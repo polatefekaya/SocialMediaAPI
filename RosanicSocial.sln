@@ -3,13 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34616.47
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RosanicSocial.WebAPI", "RosanicSocial.WebAPI\RosanicSocial.WebAPI.csproj", "{F1B2F984-5567-4A04-925A-18CAF116B094}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RosanicSocial.API", "RosanicSocial.WebAPI\RosanicSocial.API.csproj", "{F1B2F984-5567-4A04-925A-18CAF116B094}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosanicSocial.Infrastructure", "RosanicSocial.Infrastructure\RosanicSocial.Infrastructure.csproj", "{59B77DC9-13FC-4611-8627-FEEFD23AB866}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RosanicSocial.Infrastructure", "RosanicSocial.Infrastructure\RosanicSocial.Infrastructure.csproj", "{59B77DC9-13FC-4611-8627-FEEFD23AB866}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosanicSocial.Application", "RosanicSocial.Core\RosanicSocial.Application.csproj", "{CE92A91E-DAF4-4D0A-A780-E01BDDAF33F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RosanicSocial.Application", "RosanicSocial.Core\RosanicSocial.Application.csproj", "{CE92A91E-DAF4-4D0A-A780-E01BDDAF33F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosanicSocial.Domain", "RosanicSocial.Domain\RosanicSocial.Domain.csproj", "{945FEFBD-736D-4647-9201-F98A51F53FB9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RosanicSocial.Domain", "RosanicSocial.Domain\RosanicSocial.Domain.csproj", "{945FEFBD-736D-4647-9201-F98A51F53FB9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{AAA7D3B9-A0BB-4972-9F3A-E5CAFAC93609}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{B0F00F96-9E90-4EE1-9095-D67AF727CC3A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +40,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F1B2F984-5567-4A04-925A-18CAF116B094} = {AAA7D3B9-A0BB-4972-9F3A-E5CAFAC93609}
+		{59B77DC9-13FC-4611-8627-FEEFD23AB866} = {AAA7D3B9-A0BB-4972-9F3A-E5CAFAC93609}
+		{CE92A91E-DAF4-4D0A-A780-E01BDDAF33F0} = {AAA7D3B9-A0BB-4972-9F3A-E5CAFAC93609}
+		{945FEFBD-736D-4647-9201-F98A51F53FB9} = {AAA7D3B9-A0BB-4972-9F3A-E5CAFAC93609}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {02B33979-C110-4BD1-8709-A22F6F79DE38}
