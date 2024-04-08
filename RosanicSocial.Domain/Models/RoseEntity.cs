@@ -1,6 +1,6 @@
 ﻿namespace RosanicSocial.Domain.Models
 {
-    public class Rose
+    public class RoseEntity
     {
         public Guid Id { get; set; } = Guid.Empty;
         public Guid AuthorId { get; set; } = Guid.Empty;

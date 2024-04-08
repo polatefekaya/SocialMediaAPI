@@ -10,12 +10,12 @@ namespace RosanicSocial.Infrastructure.DatabaseContext {
         public ApplicationDbContext() {
 
         }
-        public virtual DbSet<Rose> Roses { get; set; }
+        public virtual DbSet<RoseEntity> Roses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Rose>().HasData(new Rose() {
+            modelBuilder.Entity<RoseEntity>().HasData(new RoseEntity() {
                 Id = Guid.Parse("4C5831BA-251D-4A0B-8E46-1157AE4F739E"),
                 AuthorUsername = "polatsfekaya",
                 Message = "The World is Excellent!",
