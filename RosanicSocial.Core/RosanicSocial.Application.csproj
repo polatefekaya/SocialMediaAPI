@@ -11,8 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
-    <Folder Include="Services\" />
+    <ProjectReference Include="..\RosanicSocial.Domain\RosanicSocial.Domain.csproj" />
   </ItemGroup>
 
 </Project>
