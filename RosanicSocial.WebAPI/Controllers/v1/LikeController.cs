@@ -10,6 +10,7 @@ namespace RosanicSocial.API.Controllers.v1 {
 
         }
 
+        #region PostLike
         [HttpPost]
         public async Task<ActionResult<PostLikesAddResponse>> AddPostLike(PostLikesAddRequest request) {
             return null;
@@ -24,7 +25,9 @@ namespace RosanicSocial.API.Controllers.v1 {
         public async Task<ActionResult<PostLikesGetResponse>> GetPostLikes(PostLikesGetRequest request) {
             return null;
         }
+        #endregion
 
+        #region CommentLike
         [HttpPost]
         public async Task<ActionResult<CommentLikesAddResponse>> AddCommentLike(CommentLikesAddRequest request) {
             return null;
@@ -40,6 +43,7 @@ namespace RosanicSocial.API.Controllers.v1 {
         public async Task<ActionResult<CommentLikesGetResponse>> GetCommentLikes(CommentLikesGetRequest request) {
             return null;
         }
+        #endregion
 
     }
 }

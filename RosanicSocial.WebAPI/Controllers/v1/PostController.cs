@@ -11,6 +11,8 @@ namespace RosanicSocial.API.Controllers.v1 {
 
         }
 
+        #region Get
+
         [HttpGet]
         [Route("ById")]
         public async Task<ActionResult<PostGetResponse>> GetPost(PostGetRequest request) {
@@ -25,13 +27,36 @@ namespace RosanicSocial.API.Controllers.v1 {
             return null;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<PostGetByCategoryResponse>> GetPostsByCategory(PostGetByCategoryRequest request) {
+            return null;
+        }
 
+        [HttpGet]
+        public async Task<ActionResult<PostGetByTypeResponse>> GetPostsByType(PostGetByTypeRequest request) {
+            return null;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<PostGetByTopicResponse>> GetPostsByTopic(PostGetByTopicRequest request) {
+            return null;
+        }
+
+        #endregion
+
+        #region Post
 
         [HttpPost]
         public async Task<ActionResult<PostAddResponse>> AddPost(PostAddRequest request) {
             
             return null;
         }
+
+        #endregion
+
+
+
+
 
         [HttpDelete]
         public async Task<ActionResult<PostDeleteResponse>> DeletePost(PostDeleteRequest request) {
