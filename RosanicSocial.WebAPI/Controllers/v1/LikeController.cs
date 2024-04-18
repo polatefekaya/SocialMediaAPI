@@ -15,9 +15,31 @@ namespace RosanicSocial.API.Controllers.v1 {
             return null;
         }
 
+        [HttpDelete]
+        public async Task<ActionResult<PostLikesDeleteResponse>> DeletePostLike(PostLikesDeleteRequest request) {
+            return null;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<PostLikesGetResponse>> GetPostLikes(PostLikesGetRequest request) {
+            return null;
+        }
+
         [HttpPost]
         public async Task<ActionResult<CommentLikesAddResponse>> AddCommentLike(CommentLikesAddRequest request) {
             return null;
         }
+
+
+        [HttpDelete]
+        public async Task<ActionResult<CommentLikesDeleteResponse>> DeleteCommentLike(CommentLikesDeleteRequest request) {
+            return null;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<CommentLikesGetResponse>> GetCommentLikes(CommentLikesGetRequest request) {
+            return null;
+        }
+
     }
 }
