@@ -1,8 +1,9 @@
-﻿using RosanicSocial.Domain.Models;
+﻿using RosanicSocial.Domain.Data.Entites.Post;
 using System;
 using System.Collections.Generic;
 
-namespace RosanicSocial.Domain.DTO.Response.Rose {
+namespace RosanicSocial.Domain.DTO.Response.Rose
+{
     public class RoseAddResponse {
 
 

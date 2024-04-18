@@ -1,8 +1,9 @@
-﻿using RosanicSocial.Domain.Models;
+﻿using RosanicSocial.Domain.Data.Entites.Post;
 using System;
 using System.Collections.Generic;
 
-namespace RosanicSocial.Domain.DTO.Response.Rose {
+namespace RosanicSocial.Domain.DTO.Response.Rose
+{
     public class RoseGetResponse {
         public Guid Id { get; set; } = Guid.Empty;
         public Guid AuthorId { get; set; } = Guid.Empty;

@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 using RosanicSocial.Application.Interfaces.Repository;
-using RosanicSocial.Domain.Models;
+using RosanicSocial.Domain.Data.Entites.Post;
 using RosanicSocial.Infrastructure.DatabaseContext;
 using System;
 using System.Collections.Generic;
 
-namespace RosanicSocial.Infrastructure.Repository {
+namespace RosanicSocial.Infrastructure.Repository
+{
     public class RoseRepository : IRoseRepository {
         private readonly ApplicationDbContext _dbContext;
         public RoseRepository(ApplicationDbContext dbContext) {

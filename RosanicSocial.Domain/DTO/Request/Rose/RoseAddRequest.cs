@@ -1,9 +1,10 @@
-﻿using RosanicSocial.Domain.Models;
+﻿using RosanicSocial.Domain.Data.Entites.Post;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace RosanicSocial.Domain.DTO.Request.Rose {
+namespace RosanicSocial.Domain.DTO.Request.Rose
+{
     public class RoseAddRequest {
         [Required]
         public Guid AuthorId { get; set; }

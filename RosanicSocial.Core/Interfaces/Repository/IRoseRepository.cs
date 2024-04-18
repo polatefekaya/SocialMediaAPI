@@ -1,8 +1,9 @@
-﻿using RosanicSocial.Domain.Models;
+﻿using RosanicSocial.Domain.Data.Entites.Post;
 using System;
 using System.Collections.Generic;
 
-namespace RosanicSocial.Application.Interfaces.Repository {
+namespace RosanicSocial.Application.Interfaces.Repository
+{
     public interface IRoseRepository {
         Task<RoseEntity> GetRoseById(Guid id);
         Task<RoseEntity> AddRose(RoseEntity rose);

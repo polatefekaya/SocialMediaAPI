@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using RosanicSocial.Application.Interfaces;
 using RosanicSocial.Application.Interfaces.Repository;
+using RosanicSocial.Domain.Data.Entites.Post;
 using RosanicSocial.Domain.DTO.Request.Rose;
 using RosanicSocial.Domain.DTO.Response.Rose;
-using RosanicSocial.Domain.Models;
 
-namespace RosanicSocial.Application.Services {
+namespace RosanicSocial.Application.Services
+{
     public class RoseDbService : IRoseDbService {
 
         private readonly IRoseRepository _roseRepository;
