@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using RosanicSocial.Application;
+using RosanicSocial.Application.Interfaces.Repository;
 using RosanicSocial.Infrastructure;
 using RosanicSocial.Infrastructure.DatabaseContext;
+using RosanicSocial.Infrastructure.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 

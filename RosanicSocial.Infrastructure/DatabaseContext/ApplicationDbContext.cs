@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RosanicSocial.Domain.Data.Entites.Post;
+using RosanicSocial.Domain.Data.Entities.Post;
 using System;
 using System.Collections.Generic;
 
@@ -11,12 +11,12 @@ namespace RosanicSocial.Infrastructure.DatabaseContext
         public ApplicationDbContext() {
 
         }
-        public virtual DbSet<RoseEntity> Roses { get; set; }
+        public virtual DbSet<PostEntity> Roses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<RoseEntity>().HasData(new RoseEntity() {
+            modelBuilder.Entity<PostEntity>().HasData(new PostEntity() {
                 Id = Guid.Parse("4C5831BA-251D-4A0B-8E46-1157AE4F739E"),
                 Message = "The World is Excellent!",
                 StatisticId = Guid.Empty,
