@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace RosanicSocial.Domain.Data.Entites.Post
+namespace RosanicSocial.Domain.Data.Entities.Post
 {
     public class CommentLikesEntity
     {

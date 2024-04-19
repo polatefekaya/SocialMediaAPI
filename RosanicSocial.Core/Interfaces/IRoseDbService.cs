@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using RosanicSocial.Domain.Models;
 using RosanicSocial.Domain.DTO.Request.Rose;
 using RosanicSocial.Domain.DTO.Response.Rose;
 

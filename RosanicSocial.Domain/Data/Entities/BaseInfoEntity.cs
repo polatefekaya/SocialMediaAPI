@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace RosanicSocial.Domain.Data.Entities {
-    internal class BaseInfoEntity {
+    public class BaseInfoEntity {
         [Key]
         public int UserId { get; set; }
         public int PostCount { get; set; }

@@ -7,7 +7,7 @@ using RosanicSocial.Infrastructure.Repository;
 namespace RosanicSocial.Infrastructure {
     public static class DependencyInjection {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services) {
-            services.AddScoped<IRoseRepository, RoseRepository>();
+            services.AddScoped<IPostRepository, RoseRepository>();
             return services;
         }
     }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace RosanicSocial.Domain.Data.Entites.Post
+namespace RosanicSocial.Domain.Data.Entities.Post
 {
     public class PostEntity
     {
