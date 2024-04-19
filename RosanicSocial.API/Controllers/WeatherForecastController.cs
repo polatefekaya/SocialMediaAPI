@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace RosanicSocial.WebAPI.Controllers {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase {
+    public class WeatherForecastController : CustomControllerBase {
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -17,6 +17,7 @@ namespace RosanicSocial.WebAPI.Controllers {
 
         [HttpGet]
         public IEnumerable<WeatherForecast> Get() {
+            _logger.LogInformation("Hннннннннннннннннн");
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast {
                 Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
                 TemperatureC = Random.Shared.Next(-20, 55),

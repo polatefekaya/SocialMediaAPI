@@ -11,11 +11,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Serilog" Version="3.1.1" />
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\RosanicSocial.Application\RosanicSocial.Application.csproj" />
-    <ProjectReference Include="..\RosanicSocial.Core\RosanicSocial.Application.csproj" />
     <ProjectReference Include="..\RosanicSocial.Infrastructure\RosanicSocial.Infrastructure.csproj" />
   </ItemGroup>
 

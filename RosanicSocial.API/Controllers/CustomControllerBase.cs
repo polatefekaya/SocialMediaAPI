@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 
 namespace RosanicSocial.WebAPI.Controllers {
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class CustomControllerBase : ControllerBase {
     }

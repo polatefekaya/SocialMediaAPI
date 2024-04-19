@@ -13,16 +13,16 @@ namespace RosanicSocial.Infrastructure.DatabaseContext
         }
         public virtual DbSet<PostEntity> Roses { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder) {
-            base.OnModelCreating(modelBuilder);
+        //protected override void OnModelCreating(ModelBuilder modelBuilder) {
+        //    base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<PostEntity>().HasData(new PostEntity() {
-                Id = Guid.Parse("4C5831BA-251D-4A0B-8E46-1157AE4F739E"),
-                Message = "The World is Excellent!",
-                StatisticId = Guid.Empty,
-                AuthorId = Guid.Parse("EFAF57C1-AB42-498B-BED6-1DBB1980A3FD"),
-                NumbersId = Guid.Empty
-            });
-        }
+        //    modelBuilder.Entity<PostEntity>().HasData(new PostEntity() {
+        //        Id = 1,
+        //        Message = "The World is Excellent!",
+        //        StatisticId = Guid.Empty,
+        //        AuthorId = Guid.Parse("EFAF57C1-AB42-498B-BED6-1DBB1980A3FD"),
+        //        NumbersId = Guid.Empty
+        //    });
+        //}
     }
 }

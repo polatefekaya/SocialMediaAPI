@@ -21,5 +21,9 @@ namespace RosanicSocial.Application.Services.DbServices {
         public Task<FollowsGetFollowingsResponse> GetFollowings(FollowsGetFollowingsRequest request) {
             throw new NotImplementedException();
         }
+
+        Task<FollowsDeleteAllResponse> IFollowDbService.DeleteAllFollows(FollowsDeleteAllRequest request) {
+            throw new NotImplementedException();
+        }
     }
 }

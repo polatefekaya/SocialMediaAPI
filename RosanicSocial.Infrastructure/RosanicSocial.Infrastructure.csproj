@@ -20,8 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RosanicSocial.Application\RosanicSocial.Application.csproj" />
-    <ProjectReference Include="..\RosanicSocial.Core\RosanicSocial.Application.csproj" />
+    <ProjectReference Include="..\RosanicSocial.Application\RosanicSocial.Application.csproj" />    
     <ProjectReference Include="..\RosanicSocial.Domain\RosanicSocial.Domain.csproj" />
   </ItemGroup>
 

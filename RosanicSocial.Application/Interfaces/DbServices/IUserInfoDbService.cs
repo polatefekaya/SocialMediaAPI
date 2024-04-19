@@ -7,6 +7,29 @@ using System;
 using System.Collections.Generic;
 
 namespace RosanicSocial.Application.Interfaces.DbServices {
+    /// <summary>
+    /// CRUD operations for Like Entity.
+    /// <para>
+    ///    BaseInfo Functionality:
+    /// </para>
+    /// <list type="bullet">
+    /// <item>Add</item>
+    /// <item>Get</item>
+    /// <item>Update</item>
+    /// <item>Delete</item>
+    /// </list>
+    /// 
+    /// <para>
+    ///    DetailedInfo Functionality:
+    /// </para>
+    /// <list type="bullet">
+    /// <item>Add</item>
+    /// <item>Get</item>
+    /// <item>Update</item>
+    /// <item>Delete</item>
+    /// </list>
+    /// This DbService calls Repository interfaces for it's db processes
+    /// </summary>
     public interface IUserInfoDbService {
         #region BaseInfo
         Task<BaseInfoAddResponse> AddBaseInfo(BaseInfoAddRequest request);
