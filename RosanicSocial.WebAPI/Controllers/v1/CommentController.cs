@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RosanicSocial.Domain.DTO.Request.Comment;
+using RosanicSocial.Domain.DTO.Response.Comment;
 using RosanicSocial.WebAPI.Controllers;
 
 namespace RosanicSocial.API.Controllers.v1 {

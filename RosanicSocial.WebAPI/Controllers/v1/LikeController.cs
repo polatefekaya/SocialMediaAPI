@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using RosanicSocial.Domain.DTO.Request.Likes.Comment;
 using RosanicSocial.Domain.DTO.Request.Likes.Post;
+using RosanicSocial.Domain.DTO.Response.Likes.Comment;
+using RosanicSocial.Domain.DTO.Response.Likes.Post;
 using RosanicSocial.WebAPI.Controllers;
 
 namespace RosanicSocial.API.Controllers.v1 {

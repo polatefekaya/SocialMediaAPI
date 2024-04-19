@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RosanicSocial.Domain.DTO.Request.Follows;
+using RosanicSocial.Domain.DTO.Response.Follows;
 using RosanicSocial.WebAPI.Controllers;
 
 namespace RosanicSocial.API.Controllers.v1 {
@@ -24,8 +25,10 @@ namespace RosanicSocial.API.Controllers.v1 {
             return null;
         }
 
+        #region Get
+
         [HttpGet]
-        public async Task<ActionResult<FollowsGetFollowingsResponse>> GetFollowings(FollowsGetFollowingsRequest request) {
+        public async Task<ActionResult<FollowsGetFollowingsResponse>> GetFollowings(FollowsGetFollowersRequest request) {
             return null;
         }
 
@@ -33,5 +36,7 @@ namespace RosanicSocial.API.Controllers.v1 {
         public async Task<ActionResult<FollowsGetFollowersResponse>> GetFollowers(FollowsGetFollowersRequest request) {
             return null;
         } 
+
+        #endregion
     }
 }

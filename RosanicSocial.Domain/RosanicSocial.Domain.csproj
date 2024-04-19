@@ -7,12 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DTO\Response\Comment\" />
-    <Folder Include="DTO\Response\Follows\" />
-    <Folder Include="DTO\Response\Info\Base\" />
-    <Folder Include="DTO\Response\Info\Detailed\" />
-    <Folder Include="DTO\Response\Likes\Comment\" />
-    <Folder Include="DTO\Response\Likes\Post\" />
     <Folder Include="DTO\Response\User\" />
     <Folder Include="Models\" />
   </ItemGroup>
