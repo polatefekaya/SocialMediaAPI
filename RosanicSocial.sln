@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34616.47
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RosanicSocial.API", "RosanicSocial.WebAPI\RosanicSocial.API.csproj", "{F1B2F984-5567-4A04-925A-18CAF116B094}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RosanicSocial.API", "RosanicSocial.API\RosanicSocial.API.csproj", "{F1B2F984-5567-4A04-925A-18CAF116B094}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RosanicSocial.Infrastructure", "RosanicSocial.Infrastructure\RosanicSocial.Infrastructure.csproj", "{59B77DC9-13FC-4611-8627-FEEFD23AB866}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RosanicSocial.Application", "RosanicSocial.Core\RosanicSocial.Application.csproj", "{CE92A91E-DAF4-4D0A-A780-E01BDDAF33F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RosanicSocial.Application", "RosanicSocial.Application\RosanicSocial.Application.csproj", "{CE92A91E-DAF4-4D0A-A780-E01BDDAF33F0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RosanicSocial.Domain", "RosanicSocial.Domain\RosanicSocial.Domain.csproj", "{945FEFBD-736D-4647-9201-F98A51F53FB9}"
 EndProject
