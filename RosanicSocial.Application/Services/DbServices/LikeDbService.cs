@@ -39,5 +39,13 @@ namespace RosanicSocial.Application.Services.DbServices {
         public Task<IEnumerable<PostLikesGetResponse>> GetPostLikes(PostLikesGetRequest request) {
             throw new NotImplementedException();
         }
+
+        public Task<IEnumerable<CommentLikesByUserIdGetResponse>> GetCommentLikesByUserId(CommentLikesByUserIdGetRequest request) {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<PostLikesByUserIdGetResponse>> GetPostLikesByUserId(PostLikesByUserIdGetRequest request) {
+            throw new NotImplementedException();
+        }
     }
 }

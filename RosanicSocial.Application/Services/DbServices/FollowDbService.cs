@@ -22,7 +22,7 @@ namespace RosanicSocial.Application.Services.DbServices {
             throw new NotImplementedException();
         }
 
-        Task<FollowsDeleteAllResponse> IFollowDbService.DeleteAllFollows(FollowsDeleteAllRequest request) {
+        public Task<FollowsDeleteAllResponse> DeleteAllFollows(FollowsDeleteAllRequest request) {
             throw new NotImplementedException();
         }
     }

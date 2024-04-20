@@ -16,6 +16,7 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
     /// <list type="bullet">
     /// <item>Add</item>
     /// <item>Get</item>
+    /// <item>GetByUserId</item>
     /// <item>Delete</item>
     /// <item>DeleteAll</item>
     /// </list>
@@ -26,6 +27,7 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
     /// <list type="bullet">
     /// <item>Add</item>
     /// <item>Get</item>
+    /// <item>GetByUserId</item>
     /// <item>Delete</item>
     /// <item>DeleteAll</item>
     /// </list>
@@ -45,7 +47,41 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
         /// <param name="request"></param>
         /// <returns></returns>
         Task<CommentLikesAddResponse> AddCommentLike(CommentLikesAddRequest request);
+        /// <summary>
+        /// Gets the Likes Entities for given <paramref name="commentId"/> from database.
+        /// <para>
+        /// It needs to know which comment entity to get Likes Entity. 
+        /// </para>
+        /// <para>
+        /// Giving <paramref name="commentId"/> in <paramref name="request"/> is a must.
+        /// </para>
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>Likes Entites by Comment</returns>
         Task<IEnumerable<CommentLikesGetResponse>> GetCommentLikes(CommentLikesGetRequest request);
+        /// <summary>
+        /// Gets the Likes Entity for given <paramref name="userId"/> by comments from database.
+        /// <para>
+        /// It needs to know which user to get Likes Entity. 
+        /// </para>
+        /// <para>
+        /// Giving <paramref name="userId"/> in <paramref name="request"/> is a must.
+        /// </para>
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>Likes Entities by User's liked comments</returns>
+        Task<IEnumerable<CommentLikesByUserIdGetResponse>> GetCommentLikesByUserId(CommentLikesByUserIdGetRequest request);
+        /// <summary>
+        /// Deletes the Likes Entity from database.
+        /// <para>
+        /// It needs to know which comment entity to delete like data. 
+        /// </para>
+        /// <para>
+        /// Giving <paramref name="commentId"/> in <paramref name="request"/> is a must.
+        /// </para>
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         Task<CommentLikesDeleteResponse> DeleteCommentLike(CommentLikesDeleteRequest request);
         Task<CommentLikesDeleteResponse> DeleteAllCommentLikes(int id);
         #endregion
@@ -67,6 +103,7 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
         /// <returns></returns>
         Task<PostLikesAddResponse> AddPostLike(PostLikesAddRequest request);
         Task<IEnumerable<PostLikesGetResponse>> GetPostLikes(PostLikesGetRequest request);
+        Task<IEnumerable<PostLikesByUserIdGetResponse>> GetPostLikesByUserId(PostLikesByUserIdGetRequest request);
         Task<PostLikesDeleteResponse> DeletePostLike(PostLikesDeleteRequest request);
         Task<PostLikesDeleteResponse> DeleteAllPostLikes(int id);
         #endregion

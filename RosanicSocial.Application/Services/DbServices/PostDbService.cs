@@ -45,15 +45,15 @@ namespace RosanicSocial.Application.Services.DbServices
             throw new NotImplementedException();
         }
 
-        Task<PostDeleteAllResponse> IPostDbService.DeleteAllPosts(PostDeleteAllRequest request) {
+        public Task<PostDeleteAllResponse> DeleteAllPosts(PostDeleteAllRequest request) {
             throw new NotImplementedException();
         }
 
-        Task<PostGetFollowingsResponse> IPostDbService.GetFollowingUsersPosts(PostGetFollowingsRequest request) {
+        public Task<PostGetFollowingsResponse> GetFollowingUsersPosts(PostGetFollowingsRequest request) {
             throw new NotImplementedException();
         }
 
-        Task<PostGetInterestedResponse> IPostDbService.GetInterestedPosts(PostGetInterestedRequest request) {
+        public Task<PostGetInterestedResponse> GetInterestedPosts(PostGetInterestedRequest request) {
             throw new NotImplementedException();
         }
     }
