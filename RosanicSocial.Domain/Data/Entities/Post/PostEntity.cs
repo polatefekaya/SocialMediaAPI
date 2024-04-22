@@ -16,6 +16,7 @@ namespace RosanicSocial.Domain.Data.Entities.Post
         public bool IsUpdated { get; set; } = false;
         public bool IsDeleted { get; set; } = false;
         public bool IsArchived { get; set; } = false;
+        public bool IsPromoted { get; set; } = false;
         public bool IsNSFW { get; set; } = false;
         public DateTime? CreatedAt { get; set; } = DateTime.MinValue;
         public DateTime? UpdatedAt { get; set; } = DateTime.MinValue;

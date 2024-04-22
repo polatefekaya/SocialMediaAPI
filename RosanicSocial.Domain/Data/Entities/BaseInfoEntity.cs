@@ -12,6 +12,7 @@ namespace RosanicSocial.Domain.Data.Entities {
         public int PostCount { get; set; }
         public int? FollowerCount { get; set; }
         public int? FollowingCount { get; set; }
+        public bool IsPrivate { get; set; } = false;
         public DateTime? Birthday { get; set; }
     }
 }

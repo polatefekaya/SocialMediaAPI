@@ -12,6 +12,5 @@ namespace RosanicSocial.Domain.Data.Entities {
         public string? Gender { get; set; }
         public string? ProfilePhotoUrl { get; set; }
         public string? WebsiteUrl { get; set; }
-
     }
 }
