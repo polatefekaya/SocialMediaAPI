@@ -58,7 +58,7 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
         /// </summary>
         /// <param name="request"></param>
         /// <returns>Likes Entites by Comment</returns>
-        Task<IEnumerable<CommentLikesGetResponse>> GetCommentLikes(CommentLikesGetRequest request);
+        Task<IQueryable<CommentLikesGetResponse>> GetCommentLikes(CommentLikesGetRequest request);
         /// <summary>
         /// Gets the Likes Entity for given <paramref name="userId"/> by comments from database.
         /// <para>
@@ -70,7 +70,7 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
         /// </summary>
         /// <param name="request"></param>
         /// <returns>Likes Entities by User's liked comments</returns>
-        Task<IEnumerable<CommentLikesByUserIdGetResponse>> GetCommentLikesByUserId(CommentLikesByUserIdGetRequest request);
+        Task<IQueryable<CommentLikesByUserIdGetResponse>> GetCommentLikesByUserId(CommentLikesByUserIdGetRequest request);
         /// <summary>
         /// Deletes the Likes Entity from database.
         /// <para>
@@ -102,8 +102,8 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
         /// <param name="request"></param>
         /// <returns></returns>
         Task<PostLikesAddResponse> AddPostLike(PostLikesAddRequest request);
-        Task<IEnumerable<PostLikesGetResponse>> GetPostLikes(PostLikesGetRequest request);
-        Task<IEnumerable<PostLikesByUserIdGetResponse>> GetPostLikesByUserId(PostLikesByUserIdGetRequest request);
+        Task<IQueryable<PostLikesGetResponse>> GetPostLikes(PostLikesGetRequest request);
+        Task<IQueryable<PostLikesByUserIdGetResponse>> GetPostLikesByUserId(PostLikesByUserIdGetRequest request);
         Task<PostLikesDeleteResponse> DeletePostLike(PostLikesDeleteRequest request);
         Task<PostLikesDeleteResponse> DeleteAllPostLikes(int id);
         #endregion

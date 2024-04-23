@@ -29,11 +29,11 @@ namespace RosanicSocial.Infrastructure.Repository {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<CommentLikesEntity>> GetAllCommentLikes(int id) {
+        public Task<IQueryable<CommentLikesEntity>> GetAllCommentLikes(int id) {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<PostLikesEntity>> GetAllPostLikes(int id) {
+        public Task<IQueryable<PostLikesEntity>> GetAllPostLikes(int id) {
             throw new NotImplementedException();
         }
 

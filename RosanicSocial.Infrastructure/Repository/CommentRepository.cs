@@ -1,9 +1,10 @@
-﻿using RosanicSocial.Application.Interfaces.Repository;
+﻿using RosanicSocial.Application.Interfaces.Repository.Post;
 using RosanicSocial.Domain.Data.Entities.Post;
 using System;
 using System.Collections.Generic;
 
-namespace RosanicSocial.Infrastructure.Repository {
+namespace RosanicSocial.Infrastructure.Repository
+{
     public class CommentRepository : ICommentRepository {
         public Task<CommentEntity> AddComment(CommentEntity comment) {
             throw new NotImplementedException();
@@ -17,7 +18,7 @@ namespace RosanicSocial.Infrastructure.Repository {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<CommentEntity>> GetAllComments(int id) {
+        public Task<IQueryable<CommentEntity>> GetAllComments(int id) {
             throw new NotImplementedException();
         }
 

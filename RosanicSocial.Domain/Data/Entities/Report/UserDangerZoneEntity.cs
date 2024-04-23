@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace RosanicSocial.Domain.Data.Entities {
-    public class UserDangerZoneEntity {
+namespace RosanicSocial.Domain.Data.Entities.Report
+{
+    public class UserDangerZoneEntity
+    {
         public int UserId { get; set; }
         public bool IsBanned { get; set; } = false;
         public bool IsPermaBanned { get; set; } = false;

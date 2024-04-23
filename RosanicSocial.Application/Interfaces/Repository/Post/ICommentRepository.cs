@@ -2,11 +2,13 @@
 using System;
 using System.Collections.Generic;
 
-namespace RosanicSocial.Application.Interfaces.Repository {
-    public interface ICommentRepository {
+namespace RosanicSocial.Application.Interfaces.Repository.Post
+{
+    public interface ICommentRepository
+    {
         Task<CommentEntity> AddComment(CommentEntity comment);
         Task<CommentEntity> GetComment(int id);
-        Task<IEnumerable<CommentEntity>> GetAllComments(int id);
+        Task<IQueryable<CommentEntity>> GetAllComments(int id);
         Task<CommentEntity> UpdateComment(CommentEntity comment);
         Task<CommentEntity> DeleteComment(int id);
         Task<CommentEntity> DeleteAllComments(int id);

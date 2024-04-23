@@ -13,7 +13,7 @@ namespace RosanicSocial.Infrastructure.Repository {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<FollowsEntity>> GetAllFollows(int id) {
+        public Task<IQueryable<FollowsEntity>> GetAllFollows(int id) {
             throw new NotImplementedException();
         }
 
