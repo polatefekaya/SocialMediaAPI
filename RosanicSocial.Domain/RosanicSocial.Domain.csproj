@@ -7,8 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DTO\Request\Statistics\Comment\" />
-    <Folder Include="DTO\Request\Statistics\Post\" />
     <Folder Include="DTO\Response\User\" />
     <Folder Include="Models\" />
   </ItemGroup>

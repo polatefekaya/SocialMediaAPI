@@ -14,4 +14,9 @@
     <ProjectReference Include="..\RosanicSocial.Domain\RosanicSocial.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interfaces\EntityServices\" />
+    <Folder Include="Services\EntityServices\" />
+  </ItemGroup>
+
 </Project>
