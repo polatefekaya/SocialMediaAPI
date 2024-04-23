@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RosanicSocial.Domain.Data.Entities {
     public class BaseInfoEntity {
@@ -14,5 +11,7 @@ namespace RosanicSocial.Domain.Data.Entities {
         public int? FollowingCount { get; set; }
         public bool IsPrivate { get; set; } = false;
         public DateTime? Birthday { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 }

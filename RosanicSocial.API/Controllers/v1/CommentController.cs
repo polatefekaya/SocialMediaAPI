@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RosanicSocial.Application.Interfaces.DbServices;
 using RosanicSocial.Domain.DTO.Request.Comment;
 using RosanicSocial.Domain.DTO.Response.Comment;
 using RosanicSocial.WebAPI.Controllers;
 
 namespace RosanicSocial.API.Controllers.v1 {
     public class CommentController : CustomControllerBase {
-        public CommentController() {
-
+        private readonly ICommentDbService _dbService;
+        public CommentController(ICommentDbService dbService) {
+            _dbService = dbService;
         }
 
         [HttpGet]
@@ -16,14 +18,14 @@ namespace RosanicSocial.API.Controllers.v1 {
         }
 
         [HttpGet]
-        public async Task<ActionResult<CommentGetAllResponse>> GetAllComments(CommentGetAllRequest request) {
+        public async Task<ActionResult<CommentGetAllByPostIdResponse>> GetAllComments(CommentGetAllByPostIdRequest request) {
 
             return null;
         }
 
         [HttpPost]
         public async Task<ActionResult<CommentAddResponse>> AddComment(CommentAddRequest request) {
-            return null;
+            return await _dbService.AddCommentAsync(request);
         }
 
         [HttpPut]

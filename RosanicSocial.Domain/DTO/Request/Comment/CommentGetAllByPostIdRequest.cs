@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 namespace RosanicSocial.Domain.DTO.Request.Comment {
-    public class CommentGetAllRequest {
+    public class CommentGetAllByPostIdRequest {
+        public int PostId { get; set; }
     }
 }
