@@ -1,10 +1,16 @@
-﻿using System;
+﻿using RosanicSocial.Domain.DTO.Request.Seen.Post;
+using RosanicSocial.Domain.DTO.Response.Seen.Post;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RosanicSocial.Application.Interfaces.DbServices {
-    internal interface IPostSeenDbService {
+    public interface IPostSeenDbService {
+        Task<PostSeenAddResponse> AddPostSeen(PostSeenAddRequest request);
+        Task<PostSeenDeleteResponse> DeletePostSeen(PostSeenDeleteRequest request);
+        Task<PostSeenGetAllByUserIdResponse> GetAllPostSeensByUserId(PostSeenGetAllByUserIdRequest request);
+        Task<PostSeenGetAllByPostIdResponse> GetAllPostSeensByPostId(PostSeenGetAllByPostIdRequest request);
+        Task<PostSeenDeleteAllByPostIdResponse> DeleteAllPostSeensByPostId(PostSeenDeleteAllByPostIdRequest request);
+        Task<PostSeenDeleteAllByUserIdResponse> DeleteAllPostSeensByUserId(PostSeenDeleteAllByUserIdRequest request);
+
     }
 }

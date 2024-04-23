@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 namespace RosanicSocial.Application.Interfaces.Repository {
-    public interface IUserPermissionRepository {
+    public interface IUserPermissionsRepository {
         Task<UserPermissionEntity> AddUserPermission(UserPermissionEntity entity);
         Task<UserPermissionEntity> UpdateUserPermission(UserPermissionEntity entity);
         Task<UserPermissionEntity> DeleteUserPermission(int userId);

@@ -2,12 +2,9 @@
 using RosanicSocial.Domain.DTO.Response.Reports.Block;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RosanicSocial.Application.Interfaces.DbServices {
-    internal interface IUserBlockDbService {
+    public interface IUserBlockDbService {
         Task<BlockAddResponse> AddBlock(BlockAddRequest request);
         Task<BlockDeleteResponse> DeleteBlock(BlockDeleteRequest request);
         Task<BlockDeleteAllResponse> DeleteAllBlocks(BlockDeleteAllRequest request);
