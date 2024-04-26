@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RosanicSocial.Domain.DTO.Request.Info.Base;
 using RosanicSocial.Domain.DTO.Request.Info.Detailed;
@@ -7,6 +8,7 @@ using RosanicSocial.Domain.DTO.Response.Info.Detailed;
 using RosanicSocial.WebAPI.Controllers;
 
 namespace RosanicSocial.API.Controllers.v1 {
+    [ApiVersion("1.0")]
     public class UserInfoController : CustomControllerBase {
         public UserInfoController() {
 

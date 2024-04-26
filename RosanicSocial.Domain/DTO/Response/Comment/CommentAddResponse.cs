@@ -7,8 +7,8 @@ namespace RosanicSocial.Domain.DTO.Response.Comment {
         public int Id { get; set; }
         public int PostId { get; set; }
         public int UserId { get; set; }
-        public int RepliedUserId { get; set; }
-        public string Body { get; set; } = string.Empty;
+        public int? RepliedUserId { get; set; }
+        public string? Body { get; set; }
         public bool IsUpdated { get; set; }
         public bool IsReply { get; set; }
         public DateTime? CreatedAt { get; set; }

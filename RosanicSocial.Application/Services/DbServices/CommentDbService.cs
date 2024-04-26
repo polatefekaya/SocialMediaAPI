@@ -19,23 +19,26 @@ namespace RosanicSocial.Application.Services.DbServices {
             return response;
         }
 
-        public Task<CommentDeleteResponse> DeleteCommentAsync(CommentDeleteRequest request) {
+        public async Task<CommentDeleteResponse> DeleteCommentAsync(CommentDeleteRequest request) {
+            CommentEntity entity = request.ToEntity();
+            entity = await _repo.DeleteComment(entity.Id);
+            CommentDeleteResponse response = entity.ToDeleteResponse();
+            return response;
+        }
+
+        public async Task<CommentGetAllByPostIdResponse> GetAllCommentsByPostIdAsync(CommentGetAllByPostIdRequest request) {
             throw new NotImplementedException();
         }
 
-        public Task<CommentGetAllByPostIdResponse> GetAllCommentsByPostIdAsync(CommentGetAllByPostIdRequest request) {
+        public async Task<CommentGetAllByUserIdResponse> GetAllCommentsByUserIdAsync(CommentGetAllByUserIdRequest request) {
             throw new NotImplementedException();
         }
 
-        public Task<CommentGetAllByUserIdResponse> GetAllCommentsByUserIdAsync(CommentGetAllByUserIdRequest request) {
+        public async Task<CommentGetResponse> GetCommentAsync(CommentGetRequest request) {
             throw new NotImplementedException();
         }
 
-        public Task<CommentGetResponse> GetCommentAsync(CommentGetRequest request) {
-            throw new NotImplementedException();
-        }
-
-        public Task<CommentUpdateResponse> UpdateCommentAsync(CommentUpdateRequest request) {
+        public async Task<CommentUpdateResponse> UpdateCommentAsync(CommentUpdateRequest request) {
             throw new NotImplementedException();
         }
     }

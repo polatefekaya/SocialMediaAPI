@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RosanicSocial.Domain.DTO.Request.Follows;
 using RosanicSocial.Domain.DTO.Response.Follows;
 using RosanicSocial.WebAPI.Controllers;
 
 namespace RosanicSocial.API.Controllers.v1 {
+    [ApiVersion("1.0")]
     public class FollowController : CustomControllerBase {
         public FollowController() {
 

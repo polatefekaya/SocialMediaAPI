@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RosanicSocial.Application.Interfaces.DbServices;
 using RosanicSocial.Domain.DTO.Request.Comment;
@@ -6,6 +7,7 @@ using RosanicSocial.Domain.DTO.Response.Comment;
 using RosanicSocial.WebAPI.Controllers;
 
 namespace RosanicSocial.API.Controllers.v1 {
+    [ApiVersion("1.0")]
     public class CommentController : CustomControllerBase {
         private readonly ICommentDbService _dbService;
         public CommentController(ICommentDbService dbService) {

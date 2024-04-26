@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Microsoft.EntityFrameworkCore;
 using RosanicSocial.Application;
 using RosanicSocial.Application.Interfaces.Repository;
@@ -36,15 +37,38 @@ builder.Services
     .AddInfrastructure()
     .AddApplication();
 
+builder.Services.AddApiVersioning(config => {
+    config.ApiVersionReader = new UrlSegmentApiVersionReader();
+})
+    .AddApiExplorer(options => {
+        options.GroupNameFormat = "'v'VV";
+        options.SubstituteApiVersionInUrl = true;
+    });
+
 builder.Services.AddDbContext<ApplicationDbContext>(options => {
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
+
+//Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options => {
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "api.xml"));
+
+    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Version = "1.0", Title = "Social Media API"});
+});
+
 
 var app = builder.Build();
 app.UseHttpLogging();
 
 // Configure the HTTP request pipeline.
+app.UseHsts();
 app.UseHttpsRedirection();
+
+app.UseSwagger();
+app.UseSwaggerUI(options => {
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "1.0");
+});
 
 app.UseAuthorization();
 

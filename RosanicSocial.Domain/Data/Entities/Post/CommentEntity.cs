@@ -8,10 +8,10 @@ namespace RosanicSocial.Domain.Data.Entities.Post {
         public int Id { get; set; }
         public int PostId { get; set; }
         public int UserId { get; set; }
-        public int RepliedUserId { get; set; }
-        public string Body { get; set; } = string.Empty;
-        public bool IsUpdated { get; set; }
-        public bool IsReply { get; set; }
+        public int? RepliedUserId { get; set; }
+        public string? Body { get; set; }
+        public bool IsUpdated { get; set; } = false;
+        public bool IsReply { get; set; } = false;
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }
