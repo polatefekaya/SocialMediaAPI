@@ -1,3 +1,4 @@
+using RosanicSocial.Domain.Data.Entities;
 using System;
 using System.Collections.Generic;
 

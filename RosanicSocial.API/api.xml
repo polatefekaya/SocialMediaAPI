@@ -4,5 +4,12 @@
         <name>RosanicSocial.API</name>
     </assembly>
     <members>
+        <member name="M:RosanicSocial.API.Controllers.v1.CommentController.GetComment(RosanicSocial.Domain.DTO.Request.Comment.CommentGetRequest)">
+            <summary>
+            GET, gets the comment that specified with CommentGetRequest
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>

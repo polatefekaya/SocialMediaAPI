@@ -5,7 +5,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RosanicSocial.Domain.DTO.Request.Comment {
     public class CommentUpdateRequest {
-        public int Id { get; set; }
         public int PostId { get; set; }
         public int UserId { get; set; }
         public int? RepliedUserId { get; set; }
@@ -14,10 +13,9 @@ namespace RosanicSocial.Domain.DTO.Request.Comment {
         public bool IsReply { get; set; } = false;
         public CommentEntity ToEntity() {
             return new CommentEntity {
-                Id = Id,
                 PostId = PostId,
                 UserId = UserId,
-                RepliedUserId = Id,
+                RepliedUserId = RepliedUserId,
                 Body = Body,
                 IsUpdated = IsUpdated,
                 IsReply = IsReply 

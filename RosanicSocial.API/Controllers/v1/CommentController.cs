@@ -10,34 +10,40 @@ namespace RosanicSocial.API.Controllers.v1 {
     [ApiVersion("1.0")]
     public class CommentController : CustomControllerBase {
         private readonly ICommentDbService _dbService;
+
         public CommentController(ICommentDbService dbService) {
             _dbService = dbService;
         }
 
+        /// <summary>
+        /// GET, gets the comment that specified with CommentGetRequest
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<CommentGetResponse>> GetComment(CommentGetRequest request) {
-            return null;
+            return NoContent();
         }
 
         [HttpGet]
         public async Task<ActionResult<CommentGetAllByPostIdResponse>> GetAllComments(CommentGetAllByPostIdRequest request) {
 
-            return null;
+            return NoContent();
         }
 
         [HttpPost]
         public async Task<ActionResult<CommentAddResponse>> AddComment(CommentAddRequest request) {
-            return await _dbService.AddCommentAsync(request);
+            return NoContent();
         }
 
         [HttpPut]
         public async Task<ActionResult<CommentUpdateResponse>> UpdateComment(CommentUpdateRequest request) {
-            return null;
+            return NoContent();
         }
 
         [HttpDelete]
         public async Task<ActionResult<CommentDeleteResponse>> DeleteComment(CommentDeleteRequest request) {
-            return null;
+            return NoContent();
         }
 
     }

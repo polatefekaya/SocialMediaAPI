@@ -3,5 +3,6 @@ using System.Collections.Generic;
 
 namespace RosanicSocial.Domain.DTO.Request.Post {
     public class PostGetInterestedRequest {
+        public int UserId { get; set; }
     }
 }

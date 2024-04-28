@@ -7,10 +7,5 @@ using System.Reflection;
 namespace RosanicSocial.Domain.DTO.Request.Info.Detailed {
     public class DetailedInfoDeleteRequest {
         public int UserId { get; set; }
-        public DetailedInfoEntity ToEntity() {
-            return new DetailedInfoEntity {
-                UserId = UserId
-            };
-        }
     }
 }

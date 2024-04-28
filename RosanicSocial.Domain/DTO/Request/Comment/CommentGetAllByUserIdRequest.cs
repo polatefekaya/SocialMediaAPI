@@ -5,10 +5,5 @@ using System.Collections.Generic;
 namespace RosanicSocial.Domain.DTO.Request.Comment {
     public class CommentGetAllByUserIdRequest {
         public int UserId { get; set; }
-        public CommentEntity ToEntity() {
-            return new CommentEntity {
-                UserId = UserId
-            };
-        }
     }
 }
