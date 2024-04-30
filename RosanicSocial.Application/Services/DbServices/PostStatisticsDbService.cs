@@ -10,7 +10,7 @@ namespace RosanicSocial.Application.Services.DbServices {
             throw new NotImplementedException();
         }
 
-        public Task<PostStatisticsDeleteAllResponse> DeleteAllPostStatisticsByUserId(PostStatisticsDeleteAllRequest request) {
+        public Task<PostStatisticsDeleteResponse[]> DeleteAllPostStatisticsByUserId(PostStatisticsDeleteAllRequest request) {
             throw new NotImplementedException();
         }
 
@@ -18,7 +18,11 @@ namespace RosanicSocial.Application.Services.DbServices {
             throw new NotImplementedException();
         }
 
-        public Task<PostStatisticsGetAllByUserIdResponse> GetAllPostStatisticsByUserId(PostStatisticsGetAllByUserIdRequest request) {
+        public Task<PostStatisticsGetResponse[]> GetAllPostStatisticsByUserId(PostStatisticsGetAllByUserIdRequest request) {
+            throw new NotImplementedException();
+        }
+
+        public Task<PostStatisticsGetResponse> GetPostStatistic(PostStatisticsGetRequest request) {
             throw new NotImplementedException();
         }
 

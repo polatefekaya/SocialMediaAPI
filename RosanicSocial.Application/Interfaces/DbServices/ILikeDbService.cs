@@ -58,7 +58,7 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
         /// </summary>
         /// <param name="request"></param>
         /// <returns>Likes Entites by Comment</returns>
-        Task<IQueryable<CommentLikesGetResponse>> GetCommentLikes(CommentLikesGetRequest request);
+        Task<CommentLikesGetResponse[]> GetCommentLikes(CommentLikesGetRequest request);
         /// <summary>
         /// Gets the Likes Entity for given <paramref name="userId"/> by comments from database.
         /// <para>
@@ -70,7 +70,7 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
         /// </summary>
         /// <param name="request"></param>
         /// <returns>Likes Entities by User's liked comments</returns>
-        Task<IQueryable<CommentLikesByUserIdGetResponse>> GetCommentLikesByUserId(CommentLikesByUserIdGetRequest request);
+        Task<CommentLikesGetResponse[]> GetCommentLikesByUserId(CommentLikesByUserIdGetRequest request);
         /// <summary>
         /// Deletes the Likes Entity from database.
         /// <para>
@@ -83,7 +83,7 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
         /// <param name="request"></param>
         /// <returns></returns>
         Task<CommentLikesDeleteResponse> DeleteCommentLike(CommentLikesDeleteRequest request);
-        Task<CommentLikesDeleteResponse> DeleteAllCommentLikes(int id);
+        Task<CommentLikesDeleteResponse[]> DeleteAllCommentLikes(int id);
         #endregion
 
         #region Post
@@ -102,10 +102,10 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
         /// <param name="request"></param>
         /// <returns></returns>
         Task<PostLikesAddResponse> AddPostLike(PostLikesAddRequest request);
-        Task<IQueryable<PostLikesGetResponse>> GetPostLikes(PostLikesGetRequest request);
-        Task<IQueryable<PostLikesByUserIdGetResponse>> GetPostLikesByUserId(PostLikesByUserIdGetRequest request);
+        Task<PostLikesGetResponse[]> GetPostLikes(PostLikesGetRequest request);
+        Task<PostLikesGetResponse[]> GetPostLikesByUserId(PostLikesByUserIdGetRequest request);
         Task<PostLikesDeleteResponse> DeletePostLike(PostLikesDeleteRequest request);
-        Task<PostLikesDeleteResponse> DeleteAllPostLikes(int id);
+        Task<PostLikesDeleteResponse[]> DeleteAllPostLikes(int id);
         #endregion
     }
 }

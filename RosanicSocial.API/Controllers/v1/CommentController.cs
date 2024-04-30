@@ -26,7 +26,7 @@ namespace RosanicSocial.API.Controllers.v1 {
         }
 
         [HttpGet]
-        public async Task<ActionResult<CommentGetAllByPostIdResponse>> GetAllComments(CommentGetAllByPostIdRequest request) {
+        public async Task<IActionResult> GetAllComments(CommentGetAllByPostIdRequest request) {
 
             return NoContent();
         }

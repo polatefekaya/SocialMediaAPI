@@ -36,14 +36,14 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        Task<CommentGetAllByUserIdResponse> GetAllCommentsByUserIdAsync(CommentGetAllByUserIdRequest request);
+        Task<CommentGetResponse[]> GetAllCommentsByUserIdAsync(CommentGetAllByUserIdRequest request);
         /// <summary>
         /// Gets all the comments for user from database by users <paramref name="id"/> and returns it.
         /// <paramref name="id"/> is must given with <paramref name="request"/>
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        Task<CommentGetAllByPostIdResponse> GetAllCommentsByPostIdAsync(CommentGetAllByPostIdRequest request);
+        Task<CommentGetResponse[]> GetAllCommentsByPostIdAsync(CommentGetAllByPostIdRequest request);
         /// <summary>
         /// Updates the comment from database by it's <paramref name="id"/> and returns it.
         /// <para>Updates all the comment information whether it's given or not.</para>

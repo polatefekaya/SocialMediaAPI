@@ -11,9 +11,9 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
         Task<UserReportAddResponse> AddUserReport(UserReportAddRequest request);
         //ByReportId
         Task<UserReportGetResponse> GetUserReport(UserReportGetRequest request);
-        Task<UserReportGetByUserIdResponse> GetUserReportsByUserId(UserReportGetByUserIdRequest request);
+        Task<UserReportGetResponse[]> GetUserReportsByUserId(UserReportGetByUserIdRequest request);
         Task<UserReportUpdateResponse> UpdateUserReport(UserReportUpdateRequest request);
         Task<UserReportDeleteResponse> DeleteUserReport(UserReportDeleteRequest request);
-        Task<UserReportDeleteAllResponse> DeleteAllUserReports(UserReportDeleteAllRequest request);
+        Task<UserReportDeleteResponse[]> DeleteAllUserReports(UserReportDeleteAllRequest request);
     }
 }

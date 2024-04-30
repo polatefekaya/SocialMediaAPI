@@ -24,17 +24,15 @@ namespace RosanicSocial.Application.Services.DbServices {
             return null;
         }
 
-        public async Task<BanDeleteResponse> DeleteBan(BanDeleteRequest request) {
-            UserBanEntity entity = await _repo.DeleteBan(request.Id);
-
-            return null;
+        public Task<BanDeleteResponse> DeleteBan(BanDeleteRequest request) {
+            throw new NotImplementedException();
         }
 
         public Task<BanGetResponse> GetBan(BanGetRequest request) {
             throw new NotImplementedException();
         }
 
-        public Task<BanGetAllByUserIdResponse> GetBansAllByUserId(BanGetAllByUserIdRequest request) {
+        public Task<BanGetResponse[]> GetBansAllByUserId(BanGetAllByUserIdRequest request) {
             throw new NotImplementedException();
         }
 

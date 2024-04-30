@@ -7,10 +7,10 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
     public interface IPostSeenDbService {
         Task<PostSeenAddResponse> AddPostSeen(PostSeenAddRequest request);
         Task<PostSeenDeleteResponse> DeletePostSeen(PostSeenDeleteRequest request);
-        Task<PostSeenGetAllByUserIdResponse> GetAllPostSeensByUserId(PostSeenGetAllByUserIdRequest request);
-        Task<PostSeenGetAllByPostIdResponse> GetAllPostSeensByPostId(PostSeenGetAllByPostIdRequest request);
-        Task<PostSeenDeleteAllByPostIdResponse> DeleteAllPostSeensByPostId(PostSeenDeleteAllByPostIdRequest request);
-        Task<PostSeenDeleteAllByUserIdResponse> DeleteAllPostSeensByUserId(PostSeenDeleteAllByUserIdRequest request);
+        Task<PostSeenGetResponse[]> GetAllPostSeensByUserId(PostSeenGetAllByUserIdRequest request);
+        Task<PostSeenGetResponse[]> GetAllPostSeensByPostId(PostSeenGetAllByPostIdRequest request);
+        Task<PostSeenDeleteResponse[]> DeleteAllPostSeensByPostId(PostSeenDeleteAllByPostIdRequest request);
+        Task<PostSeenDeleteResponse[]> DeleteAllPostSeensByUserId(PostSeenDeleteAllByUserIdRequest request);
 
     }
 }

@@ -26,4 +26,8 @@
     <ProjectReference Include="..\RosanicSocial.Infrastructure\RosanicSocial.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\v2\" />
+  </ItemGroup>
+
 </Project>

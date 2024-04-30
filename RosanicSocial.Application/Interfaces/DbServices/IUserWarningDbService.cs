@@ -7,9 +7,9 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
     public interface IUserWarningDbService {
         Task<UserWarningAddResponse> AddUserWarning(UserWarningAddRequest request);
         Task<UserWarningGetResponse> GetUserWarning(UserWarningGetRequest request);
-        Task<UserWarningGetAllByUserIdResponse> GetAllUserWarningsByUserId(UserWarningGetAllByUserIdRequest request);
+        Task<UserWarningGetResponse[]> GetAllUserWarningsByUserId(UserWarningGetAllByUserIdRequest request);
         Task<UserWarningUpdateResponse> UpdateUserWarning(UserWarningUpdateRequest request);
-        Task<UserWarningDeleteAllResponse> DeleteAllUserWarnings(UserWarningDeleteAllRequest request);
+        Task<UserWarningDeleteResponse[]> DeleteAllUserWarnings(UserWarningDeleteAllRequest request);
         Task<UserWarningDeleteResponse> DeleteUserWarning(UserWarningDeleteRequest request);
     }
 }

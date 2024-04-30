@@ -10,11 +10,11 @@ namespace RosanicSocial.Application.Services.DbServices {
             throw new NotImplementedException();
         }
 
-        public Task<PostSeenDeleteAllByPostIdResponse> DeleteAllPostSeensByPostId(PostSeenDeleteAllByPostIdRequest request) {
+        public Task<PostSeenDeleteResponse[]> DeleteAllPostSeensByPostId(PostSeenDeleteAllByPostIdRequest request) {
             throw new NotImplementedException();
         }
 
-        public Task<PostSeenDeleteAllByUserIdResponse> DeleteAllPostSeensByUserId(PostSeenDeleteAllByUserIdRequest request) {
+        public Task<PostSeenDeleteResponse[]> DeleteAllPostSeensByUserId(PostSeenDeleteAllByUserIdRequest request) {
             throw new NotImplementedException();
         }
 
@@ -22,11 +22,11 @@ namespace RosanicSocial.Application.Services.DbServices {
             throw new NotImplementedException();
         }
 
-        public Task<PostSeenGetAllByPostIdResponse> GetAllPostSeensByPostId(PostSeenGetAllByPostIdRequest request) {
+        public Task<PostSeenGetResponse[]> GetAllPostSeensByPostId(PostSeenGetAllByPostIdRequest request) {
             throw new NotImplementedException();
         }
 
-        public Task<PostSeenGetAllByUserIdResponse> GetAllPostSeensByUserId(PostSeenGetAllByUserIdRequest request) {
+        public Task<PostSeenGetResponse[]> GetAllPostSeensByUserId(PostSeenGetAllByUserIdRequest request) {
             throw new NotImplementedException();
         }
     }

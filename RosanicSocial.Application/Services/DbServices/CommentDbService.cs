@@ -1,4 +1,5 @@
-﻿using RosanicSocial.Application.Interfaces.DbServices;
+﻿using Microsoft.Extensions.Logging;
+using RosanicSocial.Application.Interfaces.DbServices;
 using RosanicSocial.Application.Interfaces.Repository.Post;
 using RosanicSocial.Domain.Data.Entities.Post;
 using RosanicSocial.Domain.DTO.Request.Comment;
@@ -9,36 +10,37 @@ using System.Collections.Generic;
 namespace RosanicSocial.Application.Services.DbServices {
     public class CommentDbService : ICommentDbService {
         private readonly ICommentRepository _repo;
-        public CommentDbService(ICommentRepository commentRepository) {
+        private readonly ILogger<CommentDbService> _logger;
+        public CommentDbService(ICommentRepository commentRepository, ILogger<CommentDbService> logger) {
             _repo = commentRepository;
+            _logger = logger;
         }
+
         public async Task<CommentAddResponse> AddCommentAsync(CommentAddRequest request) {
-            CommentEntity entity = request.ToEntity();
-            entity =  await _repo.AddComment(entity);
-            CommentAddResponse response = entity.ToAddResponse();
-            return response;
+            _logger.LogInformation("Add Comment In Db Service is Started");
+
+            CommentEntity commentEntity = request.ToEntity();
+            commentEntity = await _repo.AddComment(commentEntity);
+            return commentEntity.ToAddResponse();
         }
 
-        public async Task<CommentDeleteResponse> DeleteCommentAsync(CommentDeleteRequest request) {
-            CommentEntity entity = request.ToEntity();
-            entity = await _repo.DeleteComment(entity.Id);
-            CommentDeleteResponse response = entity.ToDeleteResponse();
-            return response;
-        }
-
-        public async Task<CommentGetAllByPostIdResponse> GetAllCommentsByPostIdAsync(CommentGetAllByPostIdRequest request) {
+        public Task<CommentDeleteResponse> DeleteCommentAsync(CommentDeleteRequest request) {
             throw new NotImplementedException();
         }
 
-        public async Task<CommentGetAllByUserIdResponse> GetAllCommentsByUserIdAsync(CommentGetAllByUserIdRequest request) {
+        public Task<CommentGetResponse[]> GetAllCommentsByPostIdAsync(CommentGetAllByPostIdRequest request) {
             throw new NotImplementedException();
         }
 
-        public async Task<CommentGetResponse> GetCommentAsync(CommentGetRequest request) {
+        public Task<CommentGetResponse[]> GetAllCommentsByUserIdAsync(CommentGetAllByUserIdRequest request) {
             throw new NotImplementedException();
         }
 
-        public async Task<CommentUpdateResponse> UpdateCommentAsync(CommentUpdateRequest request) {
+        public Task<CommentGetResponse> GetCommentAsync(CommentGetRequest request) {
+            throw new NotImplementedException();
+        }
+
+        public Task<CommentUpdateResponse> UpdateCommentAsync(CommentUpdateRequest request) {
             throw new NotImplementedException();
         }
     }

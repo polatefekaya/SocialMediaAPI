@@ -10,7 +10,7 @@ namespace RosanicSocial.Application.Services.DbServices {
             throw new NotImplementedException();
         }
 
-        public Task<BlockDeleteAllResponse> DeleteAllBlocks(BlockDeleteAllRequest request) {
+        public Task<BlockDeleteResponse[]> DeleteAllBlocks(BlockDeleteAllRequest request) {
             throw new NotImplementedException();
         }
 
@@ -18,7 +18,7 @@ namespace RosanicSocial.Application.Services.DbServices {
             throw new NotImplementedException();
         }
 
-        public Task<IQueryable<BlockGetResponse>> GetBlocks(BlockGetRequest request) {
+        public Task<BlockGetResponse[]> GetBlocks(BlockGetRequest request) {
             throw new NotImplementedException();
         }
     }

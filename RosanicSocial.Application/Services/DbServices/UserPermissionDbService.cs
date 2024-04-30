@@ -17,7 +17,6 @@ namespace RosanicSocial.Application.Services.DbServices {
         }
 
         public async Task<UserPermissionDeleteResponse> DeleteUserPermission(UserPermissionDeleteRequest request) {
-            UserPermissionEntity entity = request.ToEntity();
             UserPermissionEntity et = await _repo.DeleteUserPermission(request.UserId);
 
             return null;

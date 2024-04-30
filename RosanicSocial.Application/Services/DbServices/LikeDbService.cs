@@ -16,11 +16,11 @@ namespace RosanicSocial.Application.Services.DbServices {
             throw new NotImplementedException();
         }
 
-        public Task<CommentLikesDeleteResponse> DeleteAllCommentLikes(int id) {
+        public Task<CommentLikesDeleteResponse[]> DeleteAllCommentLikes(int id) {
             throw new NotImplementedException();
         }
 
-        public Task<PostLikesDeleteResponse> DeleteAllPostLikes(int id) {
+        public Task<PostLikesDeleteResponse[]> DeleteAllPostLikes(int id) {
             throw new NotImplementedException();
         }
 
@@ -32,19 +32,19 @@ namespace RosanicSocial.Application.Services.DbServices {
             throw new NotImplementedException();
         }
 
-        public Task<IQueryable<CommentLikesGetResponse>> GetCommentLikes(CommentLikesGetRequest request) {
+        public Task<CommentLikesGetResponse[]> GetCommentLikes(CommentLikesGetRequest request) {
             throw new NotImplementedException();
         }
 
-        public Task<IQueryable<PostLikesGetResponse>> GetPostLikes(PostLikesGetRequest request) {
+        public Task<CommentLikesGetResponse[]> GetCommentLikesByUserId(CommentLikesByUserIdGetRequest request) {
             throw new NotImplementedException();
         }
 
-        public Task<IQueryable<CommentLikesByUserIdGetResponse>> GetCommentLikesByUserId(CommentLikesByUserIdGetRequest request) {
+        public Task<PostLikesGetResponse[]> GetPostLikes(PostLikesGetRequest request) {
             throw new NotImplementedException();
         }
 
-        public Task<IQueryable<PostLikesByUserIdGetResponse>> GetPostLikesByUserId(PostLikesByUserIdGetRequest request) {
+        public Task<PostLikesGetResponse[]> GetPostLikesByUserId(PostLikesByUserIdGetRequest request) {
             throw new NotImplementedException();
         }
     }

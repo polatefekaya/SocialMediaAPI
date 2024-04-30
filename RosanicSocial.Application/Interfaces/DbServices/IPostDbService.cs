@@ -29,15 +29,15 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
     {
         Task<PostAddResponse> AddPost(PostAddRequest request);
         Task<PostGetResponse> GetPost(PostGetRequest request);
-        Task<PostGetFollowingsResponse> GetFollowingUsersPosts(PostGetFollowingsRequest request);
-        Task<PostGetInterestedResponse> GetInterestedPosts(PostGetInterestedRequest request);
-        Task<PostGetAllResponse> GetAllPosts(PostGetAllRequest request);
-        Task<PostGetByCategoryResponse> GetByCategoryPost(PostGetByCategoryRequest request);
-        Task<PostGetByTypeResponse> GetByTypePost(PostGetByTypeRequest request);
-        Task<PostGetByTopicResponse> GetByTopicPost(PostGetByTopicRequest request);
+        Task<PostGetResponse[]> GetFollowingUsersPosts(PostGetFollowingsRequest request);
+        Task<PostGetResponse[]> GetInterestedPosts(PostGetInterestedRequest request);
+        Task<PostGetResponse[]> GetAllPosts(PostGetAllRequest request);
+        Task<PostGetResponse[]> GetByCategoryPost(PostGetByCategoryRequest request);
+        Task<PostGetResponse[]> GetByTypePost(PostGetByTypeRequest request);
+        Task<PostGetResponse[]> GetByTopicPost(PostGetByTopicRequest request);
         Task<PostUpdateResponse> UpdatePost(PostUpdateRequest request);
         Task<PostDeleteResponse> DeletePost(PostDeleteRequest request);
-        Task<PostDeleteBatchResponse> DeleteBatchPost(PostDeleteBatchRequest request);
-        Task<PostDeleteAllResponse> DeleteAllPosts(PostDeleteAllRequest request);
+        Task<PostDeleteResponse[]> DeleteBatchPost(PostDeleteBatchRequest request);
+        Task<PostDeleteResponse[]> DeleteAllPosts(PostDeleteAllRequest request);
     }
 }

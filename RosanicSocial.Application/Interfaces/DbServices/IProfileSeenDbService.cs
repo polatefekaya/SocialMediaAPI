@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace RosanicSocial.Application.Interfaces.DbServices {
     public interface IProfileSeenDbService {
         Task<ProfileSeenAddResponse> AddProfileSeen(ProfileSeenAddRequest request);
-        Task<ProfileSeenGetAllByUserIdResponse> GetAllProfileSeenByUserId(ProfileSeenGetAllByUserIdRequest request);
-        Task<ProfileSeenDeleteAllByUserIdResponse> DeleteAllProfileSeenByUserId(ProfileSeenDeleteAllByUserIdRequest request);
+        Task<ProfileSeenGetResponse> GetAllProfileSeenByUserId(ProfileSeenGetAllByUserIdRequest request);
+        Task<ProfileSeenDeleteResponse[]> DeleteAllProfileSeenByUserId(ProfileSeenDeleteAllByUserIdRequest request);
     }
 }

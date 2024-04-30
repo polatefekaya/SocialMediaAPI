@@ -10,11 +10,11 @@ namespace RosanicSocial.Application.Services.DbServices {
             throw new NotImplementedException();
         }
 
-        public Task<ProfileSeenDeleteAllByUserIdResponse> DeleteAllProfileSeenByUserId(ProfileSeenDeleteAllByUserIdRequest request) {
+        public Task<ProfileSeenDeleteResponse[]> DeleteAllProfileSeenByUserId(ProfileSeenDeleteAllByUserIdRequest request) {
             throw new NotImplementedException();
         }
 
-        public Task<ProfileSeenGetAllByUserIdResponse> GetAllProfileSeenByUserId(ProfileSeenGetAllByUserIdRequest request) {
+        public Task<ProfileSeenGetResponse> GetAllProfileSeenByUserId(ProfileSeenGetAllByUserIdRequest request) {
             throw new NotImplementedException();
         }
     }

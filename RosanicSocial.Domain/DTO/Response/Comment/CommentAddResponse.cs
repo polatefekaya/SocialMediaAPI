@@ -13,8 +13,7 @@ namespace RosanicSocial.Domain.DTO.Response.Comment {
         public bool IsReply { get; set; }
         public DateTime? CreatedAt { get; set; }
     }
-    public static partial class CommentEntityExtensions
-    {
+    public static partial class CommentEntityExtensions {
         public static CommentAddResponse ToAddResponse(this CommentEntity entity) {
             return new CommentAddResponse {
                 Id = entity.Id,

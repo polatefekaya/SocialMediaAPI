@@ -18,11 +18,11 @@ namespace RosanicSocial.Infrastructure.Repository
             throw new NotImplementedException();
         }
 
-        public Task<IQueryable<CommentEntity>> GetAllCommentsByPostId(int postId) {
+        public Task<CommentEntity[]> GetAllCommentsByPostId(int postId) {
             throw new NotImplementedException();
         }
 
-        public Task<IQueryable<CommentEntity>> GetAllCommentsByUserId(int userId) {
+        public Task<CommentEntity[]> GetAllCommentsByUserId(int userId) {
             throw new NotImplementedException();
         }
 

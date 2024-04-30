@@ -8,7 +8,8 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
         Task<PostStatisticsAddResponse> AddPostStatistic(PostStatisticsAddRequest request);
         Task<PostStatisticsUpdateResponse> UpdatePostStatistic(PostStatisticsUpdateRequest request);
         Task<PostStatisticsDeleteResponse> DeletePostStatistic(PostStatisticsDeleteRequest request);
-        Task<PostStatisticsDeleteAllResponse> DeleteAllPostStatisticsByUserId(PostStatisticsDeleteAllRequest request);
-        Task<PostStatisticsGetAllByUserIdResponse> GetAllPostStatisticsByUserId(PostStatisticsGetAllByUserIdRequest request);
+        Task<PostStatisticsDeleteResponse[]> DeleteAllPostStatisticsByUserId(PostStatisticsDeleteAllRequest request);
+        Task<PostStatisticsGetResponse[]> GetAllPostStatisticsByUserId(PostStatisticsGetAllByUserIdRequest request);
+        Task<PostStatisticsGetResponse> GetPostStatistic(PostStatisticsGetRequest request);
     }
 }

@@ -1,5 +1,7 @@
 ﻿using RosanicSocial.Application.Interfaces.DbServices;
 using RosanicSocial.Domain.Data.Entities.Report;
+using RosanicSocial.Domain.DTO.Request.Reports.Comment;
+using RosanicSocial.Domain.DTO.Response.Reports.Comment;
 using System;
 using System.Collections.Generic;
 
@@ -9,23 +11,27 @@ namespace RosanicSocial.Application.Services.DbServices {
             throw new NotImplementedException();
         }
 
-        public Task<IQueryable<CommentReportEntity>> DeleteAllCommentReports(int userId) {
+        public Task<CommentReportAddResponse> AddCommentReport(CommentReportAddRequest request) {
             throw new NotImplementedException();
         }
 
-        public Task<CommentReportEntity> DeleteCommentReport(Guid reportId) {
+        public Task<CommentReportDeleteResponse[]> DeleteAllCommentReports(CommentReportDeleteAllRequest request) {
             throw new NotImplementedException();
         }
 
-        public Task<CommentReportEntity> GetCommentReport(Guid reportId) {
+        public Task<CommentReportDeleteResponse> DeleteCommentReport(CommentReportDeleteRequest request) {
             throw new NotImplementedException();
         }
 
-        public Task<IQueryable<CommentReportEntity>> GetCommentReportsByUserId(int userId) {
+        public Task<CommentReportGetResponse> GetCommentReport(CommentReportGetRequest request) {
             throw new NotImplementedException();
         }
 
-        public Task<CommentReportEntity> UpdateCommentReport(CommentReportEntity entity) {
+        public Task<CommentReportGetResponse[]> GetCommentReportsByUserId(CommentReportGetByUserIdRequest request) {
+            throw new NotImplementedException();
+        }
+
+        public Task<CommentReportUpdateResponse> UpdateCommentReport(CommentReportUpdateRequest request) {
             throw new NotImplementedException();
         }
     }

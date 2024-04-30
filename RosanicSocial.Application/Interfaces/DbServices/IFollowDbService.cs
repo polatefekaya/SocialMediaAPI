@@ -50,6 +50,6 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        Task<FollowsDeleteAllResponse> DeleteAllFollows(FollowsDeleteAllRequest request);
+        Task<FollowsDeleteResponse[]> DeleteAllFollows(FollowsDeleteAllRequest request);
     }
 }

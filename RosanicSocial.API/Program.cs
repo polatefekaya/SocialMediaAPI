@@ -54,7 +54,7 @@ builder.Services.AddApiVersioning(config => {
     config.AssumeDefaultVersionWhenUnspecified = true;
 })
     .AddApiExplorer(options => {
-        options.GroupNameFormat = "'v'VV";
+        options.GroupNameFormat = "'v'VVV";
         options.SubstituteApiVersionInUrl = true;
     });
 

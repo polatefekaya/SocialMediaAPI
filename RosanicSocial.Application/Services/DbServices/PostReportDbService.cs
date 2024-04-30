@@ -7,11 +7,11 @@ using System.Collections.Generic;
 
 namespace RosanicSocial.Application.Services.DbServices {
     public class PostReportDbService : IPostReportDbService {
-        public Task<PostReportEntity> AddPostReport(PostReportEntity entity) {
+        public Task<PostReportAddResponse> AddPostReport(PostReportEntity entity) {
             throw new NotImplementedException();
         }
 
-        public Task<PostReportDeleteAllResponse> DeleteAllPostReports(PostReportDeleteAllRequest request) {
+        public Task<PostReportDeleteResponse[]> DeleteAllPostReports(PostReportDeleteAllRequest request) {
             throw new NotImplementedException();
         }
 
@@ -23,7 +23,7 @@ namespace RosanicSocial.Application.Services.DbServices {
             throw new NotImplementedException();
         }
 
-        public Task<PostReportGetByUserIdResponse> GetPostReportsByUserId(PostReportGetByUserIdRequest request) {
+        public Task<PostReportGetResponse[]> GetPostReportsByUserId(PostReportGetByUserIdRequest request) {
             throw new NotImplementedException();
         }
 

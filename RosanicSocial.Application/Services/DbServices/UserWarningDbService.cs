@@ -10,7 +10,7 @@ namespace RosanicSocial.Application.Services.DbServices {
             throw new NotImplementedException();
         }
 
-        public Task<UserWarningDeleteAllResponse> DeleteAllUserWarnings(UserWarningDeleteAllRequest request) {
+        public Task<UserWarningDeleteResponse[]> DeleteAllUserWarnings(UserWarningDeleteAllRequest request) {
             throw new NotImplementedException();
         }
 
@@ -18,7 +18,7 @@ namespace RosanicSocial.Application.Services.DbServices {
             throw new NotImplementedException();
         }
 
-        public Task<UserWarningGetAllByUserIdResponse> GetAllUserWarningsByUserId(UserWarningGetAllByUserIdRequest request) {
+        public Task<UserWarningGetResponse[]> GetAllUserWarningsByUserId(UserWarningGetAllByUserIdRequest request) {
             throw new NotImplementedException();
         }
 

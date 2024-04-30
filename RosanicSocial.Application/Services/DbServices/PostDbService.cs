@@ -13,7 +13,11 @@ namespace RosanicSocial.Application.Services.DbServices
             throw new NotImplementedException();
         }
 
-        public Task<PostDeleteBatchResponse> DeleteBatchPost(PostDeleteBatchRequest request) {
+        public Task<PostDeleteResponse[]> DeleteAllPosts(PostDeleteAllRequest request) {
+            throw new NotImplementedException();
+        }
+
+        public Task<PostDeleteResponse[]> DeleteBatchPost(PostDeleteBatchRequest request) {
             throw new NotImplementedException();
         }
 
@@ -21,19 +25,27 @@ namespace RosanicSocial.Application.Services.DbServices
             throw new NotImplementedException();
         }
 
-        public Task<PostGetAllResponse> GetAllPosts(PostGetAllRequest request) {
+        public Task<PostGetResponse[]> GetAllPosts(PostGetAllRequest request) {
             throw new NotImplementedException();
         }
 
-        public Task<PostGetByCategoryResponse> GetByCategoryPost(PostGetByCategoryRequest request) {
+        public Task<PostGetResponse[]> GetByCategoryPost(PostGetByCategoryRequest request) {
             throw new NotImplementedException();
         }
 
-        public Task<PostGetByTopicResponse> GetByTopicPost(PostGetByTopicRequest request) {
+        public Task<PostGetResponse[]> GetByTopicPost(PostGetByTopicRequest request) {
             throw new NotImplementedException();
         }
 
-        public Task<PostGetByTypeResponse> GetByTypePost(PostGetByTypeRequest request) {
+        public Task<PostGetResponse[]> GetByTypePost(PostGetByTypeRequest request) {
+            throw new NotImplementedException();
+        }
+
+        public Task<PostGetResponse[]> GetFollowingUsersPosts(PostGetFollowingsRequest request) {
+            throw new NotImplementedException();
+        }
+
+        public Task<PostGetResponse[]> GetInterestedPosts(PostGetInterestedRequest request) {
             throw new NotImplementedException();
         }
 
@@ -42,18 +54,6 @@ namespace RosanicSocial.Application.Services.DbServices
         }
 
         public Task<PostUpdateResponse> UpdatePost(PostUpdateRequest request) {
-            throw new NotImplementedException();
-        }
-
-        public Task<PostDeleteAllResponse> DeleteAllPosts(PostDeleteAllRequest request) {
-            throw new NotImplementedException();
-        }
-
-        public Task<PostGetFollowingsResponse> GetFollowingUsersPosts(PostGetFollowingsRequest request) {
-            throw new NotImplementedException();
-        }
-
-        public Task<PostGetInterestedResponse> GetInterestedPosts(PostGetInterestedRequest request) {
             throw new NotImplementedException();
         }
     }

@@ -10,6 +10,10 @@ namespace RosanicSocial.Application.Services.DbServices {
             throw new NotImplementedException();
         }
 
+        public Task<FollowsDeleteResponse[]> DeleteAllFollows(FollowsDeleteAllRequest request) {
+            throw new NotImplementedException();
+        }
+
         public Task<FollowsDeleteResponse> DeleteFollow(FollowsDeleteRequest request) {
             throw new NotImplementedException();
         }
@@ -19,10 +23,6 @@ namespace RosanicSocial.Application.Services.DbServices {
         }
 
         public Task<FollowsGetFollowingsResponse> GetFollowings(FollowsGetFollowingsRequest request) {
-            throw new NotImplementedException();
-        }
-
-        public Task<FollowsDeleteAllResponse> DeleteAllFollows(FollowsDeleteAllRequest request) {
             throw new NotImplementedException();
         }
     }

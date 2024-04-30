@@ -9,6 +9,6 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
         Task<BanUpdateResponse> UpdateBan(BanUpdateRequest request);
         Task<BanDeleteResponse> DeleteBan(BanDeleteRequest request);
         Task<BanGetResponse> GetBan(BanGetRequest request);
-        Task<BanGetAllByUserIdResponse> GetBansAllByUserId(BanGetAllByUserIdRequest request);
+        Task<BanGetResponse[]> GetBansAllByUserId(BanGetAllByUserIdRequest request);
     }
 }
