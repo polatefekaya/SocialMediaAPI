@@ -10,7 +10,7 @@ namespace RosanicSocial.Domain.Data.Entities.Post
         public int Category { get; set; } = 0;
         public int? Type { get; set; } = null;
         public int? Topic { get; set; } = null;
-        public string Body { get; set; } = string.Empty;
+        public string? Body { get; set; } = null;
         public string? MediaUrl { get; set; } = null;
         public int MediaType { get; set; } = 0;
         public bool IsUpdated { get; set; } = false;
@@ -18,7 +18,7 @@ namespace RosanicSocial.Domain.Data.Entities.Post
         public bool IsArchived { get; set; } = false;
         public bool IsPromoted { get; set; } = false;
         public bool IsNSFW { get; set; } = false;
-        public DateTime? CreatedAt { get; set; } = DateTime.MinValue;
-        public DateTime? UpdatedAt { get; set; } = DateTime.MinValue;
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 }

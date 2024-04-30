@@ -24,23 +24,23 @@ namespace RosanicSocial.API.Controllers.v1 {
 
         [HttpGet]
         [Route("AllById")]
-        public async Task<ActionResult<PostGetAllResponse>> GetAllPostsByUserId(PostGetAllRequest request) {
+        public async Task<ActionResult<PostGetResponse[]>> GetAllPostsByUserId(PostGetAllRequest request) {
 
             return null;
         }
 
         [HttpGet]
-        public async Task<ActionResult<PostGetByCategoryResponse>> GetPostsByCategory(PostGetByCategoryRequest request) {
+        public async Task<ActionResult<PostGetResponse[]>> GetPostsByCategory(PostGetByCategoryRequest request) {
             return null;
         }
 
         [HttpGet]
-        public async Task<ActionResult<PostGetByTypeResponse>> GetPostsByType(PostGetByTypeRequest request) {
+        public async Task<ActionResult<PostGetResponse[]>> GetPostsByType(PostGetByTypeRequest request) {
             return null;
         }
 
         [HttpGet]
-        public async Task<ActionResult<PostGetByTopicResponse>> GetPostsByTopic(PostGetByTopicRequest request) {
+        public async Task<ActionResult<PostGetResponse[]>> GetPostsByTopic(PostGetByTopicRequest request) {
             return null;
         }
 
@@ -67,7 +67,7 @@ namespace RosanicSocial.API.Controllers.v1 {
         }
 
         [HttpDelete]
-        public async Task<ActionResult<PostDeleteBatchResponse>> DeleteBatchPost(PostDeleteBatchRequest request) {
+        public async Task<ActionResult<PostDeleteResponse[]>> DeleteBatchPost(PostDeleteBatchRequest request) {
             return null;
         } 
 
