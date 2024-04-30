@@ -3,5 +3,6 @@ using System.Collections.Generic;
 
 namespace RosanicSocial.Domain.DTO.Request.Reports.Comment {
     public class CommentReportDeleteAllRequest {
+        public int UserId { get; set; }
     }
 }

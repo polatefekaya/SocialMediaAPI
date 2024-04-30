@@ -3,5 +3,6 @@ using System.Collections.Generic;
 
 namespace RosanicSocial.Domain.DTO.Request.Statistics.Comment {
     public class CommentStatisticsGetAllByUserIdRequest {
+        public int UserId { get; set; }
     }
 }

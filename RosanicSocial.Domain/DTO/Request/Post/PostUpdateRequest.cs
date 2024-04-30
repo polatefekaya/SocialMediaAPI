@@ -5,6 +5,7 @@ using System.Collections.Generic;
 namespace RosanicSocial.Domain.DTO.Request.Post
 {
     public class PostUpdateRequest{
+        public int Id { get; set; }
         public int UserId { get; set; }
         public int Category { get; set; } = 0;
         public int? Type { get; set; } = null;
@@ -19,6 +20,7 @@ namespace RosanicSocial.Domain.DTO.Request.Post
         public bool IsNSFW { get; set; } = false;
         public PostEntity ToEntity() {
             return new PostEntity {
+                Id = Id,
                 UserId = UserId,
                 Category = Category,
                 Type = Type,
