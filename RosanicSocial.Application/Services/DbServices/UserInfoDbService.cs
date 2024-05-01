@@ -1,4 +1,7 @@
-﻿using RosanicSocial.Application.Interfaces.DbServices;
+﻿using Microsoft.Extensions.Logging;
+using RosanicSocial.Application.Interfaces.DbServices;
+using RosanicSocial.Application.Interfaces.Repository;
+using RosanicSocial.Domain.Data.Entities;
 using RosanicSocial.Domain.DTO.Request.Info.Base;
 using RosanicSocial.Domain.DTO.Request.Info.Detailed;
 using RosanicSocial.Domain.DTO.Response.Info.Base;
@@ -8,8 +11,17 @@ using System.Collections.Generic;
 
 namespace RosanicSocial.Application.Services.DbServices {
     public class UserInfoDbService : IUserInfoDbService {
-        public Task<BaseInfoAddResponse> AddBaseInfo(BaseInfoAddRequest request) {
-            throw new NotImplementedException();
+        private readonly ILogger<UserInfoDbService> _logger;
+        private readonly IUserInfoRepository _repo;
+        public UserInfoDbService(ILogger<UserInfoDbService> logger, IUserInfoRepository repo) {
+            _logger = logger;
+            _repo = repo;
+        }
+        public async Task<BaseInfoAddResponse> AddBaseInfo(BaseInfoAddRequest request) {
+            _logger.LogInformation($"Add BaseInfo Add request: {request}");
+            BaseInfoEntity entity = request.ToEntity();
+            entity = await _repo.AddBaseInfo(entity);
+            return entity.ToAddResponse();
         }
 
         public Task<DetailedInfoAddResponse> AddDetailedInfo(DetailedInfoAddRequest request) {
