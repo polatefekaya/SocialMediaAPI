@@ -42,9 +42,38 @@ builder.Services
     .AddInfrastructure()
     .AddApplication();
 
+var connection = String.Empty;
+if (builder.Environment.IsDevelopment()) {
+    //builder.Configuration.AddEnvironmentVariables().AddJsonFile("appsettings.Development.json");
+    connection = builder.Configuration.GetConnectionString("Default");
+    //connection = builder.Configuration.GetConnectionString("DefaultConnection");
+} else {
+    connection = Environment.GetEnvironmentVariable("Default");
+}
 
-builder.Services.AddDbContext<ApplicationDbContext>(options => {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
+builder.Services.AddDbContext<InfoDbContext>(options => {
+    options.UseSqlServer(connection);
+    options.EnableSensitiveDataLogging();
+});
+builder.Services.AddDbContext<InteractionDbContext>(options => {
+    options.UseSqlServer(connection);
+    options.EnableSensitiveDataLogging();
+});
+builder.Services.AddDbContext<SharingsDbContext>(options => {
+    options.UseSqlServer(connection);
+    options.EnableSensitiveDataLogging();
+});
+builder.Services.AddDbContext<ReportsDbContext>(options => {
+    options.UseSqlServer(connection);
+    options.EnableSensitiveDataLogging();
+});
+builder.Services.AddDbContext<StatisticsDbContext>(options => {
+    options.UseSqlServer(connection);
+    options.EnableSensitiveDataLogging();
+});
+builder.Services.AddDbContext<UserCriticalDbContext>(options => {
+    options.UseSqlServer(connection);
+    options.EnableSensitiveDataLogging();
 });
 
 //Swagger

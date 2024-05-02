@@ -1,15 +1,26 @@
+using Microsoft.EntityFrameworkCore;
 using RosanicSocial.Application.Interfaces.Repository.Report;
 using RosanicSocial.Domain.Data.Entities.Report;
+using RosanicSocial.Infrastructure.DatabaseContext;
 using System;
 using System.Collections.Generic;
 
 namespace RosanicSocial.Infrastructure.Repository {
     public class CommentReportRepository : ICommentReportRepository {
-        public Task<CommentReportEntity> AddCommentReport(CommentReportEntity entity) {
-            throw new NotImplementedException();
+        private readonly ReportsDbContext _db;
+
+        public CommentReportRepository(ReportsDbContext db) {
+            _db = db;
+        }
+        public async Task<CommentReportEntity> AddCommentReport(CommentReportEntity entity) {
+            await _db.CommentReports.AddAsync(entity);
+            return entity;
         }
 
-        public Task<IQueryable<CommentReportEntity>> DeleteAllCommentReports(int userId) {
+        public async Task<IQueryable<CommentReportEntity>> DeleteAllCommentReports(int userId) {
+           CommentReportEntity[] commentReportEntities = await _db.CommentReports
+                .Where(c => c.UserId.Equals(userId)).ToArrayAsync();
+            _db.CommentReports.RemoveRange(commentReportEntities);
             throw new NotImplementedException();
         }
 

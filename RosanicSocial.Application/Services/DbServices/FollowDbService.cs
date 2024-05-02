@@ -18,11 +18,11 @@ namespace RosanicSocial.Application.Services.DbServices {
             throw new NotImplementedException();
         }
 
-        public Task<FollowsGetFollowersResponse> GetFollowers(FollowsGetFollowersRequest request) {
+        public Task<FollowsGetResponse[]> GetFollowers(FollowsGetFollowersRequest request) {
             throw new NotImplementedException();
         }
 
-        public Task<FollowsGetFollowingsResponse> GetFollowings(FollowsGetFollowingsRequest request) {
+        public Task<FollowsGetResponse[]> GetFollowings(FollowsGetFollowingsRequest request) {
             throw new NotImplementedException();
         }
     }

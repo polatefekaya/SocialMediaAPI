@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DbContexts>
+  <Info>
+    <Add>
+      Add-Migration comment -Context InfoDbContext -o Migrations/Infos
+    </Add>
+    <Remove>
+      Remove-Migration -Context InfoDbContext
+    </Remove>
+    <Update-Database>
+      Update-Database -Context InfoDbContext
+    </Update-Database>
+  </Info>
+  <Interaction>
+    <Add>
+      Add-Migration comment -Context InteractionDbContext -o Migrations/Interactions
+    </Add>
+    <Remove>
+      Remove-Migration -Context InteractionDbContext
+    </Remove>
+    <Update-Database>
+      Update-Database -Context InteractionDbContext
+    </Update-Database>
+  </Interaction>
+  <Reports>
+    <Add>
+      Add-Migration comment -Context ReportsDbContext -o Migrations/Reports
+    </Add>
+    <Remove>
+      Remove-Migration -Context ReportsDbContext
+    </Remove>
+    <Update-Database>
+      Update-Database -Context ReportsDbContext
+    </Update-Database>
+  </Reports>
+  <Sharings>
+    <Add>
+      Add-Migration comment -Context SharingsDbContext -o Migrations/Sharings
+    </Add>
+    <Remove>
+      Remove-Migration -Context SharingsDbContext
+    </Remove>
+    <Update-Database>
+      Update-Database -Context SharingsDbContext
+    </Update-Database>
+    <Statistics>
+      <Add>
+        Add-Migration comment -Context StatisticsDbContext -o Migrations/Statistics
+      </Add>
+      <Remove>
+        Remove-Migration -Context StatisticsDbContext
+      </Remove>
+      <Update-Database>
+        Update-Database -Context StatisticsDbContext
+      </Update-Database>
+    </Statistics>
+    <UserCritical>
+      <Add>
+        Add-Migration comment -Context UserCriticalDbContext -o Migrations/UserCritical
+      </Add>
+      <Remove>
+        Remove-Migration -Context UserCriticalDbContext
+      </Remove>
+      <Update-Database>
+        Update-Database -Context UserCriticalDbContext
+      </Update-Database>
+    </UserCritical>
+  </Sharings>
+</DbContexts>

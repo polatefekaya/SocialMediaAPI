@@ -24,31 +24,31 @@ namespace RosanicSocial.Application.Services.DbServices {
             return entity.ToAddResponse();
         }
 
-        public Task<DetailedInfoAddResponse> AddDetailedInfo(DetailedInfoAddRequest request) {
+        public async Task<DetailedInfoAddResponse> AddDetailedInfo(DetailedInfoAddRequest request) {
             throw new NotImplementedException();
         }
 
-        public Task<BaseInfoDeleteResponse> DeleteBaseInfo(BaseInfoDeleteRequest request) {
+        public async Task<BaseInfoDeleteResponse> DeleteBaseInfo(BaseInfoDeleteRequest request) {
             throw new NotImplementedException();
         }
 
-        public Task<DetailedInfoDeleteResponse> DeleteDetailedInfo(DetailedInfoDeleteRequest request) {
+        public async Task<DetailedInfoDeleteResponse> DeleteDetailedInfo(DetailedInfoDeleteRequest request) {
             throw new NotImplementedException();
         }
 
-        public Task<BaseInfoGetResponse> GetBaseInfo(BaseInfoGetRequest request) {
+        public async Task<BaseInfoGetResponse> GetBaseInfo(BaseInfoGetRequest request) {
             throw new NotImplementedException();
         }
 
-        public Task<DetailedInfoGetResponse> GetDetailedInfo(DetailedInfoGetRequest request) {
+        public async Task<DetailedInfoGetResponse> GetDetailedInfo(DetailedInfoGetRequest request) {
             throw new NotImplementedException();
         }
 
-        public Task<BaseInfoUpdateResponse> UpdateBaseInfo(BaseInfoUpdateRequest request) {
+        public async Task<BaseInfoUpdateResponse> UpdateBaseInfo(BaseInfoUpdateRequest request) {
             throw new NotImplementedException();
         }
 
-        public Task<DetailedInfoUpdateResponse> UpdateDetailedInfo(DetailedInfoUpdateRequest request) {
+        public async Task<DetailedInfoUpdateResponse> UpdateDetailedInfo(DetailedInfoUpdateRequest request) {
             throw new NotImplementedException();
         }
     }

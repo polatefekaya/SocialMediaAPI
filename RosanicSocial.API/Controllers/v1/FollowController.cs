@@ -30,12 +30,12 @@ namespace RosanicSocial.API.Controllers.v1 {
         #region Get
 
         [HttpGet]
-        public async Task<ActionResult<FollowsGetFollowingsResponse>> GetFollowings(FollowsGetFollowersRequest request) {
+        public async Task<ActionResult<FollowsGetResponse[]>> GetFollowings(FollowsGetFollowersRequest request) {
             return null;
         }
 
         [HttpGet]
-        public async Task<ActionResult<FollowsGetFollowersResponse>> GetFollowers(FollowsGetFollowersRequest request) {
+        public async Task<ActionResult<FollowsGetResponse[]>> GetFollowers(FollowsGetFollowersRequest request) {
             return null;
         } 
 

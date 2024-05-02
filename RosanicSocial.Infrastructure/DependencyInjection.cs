@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RosanicSocial.Application.Interfaces.Repository;
 using RosanicSocial.Application.Interfaces.Repository.Post;
+using RosanicSocial.Domain.Data.Entities;
+using RosanicSocial.Infrastructure.DatabaseContext;
 using RosanicSocial.Infrastructure.Repository;
 
 namespace RosanicSocial.Infrastructure
@@ -14,6 +17,7 @@ namespace RosanicSocial.Infrastructure
             services.AddScoped<ILikeRepository, LikeRepository>();
             services.AddScoped<IPostRepository, PostRepository>();
             services.AddScoped<IUserInfoRepository, UserInfoRepository>();
+
             return services;
         }
     }
