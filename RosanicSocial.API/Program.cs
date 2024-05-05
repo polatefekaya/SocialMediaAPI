@@ -1,9 +1,12 @@
 using Asp.Versioning;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RosanicSocial.Application;
 using RosanicSocial.Application.Interfaces.Repository;
+using RosanicSocial.Domain.Data.Identity;
 using RosanicSocial.Infrastructure;
 using RosanicSocial.Infrastructure.DatabaseContext;
 using RosanicSocial.Infrastructure.Repository;
@@ -95,7 +98,21 @@ builder.Services.AddSwaggerGen(options => {
     options.SwaggerDoc("v2", new Microsoft.OpenApi.Models.OpenApiInfo { Version = "2.0", Title = "Social Media API" });
 });
 
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options => {
+    options.Password.RequiredLength = 8;
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequiredUniqueChars = 5;
+    options.Password.RequireNonAlphanumeric = false;
 
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+})
+    .AddEntityFrameworkStores<UserIdentityDbContext>()
+    .AddDefaultTokenProviders()
+    .AddUserStore<UserStore<ApplicationUser, ApplicationRole, UserIdentityDbContext, int>>()
+    .AddRoleStore<RoleStore<ApplicationRole, UserIdentityDbContext, int>>();
 
 var app = builder.Build();
 app.UseHttpLogging();
@@ -110,6 +127,7 @@ app.UseSwaggerUI(options => {
     options.SwaggerEndpoint("/swagger/v2/swagger.json", "2.0");
 });
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
