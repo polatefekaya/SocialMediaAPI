@@ -78,6 +78,10 @@ builder.Services.AddDbContext<UserCriticalDbContext>(options => {
     options.UseSqlServer(connection);
     options.EnableSensitiveDataLogging();
 });
+builder.Services.AddDbContext<UserIdentityDbContext>(options => {
+    options.UseSqlServer(connection);
+    options.EnableSensitiveDataLogging();
+});
 
 //Swagger
 builder.Services.AddApiVersioning(config => {
