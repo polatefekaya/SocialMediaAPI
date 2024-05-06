@@ -24,7 +24,8 @@ namespace RosanicSocial.Domain.DTO.Request.Account {
         public string Username { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Phone number can't be blank")]
-        [RegularExpression("^[0-9]*$", ErrorMessage = "Phone number should contain digits only")]
+        [RegularExpression("^(?:([+]\\d{1,4})[-.\\s]?)?(?:[(](\\d{1,3})[)][-.\\s]?)?(\\d{1,4})[-.\\s]?(\\d{1,4})[-.\\s]?(\\d{1,9})$", ErrorMessage = "Phone number should contain digits only and maximum of 15, minimum of 7 characters only")]
+        [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; } = string.Empty;
     }
 }

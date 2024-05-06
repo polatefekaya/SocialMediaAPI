@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using RosanicSocial.Application.Interfaces;
 using RosanicSocial.Domain.Data.Identity;
 using RosanicSocial.Domain.DTO.Request.Account;
+using RosanicSocial.Domain.DTO.Response.Authentication;
 using RosanicSocial.WebAPI.Controllers;
 
 namespace RosanicSocial.API.Controllers.v1 {
@@ -16,10 +18,12 @@ namespace RosanicSocial.API.Controllers.v1 {
         private readonly UserManager<ApplicationUser> _userManger;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager) {
+        private readonly IJwtService _jwtService;
+        public AccountController(IJwtService jwtService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager) {
             _userManger = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _jwtService = jwtService;
         }
 
         [HttpPost]
@@ -41,7 +45,15 @@ namespace RosanicSocial.API.Controllers.v1 {
 
             if (result.Succeeded) {
                 await _signInManager.SignInAsync(user, isPersistent: false);
-                return Ok(user);
+
+                AuthenticationResponse authResponse = _jwtService.CreateJwtToken(user.ToAuthRequest());
+
+                user.RefreshToken = authResponse.RefreshToken;
+                user.RefreshTokenExpiration = authResponse.RefreshTokenExpiration;
+
+                await _userManger.UpdateAsync(user);
+
+                return Ok(authResponse);
             }
 
             string errorDesc = string.Join(" | ", result.Errors.Select(x => x.Description));
