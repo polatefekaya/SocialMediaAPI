@@ -5,11 +5,13 @@ using RosanicSocial.Application.Interfaces;
 using RosanicSocial.Application.Interfaces.Creators;
 using RosanicSocial.Application.Interfaces.DbServices;
 using RosanicSocial.Application.Interfaces.Factories;
+using RosanicSocial.Application.Interfaces.Helpers;
 using RosanicSocial.Application.Interfaces.Repository;
 using RosanicSocial.Application.Services;
 using RosanicSocial.Application.Services.Creators;
 using RosanicSocial.Application.Services.DbServices;
 using RosanicSocial.Application.Services.Factories;
+using RosanicSocial.Application.Services.Helpers;
 
 namespace RosanicSocial.Application {
     public static class DependencyInjection {
@@ -22,6 +24,7 @@ namespace RosanicSocial.Application {
             services.AddScoped<IDbTableCreatorFactoryService, DbTableCreatorFactoryService>();
             services.AddScoped<IDbTableCreatorService, DbTableCreatorService>();
             services.AddTransient<IJwtService, JwtService>();
+            services.AddTransient<IJwtHelperService, JwtHelperService>();
 
             return services;
         }

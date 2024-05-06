@@ -2,8 +2,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using RosanicSocial.Application.Interfaces;
+using RosanicSocial.Application.Interfaces.Helpers;
 using RosanicSocial.Domain.DTO.Request.Authentication;
 using RosanicSocial.Domain.DTO.Response.Authentication;
+using RosanicSocial.Domain.Data.Services.JwtService;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -14,27 +16,23 @@ using System.Text;
 namespace RosanicSocial.Application.Services {
     public class JwtService : IJwtService {
         private readonly IConfiguration _configuration;
-        public JwtService(IConfiguration configuration) {
+        private readonly IJwtHelperService _jwtHelperService;
+        public JwtService(IConfiguration configuration, IJwtHelperService jwtHelperService) {
             _configuration = configuration;
+            _jwtHelperService = jwtHelperService;
         }
-        private enum Expirations {
-            Token = 0,
-            RefreshToken = 1
-        }
-
-        private string[] _expirationDates = { "Jwt:EXP_MINUTES", "RefreshToken:EXP_MINUTES" }; 
 
         public AuthenticationResponse CreateJwtToken(AuthenticationRequest request) {
-            DateTime tokenExpiration = SetExpiration(Expirations.Token);
-            DateTime refreshTokenExpiration = SetExpiration(Expirations.RefreshToken);
+            DateTime tokenExpiration = _jwtHelperService.SetExpiration(JwtServiceData.Expirations.Token);
+            DateTime refreshTokenExpiration = _jwtHelperService.SetExpiration(JwtServiceData.Expirations.RefreshToken);
 
-            Claim[] claims = SetClaims(ref request);
-            SymmetricSecurityKey securityKey = SetSecurityKey();
-            SigningCredentials signingCredentials = SetSigningCredentials(ref securityKey);
-            JwtSecurityToken securityToken = SetSecurityTokenGenerator(ref claims, ref tokenExpiration, ref signingCredentials);
+            Claim[] claims = _jwtHelperService.SetClaims(ref request);
+            SymmetricSecurityKey securityKey = _jwtHelperService.SetSecurityKey();
+            SigningCredentials signingCredentials = _jwtHelperService.SetSigningCredentials(ref securityKey);
+            JwtSecurityToken securityToken = _jwtHelperService.SetSecurityTokenGenerator(ref claims, ref tokenExpiration, ref signingCredentials);
 
-            string token = GenerateToken(ref securityToken);
-            string refreshToken = GenerateRefreshToken();
+            string token = _jwtHelperService.GenerateToken(ref securityToken);
+            string refreshToken = _jwtHelperService.GenerateRefreshToken();
 
             return new AuthenticationResponse {
                 Username = request.Username,
@@ -47,67 +45,19 @@ namespace RosanicSocial.Application.Services {
             };
         }
 
-        private DateTime SetExpiration(Expirations exp) {
-            string expConfig = _expirationDates[(int)exp];
-            double EXP_MINUTES = Convert.ToDouble(_configuration[expConfig]);
-            return DateTime.UtcNow.AddMinutes(EXP_MINUTES);
-        }
-        private Claim[] SetClaims(ref AuthenticationRequest request) {
-            return [
-                new Claim(JwtRegisteredClaimNames.Sub, request.Id),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                new Claim(ClaimTypes.Name, request.Name),
-                new Claim(ClaimTypes.NameIdentifier, request.Username),
-                new Claim(ClaimTypes.Email, request.Email),
-            ];
-        }
-        private SymmetricSecurityKey SetSecurityKey() {
-            byte[] keyBytes = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
-            return new SymmetricSecurityKey(keyBytes);
-        }
-        private SigningCredentials SetSigningCredentials(ref SymmetricSecurityKey securityKey) {
-            return new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-        }
-        private JwtSecurityToken SetSecurityTokenGenerator(ref Claim[] claims, ref DateTime expiration, ref SigningCredentials signingCredentials) {
-            return new JwtSecurityToken(_configuration["Jwt:Issuer"],
-                _configuration["Jwt:Audience"],
-                claims,
-                expires: expiration,
-                signingCredentials: signingCredentials
-                );
-        }
-        private string GenerateToken(ref JwtSecurityToken securityToken) {
-            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
-            return handler.WriteToken(securityToken);
-        }
-
-        private ClaimsPrincipal ValidateToken(string token, ref TokenValidationParameters validationParameters, out SecurityToken securityToken) {
-            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
-            return handler.ValidateToken(token, validationParameters, out securityToken);
-        }
-
-        private string GenerateRefreshToken() {
-            byte[] bytes = new byte[64];
-            RandomNumberGenerator rng = RandomNumberGenerator.Create();
-
-            rng.GetBytes(bytes);
-            return Convert.ToBase64String(bytes);
-        }
-
         public ClaimsPrincipal? GetClaimsPrincipal(string? token) {
             TokenValidationParameters validationParameters = new TokenValidationParameters() {
                 ValidateAudience = true,
-                ValidAudience = _configuration["Jwt:Audience"],
+                ValidAudience = _configuration[JwtServiceData.jwtDataDictionary[JwtServiceData.Expirations.Audience]],
                 ValidateIssuer = true,
-                ValidIssuer = _configuration["Jwt:Issuer"],
+                ValidIssuer = _configuration[JwtServiceData.jwtDataDictionary[JwtServiceData.Expirations.Issuer]],
 
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = SetSecurityKey(),
+                IssuerSigningKey = _jwtHelperService.SetSecurityKey(),
                 ValidateLifetime = false
             };
 
-            ClaimsPrincipal principal = ValidateToken(token, ref validationParameters, out SecurityToken securityToken);
+            ClaimsPrincipal principal = _jwtHelperService.ValidateToken(token, ref validationParameters, out SecurityToken securityToken);
 
             if (securityToken is not JwtSecurityToken jwtSecurityToken
                 || jwtSecurityToken.Header.Alg.Equals(
