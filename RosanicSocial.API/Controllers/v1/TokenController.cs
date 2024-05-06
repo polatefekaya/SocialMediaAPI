@@ -20,7 +20,12 @@ namespace RosanicSocial.API.Controllers.v1 {
             _userManager = userManager;
         }
 
-
+        /// <summary>
+        /// It Generates new access token for user to authenticate. If the supplied token meets the requirements, it generates a new one. 
+        /// refreshToken's expiration date must not be out of date and the supplied refreshToken is have to be equavalent to user's refreshToken in Identity Database
+        /// </summary>
+        /// <param name="tokenmodel">Jwt Token and Refresh Token</param>
+        /// <returns>New token values</returns>
         [HttpPost]
         public async Task<ActionResult<AuthenticationResponse>> GenerateNewAccessToken(TokenModel tokenmodel) {
             if (tokenmodel == null) {

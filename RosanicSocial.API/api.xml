@@ -11,5 +11,13 @@
             <param name="request"></param>
             <returns></returns>
         </member>
+        <member name="M:RosanicSocial.API.Controllers.v1.TokenController.GenerateNewAccessToken(RosanicSocial.Domain.Models.TokenModel)">
+            <summary>
+            It Generates new access token for user to authenticate. If the supplied token meets the requirements, it generates a new one. 
+            refreshToken's expiration date must not be out of date and the supplied refreshToken is have to be equavalent to user's refreshToken in Identity Database
+            </summary>
+            <param name="tokenmodel">Jwt Token and Refresh Token</param>
+            <returns>New token values</returns>
+        </member>
     </members>
 </doc>
