@@ -12,17 +12,21 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace RosanicSocial.Application.Services {
     public class JwtService : IJwtService {
         private readonly IConfiguration _configuration;
         private readonly IJwtHelperService _jwtHelperService;
-        public JwtService(IConfiguration configuration, IJwtHelperService jwtHelperService) {
+        private readonly ILogger<JwtService> _logger;
+        public JwtService(IConfiguration configuration, IJwtHelperService jwtHelperService, ILogger<JwtService> logger) {
             _configuration = configuration;
             _jwtHelperService = jwtHelperService;
+            _logger = logger;
         }
 
         public AuthenticationResponse CreateJwtToken(AuthenticationRequest request) {
+            _logger.LogInformation($"JwtToken Creation is Started for {request.}");
             DateTime tokenExpiration = _jwtHelperService.SetExpiration(JwtServiceData.Expirations.Token);
             DateTime refreshTokenExpiration = _jwtHelperService.SetExpiration(JwtServiceData.Expirations.RefreshToken);
 
@@ -46,6 +50,10 @@ namespace RosanicSocial.Application.Services {
         }
 
         public ClaimsPrincipal? GetClaimsPrincipal(string? token) {
+            if (token is null) {
+                _logger.LogError("Supplied token for GetClaimsPrincipal is null");
+                return null;
+            }
             TokenValidationParameters validationParameters = new TokenValidationParameters() {
                 ValidateAudience = true,
                 ValidAudience = _configuration[JwtServiceData.jwtDataDictionary[JwtServiceData.Expirations.Audience]],
@@ -56,13 +64,23 @@ namespace RosanicSocial.Application.Services {
                 IssuerSigningKey = _jwtHelperService.SetSecurityKey(),
                 ValidateLifetime = false
             };
+            _logger.LogDebug("TokenValidatonParameters object created");
 
             ClaimsPrincipal principal = _jwtHelperService.ValidateToken(token, ref validationParameters, out SecurityToken securityToken);
+            _logger.LogDebug("ClaimsPrincipal object created");
 
-            if (securityToken is not JwtSecurityToken jwtSecurityToken
-                || jwtSecurityToken.Header.Alg.Equals(
-                    SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase
-                    )) {
+            JwtSecurityToken? jwtSecurityToken = securityToken as JwtSecurityToken;
+            if (jwtSecurityToken is null) {
+                _logger.LogError("jwtSecurityToken is null");
+                throw new SecurityTokenException("Invalid Token");
+            }
+
+            bool isAlgorithmsNotMatch = jwtSecurityToken.Header.Alg.Equals(
+                SecurityAlgorithms
+                .HmacSha256, StringComparison.InvariantCultureIgnoreCase);
+
+            if (isAlgorithmsNotMatch) {
+                _logger.LogError("jwtSecurityToken algorithm not matching with securityToken");
                 throw new SecurityTokenException("InvalidToken");
             }
 
