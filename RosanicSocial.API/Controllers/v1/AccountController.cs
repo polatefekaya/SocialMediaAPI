@@ -19,15 +19,20 @@ namespace RosanicSocial.API.Controllers.v1 {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IJwtService _jwtService;
-        public AccountController(IJwtService jwtService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager) {
+        private readonly ILogger<AccountController> _logger;
+        public AccountController(IJwtService jwtService, ILogger<AccountController> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager) {
             _userManger = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _jwtService = jwtService;
+            _logger = logger;
         }
 
         [HttpPost]
         public async Task<ActionResult<ApplicationUser>> Register(RegisterRequest request) {
+            _logger.LogInformation("Register Controller started");
+            _logger.LogDebug($"Request Type: {nameof(RegisterRequest)}");
+
             if (!ModelState.IsValid) {
                 string errorMessage = string.Join(" | ", 
                     ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
@@ -62,6 +67,9 @@ namespace RosanicSocial.API.Controllers.v1 {
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginRequest request) {
+            _logger.LogInformation("Login Controller started");
+            _logger.LogDebug($"Request Type: {nameof(LoginRequest)}");
+
             if (!ModelState.IsValid) {
                 string errorMessage = string.Join(" | ",
                     ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
@@ -92,12 +100,18 @@ namespace RosanicSocial.API.Controllers.v1 {
 
         [HttpGet]
         public async Task<IActionResult> Logout() {
+            _logger.LogInformation("Logout Controller started");
+            _logger.LogDebug($"Request Type: GET");
+
             await _signInManager.SignOutAsync();
             return NoContent();
         }
 
         [HttpGet]
         public async Task<IActionResult> IsUsernameAlreadyRegistered(string usernanme) {
+            _logger.LogInformation("IsUsernameAlreadyRegistered Controller started");
+            _logger.LogDebug($"Request Type: GET");
+
             ApplicationUser? user = await _userManger.FindByNameAsync(usernanme);
 
             if (user == null) {

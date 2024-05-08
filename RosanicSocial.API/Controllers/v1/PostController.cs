@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RosanicSocial.Application.Interfaces.DbServices;
 using RosanicSocial.Domain.DTO.Request.Post;
 using RosanicSocial.Domain.DTO.Response.Post;
 using RosanicSocial.WebAPI.Controllers;
@@ -8,25 +9,24 @@ using RosanicSocial.WebAPI.Controllers;
 namespace RosanicSocial.API.Controllers.v1 {
     [ApiVersion("1.0")]
     public class PostController : CustomControllerBase {
-
-        public PostController() {
-
+        private readonly IPostDbService _dbService;
+        public PostController(IPostDbService dbService) {
+            _dbService = dbService;
         }
 
         #region Get
 
         [HttpGet]
-        [Route("ById")]
         public async Task<ActionResult<PostGetResponse>> GetPost(PostGetRequest request) {
 
             return null;
         }
 
         [HttpGet]
-        [Route("AllById")]
-        public async Task<ActionResult<PostGetResponse[]>> GetAllPostsByUserId(PostGetAllRequest request) {
-
-            return null;
+        public async Task<ActionResult<PostGetResponse[]>> GetAllPostsByUserId([FromQuery]PostGetAllRequest request) {
+            //TODO: it has to authenticate user for preventing private account post leaks
+            PostGetResponse[] entities = await _dbService.GetAllPosts(request);
+            return entities;
         }
 
         [HttpGet]

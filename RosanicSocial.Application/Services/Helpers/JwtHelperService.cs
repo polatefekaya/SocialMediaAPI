@@ -1,11 +1,13 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using RosanicSocial.Application.Interfaces.Helpers;
 using RosanicSocial.Domain.Data.Services.JwtService;
 using RosanicSocial.Domain.DTO.Request.Authentication;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -47,9 +49,9 @@ namespace RosanicSocial.Application.Services.Helpers {
             return [
                 new Claim(JwtRegisteredClaimNames.Sub, request.Id),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                new Claim(ClaimTypes.Name, request.Name),
-                new Claim(ClaimTypes.NameIdentifier, request.Username),
+                new Claim(JwtRegisteredClaimNames.Iat, EpochTime.GetIntDate(DateTime.UtcNow).ToString(CultureInfo.InvariantCulture), ClaimValueTypes.Integer64),
+                new Claim(ClaimTypes.GivenName, request.Name),
+                new Claim(ClaimTypes.Name, request.Username),
                 new Claim(ClaimTypes.Email, request.Email),
             ];
         }
@@ -91,6 +93,7 @@ namespace RosanicSocial.Application.Services.Helpers {
 
         public ClaimsPrincipal ValidateToken(string token, ref TokenValidationParameters validationParameters, out SecurityToken securityToken) {
             _logger.LogTrace("ClaimsPrincipal Token Validation is started");
+            IdentityModelEventSource.ShowPII = true;
 
             JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
             return handler.ValidateToken(token, validationParameters, out securityToken);

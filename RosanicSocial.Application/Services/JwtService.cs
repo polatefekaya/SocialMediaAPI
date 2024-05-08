@@ -90,12 +90,13 @@ namespace RosanicSocial.Application.Services {
                 throw new SecurityTokenException("Invalid Token");
             }
 
-            bool isAlgorithmsNotMatch = jwtSecurityToken.Header.Alg.Equals(
+            bool isAlgorithmsNotMatch = !(jwtSecurityToken.Header.Alg.Equals(
                 SecurityAlgorithms
-                .HmacSha256, StringComparison.InvariantCultureIgnoreCase);
+                .HmacSha256, StringComparison.InvariantCultureIgnoreCase));
 
             if (isAlgorithmsNotMatch) {
                 _logger.LogError("jwtSecurityToken algorithm not matching with securityToken");
+                _logger.LogDebug($"JwtSecurityToken Algorithm: {jwtSecurityToken.Header.Alg}, Accepted Algorithm: {SecurityAlgorithms.HmacSha256}");
                 throw new SecurityTokenException("InvalidToken");
             }
 

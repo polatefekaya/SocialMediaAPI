@@ -48,7 +48,7 @@ namespace RosanicSocial.API.Controllers.v1 {
                 return BadRequest("Invalid JWT Access Token");
             }
 
-            string? userName = principal.FindFirstValue(ClaimTypes.NameIdentifier);
+            string? userName = principal.FindFirstValue(ClaimTypes.Name);
             if (userName == null) {
                 _logger.LogError("No UserName Found");
                 return BadRequest("No UserName Found");
@@ -59,14 +59,22 @@ namespace RosanicSocial.API.Controllers.v1 {
             _logger.LogDebug("ApplicationUser is setted via UserManager");
 
             bool isUserNull = user is null;
+            if (isUserNull) {
+                _logger.LogWarning($"{nameof(user)} is null");
+                _logger.LogTrace($"Searched UserName is {userName}");
+                return BadRequest("Invalid Jwt Token");
+            }
+
             bool isRefreshTokensNotMatch = user.RefreshToken != tokenmodel.RefreshToken;
+            if (isRefreshTokensNotMatch) {
+                _logger.LogError("RefreshTokens not matching");
+                return BadRequest("Invalid RefreshToken");
+            }
+
             bool isRefreshTokenExpired = user.RefreshTokenExpiration <= DateTime.UtcNow;
 
-            if (isUserNull || isRefreshTokensNotMatch || isRefreshTokenExpired)
-            {
-                _logger.LogTrace($"Some error about RefreshToken\nIs User Null: {isUserNull}\nIs Refresh Tokens Not Matching: {isRefreshTokensNotMatch}\nIs Refresh Token Expired: {isRefreshTokenExpired}");
-                
-                _logger.LogError("Invalid RefreshToken");
+            if (isRefreshTokenExpired) {   
+                _logger.LogError("RefreshToken is Expired");
                 return BadRequest("Invalid RefreshToken");
             }
 
