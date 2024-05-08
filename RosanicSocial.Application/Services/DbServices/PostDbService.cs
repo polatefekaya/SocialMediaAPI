@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using RosanicSocial.Application.Interfaces;
 using RosanicSocial.Application.Interfaces.DbServices;
 using RosanicSocial.Application.Interfaces.Repository;
 using RosanicSocial.Domain.Data.Entities.Post;
@@ -11,8 +12,10 @@ namespace RosanicSocial.Application.Services.DbServices
 {
     public class PostDbService : IPostDbService {
         private readonly IPostRepository _postRepository;
-        public PostDbService(IPostRepository postRepository) {
+        private readonly IEntityConvertService _converter;
+        public PostDbService(IPostRepository postRepository, IEntityConvertService converter) {
             _postRepository = postRepository;
+            _converter = converter;
         }
         public async Task<PostAddResponse> AddPost(PostAddRequest request) {
             PostEntity entity = request.ToEntity();
@@ -26,12 +29,20 @@ namespace RosanicSocial.Application.Services.DbServices
             return response;
         }
 
-        public Task<PostDeleteResponse[]> DeleteAllPosts(PostDeleteAllRequest request) {
-            throw new NotImplementedException();
+        public async Task<PostDeleteResponse[]> DeleteAllPosts(PostDeleteAllRequest request) {
+            PostEntity[] entities = await _postRepository.DeleteAllPostsByUserId(request.UserId);
+
+            return await _converter.ToResponseAsync(entities, (e) => {
+                return e.ToDeleteResponse();
+            });
         }
 
-        public Task<PostDeleteResponse[]> DeleteBatchPost(PostDeleteBatchRequest request) {
-            throw new NotImplementedException();
+        public async Task<PostDeleteResponse[]> DeleteBatchPost(PostDeleteBatchRequest request) {
+            PostEntity[] entities = await _postRepository.DeleteBatchPost(request.PostIds);
+
+            return await _converter.ToResponseAsync(entities, (e) => {
+                return e.ToDeleteResponse();
+            });
         }
 
         public async Task<PostDeleteResponse> DeletePost(PostDeleteRequest request) {
@@ -41,30 +52,40 @@ namespace RosanicSocial.Application.Services.DbServices
 
         public async Task<PostGetResponse[]> GetAllPostsById(PostGetAllRequest request) {
             PostEntity[] entities = await _postRepository.GetPostsByUserId(request.UserId);
-            PostGetResponse[] responses = new PostGetResponse[entities.Length];
-            for (int i = 0; i < entities.Length; i++) {
-                responses[i] = entities[i].ToGetResponse();
-            }
-            return responses;
+            return await _converter.ToResponseAsync(entities, (e) => {
+                return e.ToGetResponse();
+            });
         }
 
         public async Task<PostGetResponse[]> GetByCategoryPost(PostGetByCategoryRequest request) {
             PostEntity[] entities = await _postRepository.GetPostsByUserId(request.UserId);
             PostEntity[] categorizedEntities = entities.Where(p => p.Category == request.Category).ToArray();
 
-            PostGetResponse[] responses = new PostGetResponse[categorizedEntities.Length];
-            for (int i = 0; i < categorizedEntities.Length; i++) {
-                responses[i] = categorizedEntities[i].ToGetResponse();
-            }
-            return responses;
+            return await _converter.ToResponseAsync(categorizedEntities, (e) => {
+                return e.ToGetResponse();
+            });
         }
 
-        public Task<PostGetResponse[]> GetByTopicPost(PostGetByTopicRequest request) {
-            throw new NotImplementedException();
+        public async Task<PostGetResponse[]> GetByTopicPost(PostGetByTopicRequest request) {
+            PostEntity[] entities = await _postRepository.GetPostsByUserId(request.UserId);
+            PostEntity[] categorizedEntities = entities.Where(p =>
+                    p.Category == request.Category && p.Type == request.Type && p.Topic == request.Topic
+                ).ToArray();
+
+            return await _converter.ToResponseAsync(categorizedEntities, (e) => {
+                return e.ToGetResponse();
+            });
         }
 
-        public Task<PostGetResponse[]> GetByTypePost(PostGetByTypeRequest request) {
-            throw new NotImplementedException();
+        public async Task<PostGetResponse[]> GetByTypePost(PostGetByTypeRequest request) {
+            PostEntity[] entities = await _postRepository.GetPostsByUserId(request.UserId);
+            PostEntity[] categorizedEntities = entities.Where(p =>
+                    p.Category == request.Category && p.Type == request.Type
+                ).ToArray();
+
+            return await _converter.ToResponseAsync(categorizedEntities, (e) => {
+                return e.ToGetResponse();
+            });
         }
 
         public Task<PostGetResponse[]> GetFollowingUsersPosts(PostGetFollowingsRequest request) {
@@ -75,12 +96,24 @@ namespace RosanicSocial.Application.Services.DbServices
             throw new NotImplementedException();
         }
 
-        public Task<PostGetResponse> GetPost(PostGetRequest request) {
-            throw new NotImplementedException();
+        public async Task<PostGetResponse> GetPost(PostGetRequest request) {
+            PostEntity? entity = await _postRepository.GetPostById(request.PostId);
+            if(entity is null) { return null; }
+
+            PostGetResponse response = entity.ToGetResponse();
+            return response;
         }
 
-        public Task<PostUpdateResponse> UpdatePost(PostUpdateRequest request) {
-            throw new NotImplementedException();
+        public async Task<PostUpdateResponse> UpdatePost(PostUpdateRequest request) {
+            PostEntity entity = request.ToEntity();
+            entity.IsUpdated = true;
+            entity.UpdatedAt = DateTime.UtcNow;
+
+            PostEntity? updatedEntity = await _postRepository.UpdatePost(entity);
+            if(updatedEntity is null) { return null; }
+
+            PostUpdateResponse response = updatedEntity.ToUpdateResponse();
+            return response;
         }
     }
 }

@@ -45,7 +45,7 @@ namespace RosanicSocial.Infrastructure.Repository
         public async Task<PostEntity?> UpdatePost(PostEntity post) {
             _db.Posts.Update(post);
             await _db.SaveChangesAsync();
-            throw new NotImplementedException();
+            return post;
         }
 
         public async Task<PostEntity[]> DeleteBatchPost(int[] ids) {

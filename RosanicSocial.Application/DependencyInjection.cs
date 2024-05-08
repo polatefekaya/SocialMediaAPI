@@ -25,6 +25,7 @@ namespace RosanicSocial.Application {
             services.AddScoped<IDbTableCreatorService, DbTableCreatorService>();
             services.AddTransient<IJwtService, JwtService>();
             services.AddTransient<IJwtHelperService, JwtHelperService>();
+            services.AddScoped<IEntityConvertService, EntityConvertService>();
 
             return services;
         }

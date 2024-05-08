@@ -18,8 +18,8 @@ namespace RosanicSocial.API.Controllers.v1 {
 
         [HttpGet]
         public async Task<ActionResult<PostGetResponse>> GetPost([FromQuery] PostGetRequest request) {
-
-            return null;
+            PostGetResponse response = await _dbService.GetPost(request);
+            return response;
         }
 
         [HttpGet]
@@ -37,12 +37,14 @@ namespace RosanicSocial.API.Controllers.v1 {
 
         [HttpGet]
         public async Task<ActionResult<PostGetResponse[]>> GetPostsByType([FromQuery]PostGetByTypeRequest request) {
-            return null;
+            PostGetResponse[] responses = await _dbService.GetByTypePost(request);
+            return responses;
         }
 
         [HttpGet]
         public async Task<ActionResult<PostGetResponse[]>> GetPostsByTopic([FromQuery] PostGetByTopicRequest request) {
-            return null;
+            PostGetResponse[] responses = await _dbService.GetByTopicPost(request);
+            return responses;
         }
 
         #endregion
@@ -70,12 +72,18 @@ namespace RosanicSocial.API.Controllers.v1 {
         public async Task<ActionResult<PostDeleteResponse[]>> DeleteBatchPost(PostDeleteBatchRequest request) {
             PostDeleteResponse[] responses = await _dbService.DeleteBatchPost(request);
             return responses;
-        } 
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult<PostDeleteResponse[]>> DeleteAllPostsByUserId(PostDeleteAllRequest request) {
+            PostDeleteResponse[] responses = await _dbService.DeleteAllPosts(request);
+            return responses;
+        }
 
         [HttpPut]
         public async Task<ActionResult<PostUpdateResponse>> UpdatePost(PostUpdateRequest request) {
-
-            return null;
+            PostUpdateResponse response = await _dbService.UpdatePost(request); 
+            return response;
         }
     }
 }
