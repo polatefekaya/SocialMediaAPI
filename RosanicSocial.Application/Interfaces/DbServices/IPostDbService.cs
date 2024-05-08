@@ -31,7 +31,7 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
         Task<PostGetResponse> GetPost(PostGetRequest request);
         Task<PostGetResponse[]> GetFollowingUsersPosts(PostGetFollowingsRequest request);
         Task<PostGetResponse[]> GetInterestedPosts(PostGetInterestedRequest request);
-        Task<PostGetResponse[]> GetAllPosts(PostGetAllRequest request);
+        Task<PostGetResponse[]> GetAllPostsById(PostGetAllRequest request);
         Task<PostGetResponse[]> GetByCategoryPost(PostGetByCategoryRequest request);
         Task<PostGetResponse[]> GetByTypePost(PostGetByTypeRequest request);
         Task<PostGetResponse[]> GetByTopicPost(PostGetByTopicRequest request);

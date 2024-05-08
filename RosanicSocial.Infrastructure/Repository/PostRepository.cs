@@ -15,32 +15,53 @@ namespace RosanicSocial.Infrastructure.Repository
             _db = db;
         }
 
-        public async Task<PostEntity> AddRose(PostEntity post) {
+        public async Task<PostEntity> AddPost(PostEntity post) {
             await _db.Posts.AddAsync(post);
             await _db.SaveChangesAsync();
             return post;
         }
 
-        public async Task<PostEntity> DeleteRose(PostEntity post) {
-            _db.Posts.Remove(post);
+        public async Task<PostEntity> DeletePost(int id) {
+            PostEntity? entity = await _db.Posts.FindAsync(id);
+            if (entity is null) {
+                return null;
+            }
+
+            _db.Posts.Remove(entity);
             await _db.SaveChangesAsync();
 
-            return post;
+            return entity;
         }
 
         public async Task<PostEntity[]> GetPostsByUserId(int id) {
             return await _db.Posts.Where(p => p.UserId == id).ToArrayAsync();
         }
 
-        public async Task<PostEntity?> GetRoseById(int id) {
+        public async Task<PostEntity?> GetPostById(int id) {
             PostEntity? tempPost = await _db.Posts.SingleOrDefaultAsync(p => p.Id == id);
             return tempPost;
         }
 
-        public async Task<PostEntity?> UpdateRose(PostEntity post) {
+        public async Task<PostEntity?> UpdatePost(PostEntity post) {
             _db.Posts.Update(post);
             await _db.SaveChangesAsync();
             throw new NotImplementedException();
+        }
+
+        public async Task<PostEntity[]> DeleteBatchPost(int[] ids) {
+            PostEntity[] postEntities = await _db.Posts.Where(p => ids.Contains(p.Id)).ToArrayAsync();
+
+            _db.Posts.RemoveRange(postEntities);
+            await _db.SaveChangesAsync();
+
+            return postEntities;
+        }
+
+        public async Task<PostEntity[]> DeleteAllPostsByUserId(int id) {
+            PostEntity[] entities = await _db.Posts.Where(p => p.UserId == id).ToArrayAsync();
+            _db.Posts.RemoveRange(entities);
+            await _db.SaveChangesAsync();
+            return entities;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using RosanicSocial.Application.Interfaces.DbServices;
 using RosanicSocial.Application.Interfaces.Repository;
 using RosanicSocial.Domain.Data.Entities.Post;
@@ -9,8 +10,20 @@ using RosanicSocial.Domain.DTO.Response.Post;
 namespace RosanicSocial.Application.Services.DbServices
 {
     public class PostDbService : IPostDbService {
-        public Task<PostAddResponse> AddPost(PostAddRequest request) {
-            throw new NotImplementedException();
+        private readonly IPostRepository _postRepository;
+        public PostDbService(IPostRepository postRepository) {
+            _postRepository = postRepository;
+        }
+        public async Task<PostAddResponse> AddPost(PostAddRequest request) {
+            PostEntity entity = request.ToEntity();
+            DateTime initTime = DateTime.UtcNow;
+
+            entity.UpdatedAt = initTime;
+            entity.CreatedAt = initTime;
+
+            entity = await _postRepository.AddPost(entity);
+            PostAddResponse response = entity.ToAddResponse();
+            return response;
         }
 
         public Task<PostDeleteResponse[]> DeleteAllPosts(PostDeleteAllRequest request) {
@@ -21,16 +34,29 @@ namespace RosanicSocial.Application.Services.DbServices
             throw new NotImplementedException();
         }
 
-        public Task<PostDeleteResponse> DeletePost(PostDeleteRequest request) {
-            throw new NotImplementedException();
+        public async Task<PostDeleteResponse> DeletePost(PostDeleteRequest request) {
+            PostEntity entity = await _postRepository.DeletePost(request.PostId);
+            return entity.ToDeleteResponse();
         }
 
-        public Task<PostGetResponse[]> GetAllPosts(PostGetAllRequest request) {
-            throw new NotImplementedException();
+        public async Task<PostGetResponse[]> GetAllPostsById(PostGetAllRequest request) {
+            PostEntity[] entities = await _postRepository.GetPostsByUserId(request.UserId);
+            PostGetResponse[] responses = new PostGetResponse[entities.Length];
+            for (int i = 0; i < entities.Length; i++) {
+                responses[i] = entities[i].ToGetResponse();
+            }
+            return responses;
         }
 
-        public Task<PostGetResponse[]> GetByCategoryPost(PostGetByCategoryRequest request) {
-            throw new NotImplementedException();
+        public async Task<PostGetResponse[]> GetByCategoryPost(PostGetByCategoryRequest request) {
+            PostEntity[] entities = await _postRepository.GetPostsByUserId(request.UserId);
+            PostEntity[] categorizedEntities = entities.Where(p => p.Category == request.Category).ToArray();
+
+            PostGetResponse[] responses = new PostGetResponse[categorizedEntities.Length];
+            for (int i = 0; i < categorizedEntities.Length; i++) {
+                responses[i] = categorizedEntities[i].ToGetResponse();
+            }
+            return responses;
         }
 
         public Task<PostGetResponse[]> GetByTopicPost(PostGetByTopicRequest request) {

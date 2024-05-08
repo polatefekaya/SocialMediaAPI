@@ -5,10 +5,12 @@ using System.Collections.Generic;
 namespace RosanicSocial.Application.Interfaces.Repository
 {
     public interface IPostRepository {
-        Task<PostEntity?> GetRoseById(int id);
+        Task<PostEntity?> GetPostById(int id);
         Task<PostEntity[]> GetPostsByUserId(int id);
-        Task<PostEntity> AddRose(PostEntity rose);
-        Task<PostEntity> DeleteRose(PostEntity rose);
-        Task<PostEntity?> UpdateRose(PostEntity rose);
+        Task<PostEntity> AddPost(PostEntity entity);
+        Task<PostEntity> DeletePost(int id);
+        Task<PostEntity[]> DeleteBatchPost(int[] ids);
+        Task<PostEntity[]> DeleteAllPostsByUserId(int id);
+        Task<PostEntity?> UpdatePost(PostEntity entity);
     }
 }

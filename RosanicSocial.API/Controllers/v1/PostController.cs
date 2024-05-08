@@ -17,7 +17,7 @@ namespace RosanicSocial.API.Controllers.v1 {
         #region Get
 
         [HttpGet]
-        public async Task<ActionResult<PostGetResponse>> GetPost(PostGetRequest request) {
+        public async Task<ActionResult<PostGetResponse>> GetPost([FromQuery] PostGetRequest request) {
 
             return null;
         }
@@ -25,22 +25,23 @@ namespace RosanicSocial.API.Controllers.v1 {
         [HttpGet]
         public async Task<ActionResult<PostGetResponse[]>> GetAllPostsByUserId([FromQuery]PostGetAllRequest request) {
             //TODO: it has to authenticate user for preventing private account post leaks
-            PostGetResponse[] entities = await _dbService.GetAllPosts(request);
+            PostGetResponse[] entities = await _dbService.GetAllPostsById(request);
             return entities;
         }
 
         [HttpGet]
-        public async Task<ActionResult<PostGetResponse[]>> GetPostsByCategory(PostGetByCategoryRequest request) {
+        public async Task<ActionResult<PostGetResponse[]>> GetPostsByCategory([FromQuery]PostGetByCategoryRequest request) {
+            PostGetResponse[] responses = await _dbService.GetByCategoryPost(request);
+            return responses;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<PostGetResponse[]>> GetPostsByType([FromQuery]PostGetByTypeRequest request) {
             return null;
         }
 
         [HttpGet]
-        public async Task<ActionResult<PostGetResponse[]>> GetPostsByType(PostGetByTypeRequest request) {
-            return null;
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<PostGetResponse[]>> GetPostsByTopic(PostGetByTopicRequest request) {
+        public async Task<ActionResult<PostGetResponse[]>> GetPostsByTopic([FromQuery] PostGetByTopicRequest request) {
             return null;
         }
 
@@ -50,8 +51,7 @@ namespace RosanicSocial.API.Controllers.v1 {
 
         [HttpPost]
         public async Task<ActionResult<PostAddResponse>> AddPost(PostAddRequest request) {
-            
-            return null;
+            return await _dbService.AddPost(request);
         }
 
         #endregion
@@ -62,13 +62,14 @@ namespace RosanicSocial.API.Controllers.v1 {
 
         [HttpDelete]
         public async Task<ActionResult<PostDeleteResponse>> DeletePost(PostDeleteRequest request) {
-
-            return null;
+            PostDeleteResponse response = await _dbService.DeletePost(request); 
+            return response;
         }
 
         [HttpDelete]
         public async Task<ActionResult<PostDeleteResponse[]>> DeleteBatchPost(PostDeleteBatchRequest request) {
-            return null;
+            PostDeleteResponse[] responses = await _dbService.DeleteBatchPost(request);
+            return responses;
         } 
 
         [HttpPut]
