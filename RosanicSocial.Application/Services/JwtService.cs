@@ -26,17 +26,31 @@ namespace RosanicSocial.Application.Services {
         }
 
         public AuthenticationResponse CreateJwtToken(AuthenticationRequest request) {
-            _logger.LogInformation($"JwtToken Creation is Started for {request.}");
-            DateTime tokenExpiration = _jwtHelperService.SetExpiration(JwtServiceData.Expirations.Token);
-            DateTime refreshTokenExpiration = _jwtHelperService.SetExpiration(JwtServiceData.Expirations.RefreshToken);
+            _logger.LogTrace($"JwtToken Creation is Started for {request.Username}");
 
-            Claim[] claims = _jwtHelperService.SetClaims(ref request);
+            DateTime tokenExpiration = _jwtHelperService.SetExpiration(JwtServiceData.Expirations.Token);
+            _logger.LogDebug("Token Expiration is setted");
+
+            DateTime refreshTokenExpiration = _jwtHelperService.SetExpiration(JwtServiceData.Expirations.RefreshToken);
+            _logger.LogDebug("RefreshToken Expiration is setted");
+
+            Claim[] claims = SetClaimsWithLog(ref request);
+            _logger.LogDebug("Claims setted");
+
             SymmetricSecurityKey securityKey = _jwtHelperService.SetSecurityKey();
+            _logger.LogDebug("SymmetricSecurityKey is setted");
+
             SigningCredentials signingCredentials = _jwtHelperService.SetSigningCredentials(ref securityKey);
+            _logger.LogDebug("SigningCredentials are setted");
+
             JwtSecurityToken securityToken = _jwtHelperService.SetSecurityTokenGenerator(ref claims, ref tokenExpiration, ref signingCredentials);
+            _logger.LogDebug("JwtSecurityToken (used for generation) is setted");
 
             string token = _jwtHelperService.GenerateToken(ref securityToken);
+            _logger.LogDebug("Token is generated and setted");
+
             string refreshToken = _jwtHelperService.GenerateRefreshToken();
+            _logger.LogDebug("RefreshToken is generated and setted");
 
             return new AuthenticationResponse {
                 Username = request.Username,
@@ -65,9 +79,10 @@ namespace RosanicSocial.Application.Services {
                 ValidateLifetime = false
             };
             _logger.LogDebug("TokenValidatonParameters object created");
+            _logger.LogTrace($"Valid Audience: {validationParameters.ValidAudience}\nValid Issuer: {validationParameters.ValidIssuer}\nValidateIssuerSignInKey: {validationParameters.ValidateIssuerSigningKey}\nValidateLifetime: {validationParameters.ValidateLifetime}");
 
             ClaimsPrincipal principal = _jwtHelperService.ValidateToken(token, ref validationParameters, out SecurityToken securityToken);
-            _logger.LogDebug("ClaimsPrincipal object created");
+            _logger.LogDebug("ClaimsPrincipal object created via ValidateToken");
 
             JwtSecurityToken? jwtSecurityToken = securityToken as JwtSecurityToken;
             if (jwtSecurityToken is null) {
@@ -85,6 +100,14 @@ namespace RosanicSocial.Application.Services {
             }
 
             return principal;
+        }
+        private Claim[] SetClaimsWithLog(ref AuthenticationRequest request) {
+            Claim[] tempClaims = _jwtHelperService.SetClaims(ref request);
+            _logger.LogDebug($"{tempClaims.Length} Claim setted");
+            foreach (Claim claim in tempClaims) {
+                _logger.LogTrace($"Claim Type: {claim.Type}\nClaim ValueType: {claim.ValueType}\nClaim Issuer: {claim.Issuer}\nClaim Subject: {claim.Subject}\nClaim Value: {claim.Value}\nClaim OriginalIssuer: {claim.OriginalIssuer}");
+            }
+            return tempClaims;
         }
     }
 }
