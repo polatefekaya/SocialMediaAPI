@@ -59,5 +59,12 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
         /// <param name="request"></param>
         /// <returns></returns>
         Task<CommentDeleteResponse> DeleteCommentAsync(CommentDeleteRequest request);
+        /// <summary>
+        /// Deletes the all the comments from database by users <paramref name="id"/> and returns it.
+        /// <paramref name="id"/> is must given with <paramref name="request"/>
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task<CommentDeleteResponse[]> DeleteAllCommentsByUserIdAsync(CommentDeleteAllByUserIdRequest request);
     }
 }

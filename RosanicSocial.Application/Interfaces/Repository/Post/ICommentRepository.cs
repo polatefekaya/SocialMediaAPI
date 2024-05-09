@@ -11,7 +11,7 @@ namespace RosanicSocial.Application.Interfaces.Repository.Post
         Task<CommentEntity[]> GetAllCommentsByUserId(int userId);
         Task<CommentEntity[]> GetAllCommentsByPostId(int postId);
         Task<CommentEntity> UpdateComment(CommentEntity comment);
-        Task<CommentEntity> DeleteComment(int id);
-        Task<CommentEntity> DeleteAllComments(int id);
+        Task<CommentEntity?> DeleteComment(int id);
+        Task<CommentEntity[]> DeleteAllComments(int id);
     }
 }
