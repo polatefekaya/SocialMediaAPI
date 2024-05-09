@@ -20,36 +20,64 @@ namespace RosanicSocial.Application.Services.DbServices {
         public async Task<BaseInfoAddResponse> AddBaseInfo(BaseInfoAddRequest request) {
             _logger.LogInformation($"Add BaseInfo Add request: {request}");
             BaseInfoEntity entity = request.ToEntity();
+
+            entity.CreatedAt = DateTime.UtcNow;
+            entity.UpdatedAt = entity.CreatedAt;
+
             entity = await _repo.AddBaseInfo(entity);
             return entity.ToAddResponse();
         }
 
         public async Task<DetailedInfoAddResponse> AddDetailedInfo(DetailedInfoAddRequest request) {
-            throw new NotImplementedException();
+            DetailedInfoEntity entity = request.ToEntity();
+
+            entity.CreatedAt = DateTime.UtcNow;
+            entity.UpdatedAt = entity.CreatedAt;
+            
+            entity = await _repo.AddDetailedInfo(entity);
+            return entity.ToAddResponse();
         }
 
         public async Task<BaseInfoDeleteResponse> DeleteBaseInfo(BaseInfoDeleteRequest request) {
-            throw new NotImplementedException();
+            BaseInfoEntity entity = await _repo.DeleteBaseInfo(request.UserId);
+            BaseInfoDeleteResponse response = entity.ToDeleteResponse();
+            return response;
         }
 
         public async Task<DetailedInfoDeleteResponse> DeleteDetailedInfo(DetailedInfoDeleteRequest request) {
-            throw new NotImplementedException();
+            DetailedInfoEntity entity = await _repo.DeleteDetailedInfo(request.UserId);
+            DetailedInfoDeleteResponse response = entity.ToDeleteResponse();
+            return response;
         }
 
         public async Task<BaseInfoGetResponse> GetBaseInfo(BaseInfoGetRequest request) {
-            throw new NotImplementedException();
+            BaseInfoEntity entity = await _repo.GetBaseInfo(request.UserId);
+            BaseInfoGetResponse response = entity.ToGetResponse();
+            return response;
         }
 
         public async Task<DetailedInfoGetResponse> GetDetailedInfo(DetailedInfoGetRequest request) {
-            throw new NotImplementedException();
+            DetailedInfoEntity entity = await _repo.GetDetailedInfo(request.UserId);
+            DetailedInfoGetResponse response = entity.ToGetResponse();
+            return response;
         }
 
         public async Task<BaseInfoUpdateResponse> UpdateBaseInfo(BaseInfoUpdateRequest request) {
-            throw new NotImplementedException();
+            BaseInfoEntity entity = request.ToEntity();
+            entity.UpdatedAt = DateTime.UtcNow;
+
+            BaseInfoEntity updatedEntity = await _repo.UpdateBaseInfo(entity);
+            BaseInfoUpdateResponse response = updatedEntity.ToUpdateResponse();
+            return response;
         }
 
         public async Task<DetailedInfoUpdateResponse> UpdateDetailedInfo(DetailedInfoUpdateRequest request) {
-            throw new NotImplementedException();
+            DetailedInfoEntity entity = request.ToEntity();
+            entity.UpdatedAt = DateTime.UtcNow;
+
+            DetailedInfoEntity updatedEntity = await _repo.UpdateDetailedInfo(entity);
+            DetailedInfoUpdateResponse response = updatedEntity.ToUpdateResponse();
+            return response;
         }
     }
 }

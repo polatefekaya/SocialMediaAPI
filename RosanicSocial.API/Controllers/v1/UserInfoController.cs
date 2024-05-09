@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RosanicSocial.Application.Interfaces.DbServices;
 using RosanicSocial.Domain.DTO.Request.Info.Base;
 using RosanicSocial.Domain.DTO.Request.Info.Detailed;
 using RosanicSocial.Domain.DTO.Response.Info.Base;
@@ -10,8 +11,9 @@ using RosanicSocial.WebAPI.Controllers;
 namespace RosanicSocial.API.Controllers.v1 {
     [ApiVersion("1.0")]
     public class UserInfoController : CustomControllerBase {
-        public UserInfoController() {
-
+        private readonly IUserInfoDbService _dbService;
+        public UserInfoController(IUserInfoDbService dbService) {
+            _dbService = dbService;
         }
 
         #region Base
@@ -19,24 +21,28 @@ namespace RosanicSocial.API.Controllers.v1 {
         //AddBaseInfo Post
         [HttpPost]
         public async Task<ActionResult<BaseInfoAddResponse>> AddBaseInfo(BaseInfoAddRequest request) {
-            return null;
+            BaseInfoAddResponse response = await _dbService.AddBaseInfo(request);
+            return Ok(response);
         }
 
         //GetBaseInfo Get
         [HttpGet]
-        public async Task<ActionResult<BaseInfoGetResponse>> GetBaseInfo(BaseInfoGetRequest request) {
-            return null;
+        public async Task<ActionResult<BaseInfoGetResponse>> GetBaseInfo([FromQuery] BaseInfoGetRequest request) {
+            BaseInfoGetResponse response = await _dbService.GetBaseInfo(request);
+            return Ok(response);
         }
         //UpdateBaseInfo Put
         [HttpPut]
         public async Task<ActionResult<BaseInfoUpdateResponse>> UpdateBaseInfo(BaseInfoUpdateRequest request) {
-            return null;
+            BaseInfoUpdateResponse response = await _dbService.UpdateBaseInfo(request);
+            return Ok(response);
         }
 
         //DeleteBaseInfo Delete
         [HttpDelete]
         public async Task<ActionResult<BaseInfoDeleteResponse>> DeleteBaseInfo(BaseInfoDeleteRequest request) {
-            return null;
+            BaseInfoDeleteResponse response = await _dbService.DeleteBaseInfo(request);
+            return Ok(response);
         }
 
 
@@ -46,22 +52,26 @@ namespace RosanicSocial.API.Controllers.v1 {
 
         [HttpPost]
         public async Task<ActionResult<DetailedInfoAddResponse>> AddDetailedInfo(DetailedInfoAddRequest request) {
-            return null;
+            DetailedInfoAddResponse response = await _dbService.AddDetailedInfo(request);
+            return Ok(response);
         }
 
         [HttpGet]
-        public async Task<ActionResult<DetailedInfoGetResponse>> GetDetailedInfo(DetailedInfoGetRequest request) {
-            return null;
+        public async Task<ActionResult<DetailedInfoGetResponse>> GetDetailedInfo([FromQuery] DetailedInfoGetRequest request) {
+            DetailedInfoGetResponse response = await _dbService.GetDetailedInfo(request);
+            return Ok(response);
         }
         
         [HttpPut]
         public async Task<ActionResult<DetailedInfoUpdateResponse>> UpdateDetailedInfo(DetailedInfoUpdateRequest request) {
-            return null;
+            DetailedInfoUpdateResponse response = await _dbService.UpdateDetailedInfo(request);
+            return Ok(response);
         }
 
         [HttpDelete]
         public async Task<ActionResult<DetailedInfoDeleteResponse>> DeleteDetailedInfo(DetailedInfoDeleteRequest request) {
-            return null;
+            DetailedInfoDeleteResponse response = await _dbService.DeleteDetailedInfo(request);
+            return Ok(response);
         }
         #endregion
 
