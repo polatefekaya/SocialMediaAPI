@@ -9,9 +9,9 @@ namespace RosanicSocial.Application.Interfaces.Repository {
 
         Task<CommentLikesEntity> AddCommentLike(CommentLikesEntity commentLikesEntity);
         Task<CommentLikesEntity> GetCommentLike(int id);
-        Task<IQueryable<CommentLikesEntity>> GetAllCommentLikes(int id);
+        Task<CommentLikesEntity[]> GetAllCommentLikes(int id);
         Task<CommentLikesEntity> DeleteCommentLike(int id);
-        Task<CommentLikesEntity> DeleteAllCommentLikes(int id);
+        Task<CommentLikesEntity[]> DeleteAllCommentLikes(int id);
 
         #endregion
 
@@ -19,9 +19,9 @@ namespace RosanicSocial.Application.Interfaces.Repository {
 
         Task<PostLikesEntity> AddPostLike(PostLikesEntity commentLikesEntity);
         Task<PostLikesEntity> GetPostLike(int id);
-        Task<IQueryable<PostLikesEntity>> GetAllPostLikes(int id);
+        Task<PostLikesEntity[]> GetAllPostLikes(int id);
         Task<PostLikesEntity> DeletePostLike(int id);
-        Task<PostLikesEntity> DeleteAllPostLikes(int id);
+        Task<PostLikesEntity[]> DeleteAllPostLikes(int id);
 
         #endregion
     }

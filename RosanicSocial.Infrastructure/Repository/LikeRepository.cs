@@ -1,39 +1,53 @@
-﻿using RosanicSocial.Application.Interfaces.Repository;
+﻿using Microsoft.EntityFrameworkCore;
+using RosanicSocial.Application.Interfaces.Repository;
 using RosanicSocial.Domain.Data.Entities.Post;
+using RosanicSocial.Infrastructure.DatabaseContext;
 using System;
 using System.Collections.Generic;
 
 namespace RosanicSocial.Infrastructure.Repository {
     public class LikeRepository : ILikeRepository {
-        public Task<CommentLikesEntity> AddCommentLike(CommentLikesEntity commentLikesEntity) {
-            throw new NotImplementedException();
+        private readonly InteractionDbContext _db;
+        public LikeRepository(InteractionDbContext db) {
+            _db = db;
+        }
+        public async Task<CommentLikesEntity> AddCommentLike(CommentLikesEntity entity) {
+            await _db.CommentLikes.AddAsync(entity);
+            return entity;
         }
 
-        public Task<PostLikesEntity> AddPostLike(PostLikesEntity commentLikesEntity) {
-            throw new NotImplementedException();
+        public async Task<PostLikesEntity> AddPostLike(PostLikesEntity entity) {
+            await _db.PostLikes.AddAsync(entity);
+            return entity;
         }
 
-        public Task<CommentLikesEntity> DeleteAllCommentLikes(int id) {
-            throw new NotImplementedException();
+        public async Task<CommentLikesEntity[]> DeleteAllCommentLikes(int id) {
+            CommentLikesEntity[] entities = await _db.CommentLikes.Where(cl => cl.CommentId == id).ToArrayAsync();
+            _db.CommentLikes.RemoveRange(entities);
+            await _db.SaveChangesAsync();
+            return entities;
         }
 
-        public Task<PostLikesEntity> DeleteAllPostLikes(int id) {
-            throw new NotImplementedException();
+        public async Task<PostLikesEntity[]> DeleteAllPostLikes(int id) {
+            PostLikesEntity[] entities = await _db.PostLikes.Where(pl => pl.PostId == id).ToArrayAsync();
+            _db.PostLikes.RemoveRange(entities);
+            await _db.SaveChangesAsync();
+            return entities;
         }
 
         public Task<CommentLikesEntity> DeleteCommentLike(int id) {
-            throw new NotImplementedException();
+            //_db.CommentLikes.Remove(id);
         }
 
         public Task<PostLikesEntity> DeletePostLike(int id) {
             throw new NotImplementedException();
         }
 
-        public Task<IQueryable<CommentLikesEntity>> GetAllCommentLikes(int id) {
+        public Task<CommentLikesEntity[]> GetAllCommentLikes(int id) {
             throw new NotImplementedException();
         }
 
-        public Task<IQueryable<PostLikesEntity>> GetAllPostLikes(int id) {
+        public Task<PostLikesEntity[]> GetAllPostLikes(int id) {
             throw new NotImplementedException();
         }
 
