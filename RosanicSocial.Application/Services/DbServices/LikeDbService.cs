@@ -86,7 +86,7 @@ namespace RosanicSocial.Application.Services.DbServices {
 
         #region GET
         #region Comment
-        public async Task<CommentLikesGetResponse[]> GetAllCommentLikesByCommentId(CommentLikesGetRequest request) {
+        public async Task<CommentLikesGetResponse[]> GetAllCommentLikesByCommentId(CommentLikesGetAllByCommentIdRequest request) {
             CommentLikesEntity[] entities = await _repo.GetAllCommentLikesByCommentId(request.CommentId);
             CommentLikesGetResponse[] responses = await _converter.ToResponseAsync(entities, cl => {
                 return cl.ToGetResponse();
@@ -108,7 +108,7 @@ namespace RosanicSocial.Application.Services.DbServices {
         }
         #endregion
         #region Post
-        public async Task<PostLikesGetResponse[]> GetAllPostLikesByPostId(PostLikesGetRequest request) {
+        public async Task<PostLikesGetResponse[]> GetAllPostLikesByPostId(PostLikesGetAllByPostIdRequest request) {
             PostLikesEntity[] entities = await _repo.GetAllPostLikesByPostId(request.PostId);
             PostLikesGetResponse[] responses = await _converter.ToResponseAsync(entities, pl => {
                 return pl.ToGetResponse();

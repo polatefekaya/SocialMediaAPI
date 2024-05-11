@@ -58,7 +58,7 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
         /// </summary>
         /// <param name="request"></param>
         /// <returns>Likes Entities by Comment's likes</returns>
-        Task<CommentLikesGetResponse[]> GetAllCommentLikesByCommentId(CommentLikesGetRequest request);
+        Task<CommentLikesGetResponse[]> GetAllCommentLikesByCommentId(CommentLikesGetAllByCommentIdRequest request);
         /// <summary>
         /// Gets the Likes Entities for given <paramref name="userId"/> by comments from database.
         /// <para>
@@ -115,7 +115,7 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
         /// <param name="request"></param>
         /// <returns></returns>
         Task<PostLikesAddResponse> AddPostLike(PostLikesAddRequest request);
-        Task<PostLikesGetResponse[]> GetAllPostLikesByPostId(PostLikesGetRequest request);
+        Task<PostLikesGetResponse[]> GetAllPostLikesByPostId(PostLikesGetAllByPostIdRequest request);
         Task<PostLikesGetResponse[]> GetAllPostLikesByUserId(PostLikesGetAllByUserIdRequest request);
         Task<PostLikesGetResponse?> GetPostLike(PostLikesGetRequest request);
         Task<PostLikesDeleteResponse?> DeletePostLike(PostLikesDeleteRequest request);
