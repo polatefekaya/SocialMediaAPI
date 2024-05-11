@@ -13,50 +13,90 @@ namespace RosanicSocial.Infrastructure.Repository {
         }
         public async Task<CommentLikesEntity> AddCommentLike(CommentLikesEntity entity) {
             await _db.CommentLikes.AddAsync(entity);
+            await _db.SaveChangesAsync();   
             return entity;
         }
 
         public async Task<PostLikesEntity> AddPostLike(PostLikesEntity entity) {
             await _db.PostLikes.AddAsync(entity);
+            await _db.SaveChangesAsync();
             return entity;
         }
 
-        public async Task<CommentLikesEntity[]> DeleteAllCommentLikes(int id) {
+        public async Task<CommentLikesEntity[]> DeleteAllCommentLikesByCommentId(int id) {
             CommentLikesEntity[] entities = await _db.CommentLikes.Where(cl => cl.CommentId == id).ToArrayAsync();
             _db.CommentLikes.RemoveRange(entities);
             await _db.SaveChangesAsync();
             return entities;
         }
 
-        public async Task<PostLikesEntity[]> DeleteAllPostLikes(int id) {
+        public async Task<CommentLikesEntity[]> DeleteAllCommentLikesByUserId(int id) {
+            CommentLikesEntity[] entities = await _db.CommentLikes.Where(cl => cl.UserId == id).ToArrayAsync();
+            _db.CommentLikes.RemoveRange(entities);
+            await _db.SaveChangesAsync();
+            return entities;
+        }
+
+        public async Task<PostLikesEntity[]> DeleteAllPostLikesByPostId(int id) {
             PostLikesEntity[] entities = await _db.PostLikes.Where(pl => pl.PostId == id).ToArrayAsync();
             _db.PostLikes.RemoveRange(entities);
             await _db.SaveChangesAsync();
             return entities;
         }
 
-        public Task<CommentLikesEntity> DeleteCommentLike(int id) {
-            //_db.CommentLikes.Remove(id);
+        public async Task<PostLikesEntity[]> DeleteAllPostLikesByUserId(int id) {
+            PostLikesEntity[] entities = await _db.PostLikes.Where(pl => pl.UserId == id).ToArrayAsync();
+            _db.PostLikes.RemoveRange(entities);
+            await _db.SaveChangesAsync();
+            return entities;
         }
 
-        public Task<PostLikesEntity> DeletePostLike(int id) {
-            throw new NotImplementedException();
+        public async Task<CommentLikesEntity?> DeleteCommentLike(int commentId, int userId) {
+            CommentLikesEntity? entity = await _db.CommentLikes.SingleOrDefaultAsync(cl => cl.CommentId == commentId && cl.UserId == userId);
+            if (entity == null) return null;
+            _db.CommentLikes.Remove(entity);
+            await _db.SaveChangesAsync();
+            return entity;
         }
 
-        public Task<CommentLikesEntity[]> GetAllCommentLikes(int id) {
-            throw new NotImplementedException();
+        public async Task<PostLikesEntity?> DeletePostLike(int postId, int userId) {
+            PostLikesEntity? entity = await _db.PostLikes.SingleOrDefaultAsync(pl => pl.PostId ==  postId && pl.UserId == userId);
+            if (entity == null) return null;
+            _db.PostLikes.Remove(entity);
+            await _db.SaveChangesAsync();
+            return entity;
         }
 
-        public Task<PostLikesEntity[]> GetAllPostLikes(int id) {
-            throw new NotImplementedException();
+        public async Task<CommentLikesEntity[]> GetAllCommentLikesByCommentId(int id) {
+            CommentLikesEntity[] entities = await _db.CommentLikes.Where(cl => cl.CommentId == id).ToArrayAsync();
+            return entities;
         }
 
-        public Task<CommentLikesEntity> GetCommentLike(int id) {
-            throw new NotImplementedException();
+        public async Task<CommentLikesEntity[]> GetAllCommentLikesByUserId(int id) {
+            CommentLikesEntity[] entities = await _db.CommentLikes.Where(cl => cl.UserId == id).ToArrayAsync();
+            return entities;
         }
 
-        public Task<PostLikesEntity> GetPostLike(int id) {
-            throw new NotImplementedException();
+
+        public async Task<PostLikesEntity[]> GetAllPostLikesByPostId(int id) {
+            PostLikesEntity[] entities = await _db.PostLikes.Where(pl =>  pl.PostId == id).ToArrayAsync();
+            return entities;
+        }
+
+        public async Task<PostLikesEntity[]> GetAllPostLikesByUserId(int id) {
+            PostLikesEntity[] entities = await _db.PostLikes.Where(pl => pl.UserId == id).ToArrayAsync();
+            return entities;
+        }
+
+        public async Task<CommentLikesEntity?> GetCommentLike(int commentId, int userId) {
+            CommentLikesEntity? entity = await _db.CommentLikes.SingleOrDefaultAsync(cl => cl.UserId == userId && cl.CommentId == commentId);
+            return entity;
+        }
+
+
+        public async Task<PostLikesEntity?> GetPostLike(int postId, int userId) {
+            PostLikesEntity? entity = await _db.PostLikes.SingleOrDefaultAsync(pl => pl.PostId ==  postId && pl.UserId == userId);
+            return entity;
         }
     }
 }

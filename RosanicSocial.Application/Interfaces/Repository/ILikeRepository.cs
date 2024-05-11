@@ -8,20 +8,24 @@ namespace RosanicSocial.Application.Interfaces.Repository {
         #region Comment
 
         Task<CommentLikesEntity> AddCommentLike(CommentLikesEntity commentLikesEntity);
-        Task<CommentLikesEntity> GetCommentLike(int id);
-        Task<CommentLikesEntity[]> GetAllCommentLikes(int id);
-        Task<CommentLikesEntity> DeleteCommentLike(int id);
-        Task<CommentLikesEntity[]> DeleteAllCommentLikes(int id);
+        Task<CommentLikesEntity?> GetCommentLike(int commentId, int userId);
+        Task<CommentLikesEntity[]> GetAllCommentLikesByUserId(int id);
+        Task<CommentLikesEntity[]> GetAllCommentLikesByCommentId(int id);
+        Task<CommentLikesEntity?> DeleteCommentLike(int commentId, int userId);
+        Task<CommentLikesEntity[]> DeleteAllCommentLikesByUserId(int id);
+        Task<CommentLikesEntity[]> DeleteAllCommentLikesByCommentId(int id);
 
         #endregion
 
         #region Post
 
         Task<PostLikesEntity> AddPostLike(PostLikesEntity commentLikesEntity);
-        Task<PostLikesEntity> GetPostLike(int id);
-        Task<PostLikesEntity[]> GetAllPostLikes(int id);
-        Task<PostLikesEntity> DeletePostLike(int id);
-        Task<PostLikesEntity[]> DeleteAllPostLikes(int id);
+        Task<PostLikesEntity?> GetPostLike(int postId, int userId);
+        Task<PostLikesEntity[]> GetAllPostLikesByUserId(int id);
+        Task<PostLikesEntity[]> GetAllPostLikesByPostId(int id);
+        Task<PostLikesEntity?> DeletePostLike(int postId, int userId);
+        Task<PostLikesEntity[]> DeleteAllPostLikesByUserId(int id);
+        Task<PostLikesEntity[]> DeleteAllPostLikesByPostId(int id);
 
         #endregion
     }

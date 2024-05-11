@@ -28,6 +28,10 @@ namespace RosanicSocial.API.Controllers.v1 {
         }
 
         #region Get
+        [HttpGet]
+        public async Task<ActionResult<FollowsGetResponse?>> GetIsFollow(FollowsGetIsFollowingRequest request) {
+            return null;
+        }
 
         [HttpGet]
         public async Task<ActionResult<FollowsGetResponse[]>> GetFollowings(FollowsGetFollowersRequest request) {

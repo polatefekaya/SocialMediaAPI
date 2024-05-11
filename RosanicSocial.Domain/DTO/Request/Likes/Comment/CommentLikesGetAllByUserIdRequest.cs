@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 
 namespace RosanicSocial.Domain.DTO.Request.Likes.Comment {
-    public class CommentLikesByUserIdGetRequest {
+    public class CommentLikesGetAllByUserIdRequest {
         public int UserId { get; set; }
     }
 }
