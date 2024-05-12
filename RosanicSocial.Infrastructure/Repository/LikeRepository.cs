@@ -12,12 +12,20 @@ namespace RosanicSocial.Infrastructure.Repository {
             _db = db;
         }
         public async Task<CommentLikesEntity> AddCommentLike(CommentLikesEntity entity) {
+            CommentLikesEntity? entityFromDb = await GetCommentLike(entity.CommentId, entity.UserId);
+            if (entityFromDb != null) { 
+                return entityFromDb;
+            }
             await _db.CommentLikes.AddAsync(entity);
             await _db.SaveChangesAsync();   
             return entity;
         }
 
         public async Task<PostLikesEntity> AddPostLike(PostLikesEntity entity) {
+            PostLikesEntity? entityFromDb = await GetPostLike(entity.PostId, entity.UserId);
+            if (entityFromDb != null) {
+                return entityFromDb;
+            }
             await _db.PostLikes.AddAsync(entity);
             await _db.SaveChangesAsync();
             return entity;
