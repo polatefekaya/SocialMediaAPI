@@ -29,6 +29,13 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
+        Task<FollowsGetResponse> GetFollow(FollowsGetIsFollowingRequest request);
+        /// <summary>
+        /// Gets the Followers for given User from database. With user's <paramref name="id"/>.
+        /// <paramref name="id"/> is must given with <paramref name="request"/>
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         Task<FollowsGetResponse[]> GetFollowers(FollowsGetFollowersRequest request);
         /// <summary>
         /// Gets the Followings for given User from database. With user's <paramref name="id"/>.
