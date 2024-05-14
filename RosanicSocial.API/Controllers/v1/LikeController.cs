@@ -2,20 +2,24 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RosanicSocial.Application.Interfaces.DbServices;
+using RosanicSocial.Application.Interfaces.Managers;
 using RosanicSocial.Domain.DTO.Request.Likes.Comment;
 using RosanicSocial.Domain.DTO.Request.Likes.Post;
 using RosanicSocial.Domain.DTO.Response.Likes.Comment;
 using RosanicSocial.Domain.DTO.Response.Likes.Post;
+using RosanicSocial.Domain.DTO.Response.Post;
 using RosanicSocial.WebAPI.Controllers;
 
 namespace RosanicSocial.API.Controllers.v1 {
     [ApiVersion("1.0")]
     public class LikeController : CustomControllerBase {
         private readonly ILikeDbService _dbService;
+        private readonly IInteractionDbManagerService _interactionDbManager;
         private readonly ILogger<LikeController> _logger;   
-        public LikeController(ILogger<LikeController> logger, ILikeDbService dbService) {
+        public LikeController(IInteractionDbManagerService interactionDbManager, ILogger<LikeController> logger, ILikeDbService dbService) {
             _logger = logger;
             _dbService = dbService;
+            _interactionDbManager = interactionDbManager;
         }
 
         #region PostLike
@@ -23,7 +27,10 @@ namespace RosanicSocial.API.Controllers.v1 {
         public async Task<ActionResult<PostLikesAddResponse>> AddPostLike(PostLikesAddRequest request) {
             _logger.LogInformation($"{nameof(AddPostLike)} controller started in {nameof(LikeController)}");
 
-            PostLikesAddResponse response = await _dbService.AddPostLike(request);
+            //PostLikesAddResponse response = await _dbService.AddPostLike(request);
+            PostLikesAddResponse? response = await _interactionDbManager.AddPostLike(request);
+            if (response == null) { return BadRequest(); }
+
             return response;
         }
 
@@ -31,7 +38,8 @@ namespace RosanicSocial.API.Controllers.v1 {
         public async Task<ActionResult<PostLikesDeleteResponse>> DeletePostLike(PostLikesDeleteRequest request) {
             _logger.LogInformation($"{nameof(DeletePostLike)} controller started in {nameof(LikeController)}");
 
-            PostLikesDeleteResponse? response = await _dbService.DeletePostLike(request);
+            //PostLikesDeleteResponse? response = await _dbService.DeletePostLike(request);
+            PostLikesDeleteResponse? response = await _interactionDbManager.DeletePostLike(request);
             if (response == null) {
                 return BadRequest("There is no object like specified.");
             }
@@ -87,7 +95,10 @@ namespace RosanicSocial.API.Controllers.v1 {
         public async Task<ActionResult<CommentLikesAddResponse>> AddCommentLike(CommentLikesAddRequest request) {
             _logger.LogInformation($"{nameof(AddCommentLike)} controller started in {nameof(LikeController)}");
 
-            CommentLikesAddResponse response = await _dbService.AddCommentLike(request);
+            //CommentLikesAddResponse response = await _dbService.AddCommentLike(request);
+            CommentLikesAddResponse response = await _interactionDbManager.AddCommentLike(request);
+            if (response == null) { return BadRequest(); }
+
             return response;
         }
 
@@ -95,7 +106,8 @@ namespace RosanicSocial.API.Controllers.v1 {
         public async Task<ActionResult<CommentLikesDeleteResponse>> DeleteCommentLike(CommentLikesDeleteRequest request) {
             _logger.LogInformation($"{nameof(DeleteCommentLike)} controller started in {nameof(LikeController)}");
 
-            CommentLikesDeleteResponse? response = await _dbService.DeleteCommentLike(request);
+            //CommentLikesDeleteResponse? response = await _dbService.DeleteCommentLike(request);
+            CommentLikesDeleteResponse? response = await _interactionDbManager.DeleteCommentLike(request);
             if (response == null) {
                 return BadRequest("There is no object like specified.");
             }

@@ -52,6 +52,8 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
         /// <param name="request"></param>
         /// <returns></returns>
         Task<CommentUpdateResponse> UpdateCommentAsync(CommentUpdateRequest request);
+        Task<CommentUpdateResponse?> UpdateCommentLikeCount(CommentUpdateLikeCountRequest request);
+        Task<CommentUpdateResponse?> UpdateCommentCommentCount(CommentUpdateCommentCountRequest request);
         /// <summary>
         /// Deletes the comment from database by users <paramref name="id"/> and returns it.
         /// <paramref name="id"/> is must given with <paramref name="request"/>

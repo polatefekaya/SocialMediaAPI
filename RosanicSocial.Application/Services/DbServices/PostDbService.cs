@@ -104,16 +104,41 @@ namespace RosanicSocial.Application.Services.DbServices
             return response;
         }
 
-        public async Task<PostUpdateResponse> UpdatePost(PostUpdateRequest request) {
+        public async Task<PostUpdateResponse?> UpdatePost(PostUpdateRequest request) {
             PostEntity entity = request.ToEntity();
             entity.IsUpdated = true;
             entity.UpdatedAt = DateTime.UtcNow;
 
+            return await baseUpdater(entity);
+        }
+
+        public async Task<PostUpdateResponse?> UpdatePostLikeCount(PostUpdateLikeCountRequest request) {
+            PostEntity? entity = await _postRepository.GetPostById(request.PostId);
+            if (entity == null) { return null; }
+
+            entity.LikeCount += request.Change;
+            entity.UpdatedAt = DateTime.UtcNow;
+
+            return await baseUpdater(entity);
+        }
+
+        public async Task<PostUpdateResponse?> UpdatePostCommentCount(PostUpdateCommentCountRequest request) {
+            PostEntity? entity = await _postRepository.GetPostById(request.PostId);
+            if (entity == null) { return null; }
+
+            entity.CommentCount += request.Change;
+            entity.UpdatedAt = DateTime.UtcNow;
+
+            return await baseUpdater(entity);
+        }
+
+        private async Task<PostUpdateResponse?> baseUpdater(PostEntity entity) {
             PostEntity? updatedEntity = await _postRepository.UpdatePost(entity);
-            if(updatedEntity is null) { return null; }
+            if (updatedEntity is null) { return null; }
 
             PostUpdateResponse response = updatedEntity.ToUpdateResponse();
             return response;
         }
     }
 }
+

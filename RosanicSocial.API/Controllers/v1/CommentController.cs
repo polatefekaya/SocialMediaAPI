@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RosanicSocial.Application.Interfaces.DbServices;
+using RosanicSocial.Application.Interfaces.Managers;
 using RosanicSocial.Domain.DTO.Request.Comment;
 using RosanicSocial.Domain.DTO.Response.Comment;
 using RosanicSocial.WebAPI.Controllers;
@@ -10,11 +11,13 @@ namespace RosanicSocial.API.Controllers.v1 {
     [ApiVersion("1.0")]
     public class CommentController : CustomControllerBase {
         private readonly ICommentDbService _dbService;
+        private readonly ISharingsDbManagerService _sharingsDbManager;
         private readonly ILogger<CommentController> _logger;
 
-        public CommentController(ICommentDbService dbService, ILogger<CommentController> logger) {
+        public CommentController(ISharingsDbManagerService sharingsDbManager, ICommentDbService dbService, ILogger<CommentController> logger) {
             _dbService = dbService;
             _logger = logger;
+            _sharingsDbManager = sharingsDbManager;
         }
 
         /// <summary>
@@ -57,7 +60,11 @@ namespace RosanicSocial.API.Controllers.v1 {
             _logger.LogInformation("AddComment Controller started");
             _logger.LogDebug($"Request Type: {nameof(CommentAddRequest)}");
 
-            CommentAddResponse response = await _dbService.AddCommentAsync(request);
+            //CommentAddResponse response = await _dbService.AddCommentAsync(request);
+            CommentAddResponse? response = await _sharingsDbManager.AddComment(request);
+            if(response == null) {
+                return BadRequest();
+            }
 
             return Ok(response);
         }
@@ -77,7 +84,11 @@ namespace RosanicSocial.API.Controllers.v1 {
             _logger.LogInformation("DeleteComment Controller started");
             _logger.LogDebug($"Request Type: {nameof(CommentDeleteRequest)}");
 
-            CommentDeleteResponse response = await _dbService.DeleteCommentAsync(request);
+            //CommentDeleteResponse response = await _dbService.DeleteCommentAsync(request);
+            CommentDeleteResponse? response = await _sharingsDbManager.DeleteComment(request);
+            if(response == null) {
+                return BadRequest();
+            }
 
             return Ok(response);
         }

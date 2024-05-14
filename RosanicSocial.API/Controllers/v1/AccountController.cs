@@ -6,9 +6,14 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RosanicSocial.Application.Interfaces;
+using RosanicSocial.Application.Interfaces.DbServices;
 using RosanicSocial.Domain.Data.Identity;
 using RosanicSocial.Domain.DTO.Request.Account;
+using RosanicSocial.Domain.DTO.Request.Info.Base;
+using RosanicSocial.Domain.DTO.Request.Info.Detailed;
 using RosanicSocial.Domain.DTO.Response.Authentication;
+using RosanicSocial.Domain.DTO.Response.Info.Base;
+using RosanicSocial.Domain.DTO.Response.Info.Detailed;
 using RosanicSocial.WebAPI.Controllers;
 
 namespace RosanicSocial.API.Controllers.v1 {
@@ -20,12 +25,15 @@ namespace RosanicSocial.API.Controllers.v1 {
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IJwtService _jwtService;
         private readonly ILogger<AccountController> _logger;
-        public AccountController(IJwtService jwtService, ILogger<AccountController> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager) {
+
+        private readonly IUserInfoDbService _userInfoDbService;
+        public AccountController(IUserInfoDbService userInfoDbService, IJwtService jwtService, ILogger<AccountController> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager) {
             _userManger = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _jwtService = jwtService;
             _logger = logger;
+            _userInfoDbService = userInfoDbService;
         }
 
         [HttpPost]
@@ -57,6 +65,10 @@ namespace RosanicSocial.API.Controllers.v1 {
                 user.RefreshTokenExpiration = authResponse.RefreshTokenExpiration;
 
                 await _userManger.UpdateAsync(user);
+
+                //CreateInfos
+                BaseInfoAddResponse baseInfoResponse = await _userInfoDbService.AddBaseInfo(new BaseInfoAddRequest { UserId = user.Id });
+                DetailedInfoAddResponse detailedInfoResponse = await _userInfoDbService.AddDetailedInfo(new DetailedInfoAddRequest { UserId= user.Id });
 
                 return Ok(authResponse);
             }

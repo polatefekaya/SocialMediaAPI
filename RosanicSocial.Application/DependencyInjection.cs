@@ -30,6 +30,7 @@ namespace RosanicSocial.Application {
             services.AddScoped<IEntityConvertService, EntityConvertService>();
 
             services.AddScoped<ISharingsDbManagerService, SharingsDbManagerService>();
+            services.AddScoped<IInteractionDbManagerService, InteractionDbManagerService>();
 
             return services;
         }

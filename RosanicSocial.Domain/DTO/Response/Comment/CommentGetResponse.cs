@@ -8,6 +8,9 @@ namespace RosanicSocial.Domain.DTO.Response.Comment {
         public int PostId { get; set; }
         public int UserId { get; set; }
         public int? RepliedUserId { get; set; }
+        public int LikeCount { get; set; } = 0;
+        public int CommentCount { get; set; } = 0;
+        public int Dimension { get; set; } = 0;
         public string? Body { get; set; }
         public bool IsUpdated { get; set; } = false;
         public bool IsReply { get; set; } = false;
@@ -21,6 +24,9 @@ namespace RosanicSocial.Domain.DTO.Response.Comment {
                 PostId = entity.PostId,
                 UserId = entity.UserId,
                 RepliedUserId = entity.RepliedUserId,
+                LikeCount = entity.LikeCount,
+                CommentCount = entity.CommentCount,
+                Dimension = entity.Dimension,
                 Body = entity.Body,
                 IsUpdated = entity.IsUpdated,
                 IsReply = entity.IsReply,

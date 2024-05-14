@@ -81,7 +81,7 @@ namespace RosanicSocial.Application.Services.DbServices {
             return entity.ToGetResponse();
         }
 
-        public async Task<CommentUpdateResponse> UpdateCommentAsync(CommentUpdateRequest request) {
+        public async Task<CommentUpdateResponse?> UpdateCommentAsync(CommentUpdateRequest request) {
             _logger.LogInformation("Update Comment in DbService is started");
 
             CommentEntity entity = request.ToEntity();
@@ -89,8 +89,38 @@ namespace RosanicSocial.Application.Services.DbServices {
             entity.UpdatedAt = DateTime.UtcNow;
             entity.IsUpdated = true;
 
-            CommentEntity updatedEntity = await _repo.UpdateComment(entity);
-            return updatedEntity.ToUpdateResponse();
+            return await baseUpdater(entity);
+        }
+
+        public async Task<CommentUpdateResponse?> UpdateCommentLikeCount(CommentUpdateLikeCountRequest request) {
+            _logger.LogInformation("Update Comment Like Count in DbService is started");
+
+            CommentEntity entity = await _repo.GetComment(request.CommentId);
+            if (entity == null) { return null; }
+
+            entity.LikeCount += request.Change;
+            entity.UpdatedAt = DateTime.UtcNow;
+
+            return await baseUpdater(entity);
+        }
+        public async Task<CommentUpdateResponse?> UpdateCommentCommentCount(CommentUpdateCommentCountRequest request) {
+            _logger.LogInformation("Update Comment Comment Count in DbService is started");
+
+            CommentEntity entity = await _repo.GetComment(request.CommentId);
+            if (entity == null) { return null; }
+
+            entity.CommentCount += request.Change;
+            entity.UpdatedAt = DateTime.UtcNow;
+
+            return await baseUpdater(entity);
+        }
+
+        private async Task<CommentUpdateResponse?> baseUpdater(CommentEntity entity) {
+            CommentEntity? updatedEntity = await _repo.UpdateComment(entity);
+            if (updatedEntity == null) { return null; }
+
+            CommentUpdateResponse? response = updatedEntity.ToUpdateResponse();
+            return response;
         }
     }
 }

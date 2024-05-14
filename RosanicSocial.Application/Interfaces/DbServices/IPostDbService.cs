@@ -35,7 +35,9 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
         Task<PostGetResponse[]> GetByCategoryPost(PostGetByCategoryRequest request);
         Task<PostGetResponse[]> GetByTypePost(PostGetByTypeRequest request);
         Task<PostGetResponse[]> GetByTopicPost(PostGetByTopicRequest request);
-        Task<PostUpdateResponse> UpdatePost(PostUpdateRequest request);
+        Task<PostUpdateResponse?> UpdatePost(PostUpdateRequest request);
+        Task<PostUpdateResponse?> UpdatePostLikeCount(PostUpdateLikeCountRequest request);
+        Task<PostUpdateResponse?> UpdatePostCommentCount(PostUpdateCommentCountRequest request);
         Task<PostDeleteResponse> DeletePost(PostDeleteRequest request);
         Task<PostDeleteResponse[]> DeleteBatchPost(PostDeleteBatchRequest request);
         Task<PostDeleteResponse[]> DeleteAllPosts(PostDeleteAllRequest request);

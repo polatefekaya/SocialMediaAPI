@@ -10,6 +10,9 @@ namespace RosanicSocial.Domain.Data.Entities.Post {
         public int UserId { get; set; }
         public int? RepliedUserId { get; set; }
         public string? Body { get; set; }
+        public int LikeCount { get; set; } = 0;
+        public int CommentCount { get; set; } = 0;
+        public int Dimension { get; set; } = 0;
         public bool IsUpdated { get; set; } = false;
         public bool IsReply { get; set; } = false;
         public DateTime? CreatedAt { get; set; }
