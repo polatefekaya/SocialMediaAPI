@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using RosanicSocial.Application.Interfaces;
 using RosanicSocial.Application.Interfaces.DbServices;
 using RosanicSocial.Application.Interfaces.Repository;
 using RosanicSocial.Domain.Data.Entities;
@@ -11,9 +12,9 @@ namespace RosanicSocial.Application.Services.DbServices {
     public class FollowDbService : IFollowDbService {
         private readonly IFollowRepository _repo;
         private readonly ILogger<FollowDbService> _logger;
-        private readonly EntityConvertService _converter;
+        private readonly IEntityConvertService _converter;
 
-        public FollowDbService(IFollowRepository repo, ILogger<FollowDbService> logger, EntityConvertService converter) {
+        public FollowDbService(IFollowRepository repo, ILogger<FollowDbService> logger, IEntityConvertService converter) {
             _repo = repo;
             _logger = logger;
             _converter = converter;

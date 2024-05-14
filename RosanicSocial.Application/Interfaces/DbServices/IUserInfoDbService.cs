@@ -33,16 +33,17 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
     public interface IUserInfoDbService {
         #region BaseInfo
         Task<BaseInfoAddResponse> AddBaseInfo(BaseInfoAddRequest request);
-        Task<BaseInfoGetResponse> GetBaseInfo(BaseInfoGetRequest request);
-        Task<BaseInfoUpdateResponse> UpdateBaseInfo(BaseInfoUpdateRequest request);
-        Task<BaseInfoDeleteResponse> DeleteBaseInfo(BaseInfoDeleteRequest request);
+        Task<BaseInfoGetResponse?> GetBaseInfo(BaseInfoGetRequest request);
+        Task<BaseInfoUpdateResponse?> UpdateBaseInfo(BaseInfoUpdateRequest request);
+        Task<BaseInfoDeleteResponse?> DeleteBaseInfo(BaseInfoDeleteRequest request);
+        Task<BaseInfoUpdateResponse?> UpdateBaseInfoPostCount(BaseInfoUpdatePostCountRequest request);
         #endregion
 
         #region DetailedInfo
         Task<DetailedInfoAddResponse> AddDetailedInfo(DetailedInfoAddRequest request);
-        Task<DetailedInfoGetResponse> GetDetailedInfo(DetailedInfoGetRequest request);
-        Task<DetailedInfoUpdateResponse> UpdateDetailedInfo(DetailedInfoUpdateRequest request);
-        Task<DetailedInfoDeleteResponse> DeleteDetailedInfo(DetailedInfoDeleteRequest request);
+        Task<DetailedInfoGetResponse?> GetDetailedInfo(DetailedInfoGetRequest request);
+        Task<DetailedInfoUpdateResponse?> UpdateDetailedInfo(DetailedInfoUpdateRequest request);
+        Task<DetailedInfoDeleteResponse?> DeleteDetailedInfo(DetailedInfoDeleteRequest request);
         #endregion
     }
 }

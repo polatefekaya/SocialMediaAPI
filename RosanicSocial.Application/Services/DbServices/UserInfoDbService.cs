@@ -38,31 +38,39 @@ namespace RosanicSocial.Application.Services.DbServices {
             return entity.ToAddResponse();
         }
 
-        public async Task<BaseInfoDeleteResponse> DeleteBaseInfo(BaseInfoDeleteRequest request) {
-            BaseInfoEntity entity = await _repo.DeleteBaseInfo(request.UserId);
+        public async Task<BaseInfoDeleteResponse?> DeleteBaseInfo(BaseInfoDeleteRequest request) {
+            BaseInfoEntity? entity = await _repo.DeleteBaseInfo(request.UserId);
+            if (entity == null) { return null; }
+
             BaseInfoDeleteResponse response = entity.ToDeleteResponse();
             return response;
         }
 
-        public async Task<DetailedInfoDeleteResponse> DeleteDetailedInfo(DetailedInfoDeleteRequest request) {
-            DetailedInfoEntity entity = await _repo.DeleteDetailedInfo(request.UserId);
+        public async Task<DetailedInfoDeleteResponse?> DeleteDetailedInfo(DetailedInfoDeleteRequest request) {
+            DetailedInfoEntity? entity = await _repo.DeleteDetailedInfo(request.UserId);
+            if (entity == null) { return null; }
+
             DetailedInfoDeleteResponse response = entity.ToDeleteResponse();
             return response;
         }
 
-        public async Task<BaseInfoGetResponse> GetBaseInfo(BaseInfoGetRequest request) {
-            BaseInfoEntity entity = await _repo.GetBaseInfo(request.UserId);
+        public async Task<BaseInfoGetResponse?> GetBaseInfo(BaseInfoGetRequest request) {
+            BaseInfoEntity? entity = await _repo.GetBaseInfo(request.UserId);
+            if (entity == null) { return null; }
+
             BaseInfoGetResponse response = entity.ToGetResponse();
             return response;
         }
 
-        public async Task<DetailedInfoGetResponse> GetDetailedInfo(DetailedInfoGetRequest request) {
-            DetailedInfoEntity entity = await _repo.GetDetailedInfo(request.UserId);
+        public async Task<DetailedInfoGetResponse?> GetDetailedInfo(DetailedInfoGetRequest request) {
+            DetailedInfoEntity? entity = await _repo.GetDetailedInfo(request.UserId);
+            if (entity == null) { return null; }
+
             DetailedInfoGetResponse response = entity.ToGetResponse();
             return response;
         }
 
-        public async Task<BaseInfoUpdateResponse> UpdateBaseInfo(BaseInfoUpdateRequest request) {
+        public async Task<BaseInfoUpdateResponse?> UpdateBaseInfo(BaseInfoUpdateRequest request) {
             BaseInfoEntity entity = request.ToEntity();
             entity.UpdatedAt = DateTime.UtcNow;
 
@@ -71,7 +79,19 @@ namespace RosanicSocial.Application.Services.DbServices {
             return response;
         }
 
-        public async Task<DetailedInfoUpdateResponse> UpdateDetailedInfo(DetailedInfoUpdateRequest request) {
+        public async Task<BaseInfoUpdateResponse?> UpdateBaseInfoPostCount(BaseInfoUpdatePostCountRequest request) {
+            BaseInfoEntity? entity = await _repo.GetBaseInfo(request.UserId);
+            if (entity == null) { return null; }
+
+            entity.PostCount += request.Change;
+            entity.UpdatedAt = DateTime.UtcNow;
+
+            BaseInfoEntity updatedEntity = await _repo.UpdateBaseInfo(entity);
+            BaseInfoUpdateResponse response = updatedEntity.ToUpdateResponse();
+            return response;
+        }
+
+        public async Task<DetailedInfoUpdateResponse?> UpdateDetailedInfo(DetailedInfoUpdateRequest request) {
             DetailedInfoEntity entity = request.ToEntity();
             entity.UpdatedAt = DateTime.UtcNow;
 

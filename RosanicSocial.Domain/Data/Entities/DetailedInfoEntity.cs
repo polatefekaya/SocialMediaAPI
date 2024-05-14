@@ -6,6 +6,7 @@ using System.Security.Policy;
 namespace RosanicSocial.Domain.Data.Entities {
     public class DetailedInfoEntity {
         [Key]
+        public int Id { get; set; }
         public int UserId { get; set; }
         public string? Biography { get; set; }
         public string? Country { get; set; }

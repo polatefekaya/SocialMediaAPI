@@ -3,6 +3,6 @@ using System;
 using System.Collections.Generic;
 
 namespace RosanicSocial.Application.Services.Managers {
-    public class StatisticsDbManagerService : ISharingsDbManagerService {
+    public class StatisticsDbManagerService : IStatisticsDbManagerService {
     }
 }

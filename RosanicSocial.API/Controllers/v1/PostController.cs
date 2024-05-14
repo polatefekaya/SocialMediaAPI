@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RosanicSocial.Application.Interfaces.DbServices;
+using RosanicSocial.Application.Interfaces.Managers;
 using RosanicSocial.Domain.DTO.Request.Post;
 using RosanicSocial.Domain.DTO.Response.Post;
 using RosanicSocial.WebAPI.Controllers;
@@ -10,8 +11,10 @@ namespace RosanicSocial.API.Controllers.v1 {
     [ApiVersion("1.0")]
     public class PostController : CustomControllerBase {
         private readonly IPostDbService _dbService;
-        public PostController(IPostDbService dbService) {
+        private readonly ISharingsDbManagerService _sharingsDbManager;
+        public PostController(IPostDbService dbService, ISharingsDbManagerService sharingsDbManager) {
             _dbService = dbService;
+            _sharingsDbManager = sharingsDbManager;
         }
 
         #region Get
@@ -53,7 +56,11 @@ namespace RosanicSocial.API.Controllers.v1 {
 
         [HttpPost]
         public async Task<ActionResult<PostAddResponse>> AddPost(PostAddRequest request) {
-            return await _dbService.AddPost(request);
+            PostAddResponse? response = await _sharingsDbManager.AddPost(request);
+            if (response == null) { return BadRequest(); }
+
+            return Ok(response);
+            //return await _dbService.AddPost(request);
         }
 
         #endregion
@@ -64,8 +71,11 @@ namespace RosanicSocial.API.Controllers.v1 {
 
         [HttpDelete]
         public async Task<ActionResult<PostDeleteResponse>> DeletePost(PostDeleteRequest request) {
-            PostDeleteResponse response = await _dbService.DeletePost(request); 
-            return response;
+            //PostDeleteResponse response = await _dbService.DeletePost(request); 
+            PostDeleteResponse? response = await _sharingsDbManager.DeletePost(request);
+            if (response is null) { return BadRequest(); }
+
+            return Ok(response);
         }
 
         [HttpDelete]

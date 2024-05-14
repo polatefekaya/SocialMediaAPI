@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 namespace RosanicSocial.Domain.Data.Entities {
     public class BaseInfoEntity {
         [Key]
+        public int Id { get; set; }
         public int UserId { get; set; }
         public int PostCount { get; set; }
         public int? FollowerCount { get; set; }
