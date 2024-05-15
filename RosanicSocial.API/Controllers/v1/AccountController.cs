@@ -1,39 +1,21 @@
 ﻿using Asp.Versioning;
-using Azure.Core;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using RosanicSocial.Application.Interfaces;
 using RosanicSocial.Application.Interfaces.DbServices;
 using RosanicSocial.Domain.Data.Identity;
 using RosanicSocial.Domain.DTO.Request.Account;
-using RosanicSocial.Domain.DTO.Request.Info.Base;
-using RosanicSocial.Domain.DTO.Request.Info.Detailed;
 using RosanicSocial.Domain.DTO.Response.Authentication;
-using RosanicSocial.Domain.DTO.Response.Info.Base;
-using RosanicSocial.Domain.DTO.Response.Info.Detailed;
 using RosanicSocial.WebAPI.Controllers;
 
 namespace RosanicSocial.API.Controllers.v1 {
     [ApiVersion("1.0")]
     [AllowAnonymous]
     public class AccountController : CustomControllerBase {
-        private readonly UserManager<ApplicationUser> _userManger;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly RoleManager<ApplicationRole> _roleManager;
-        private readonly IJwtService _jwtService;
         private readonly ILogger<AccountController> _logger;
-
-        private readonly IUserInfoDbService _userInfoDbService;
-        public AccountController(IUserInfoDbService userInfoDbService, IJwtService jwtService, ILogger<AccountController> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager) {
-            _userManger = userManager;
-            _signInManager = signInManager;
-            _roleManager = roleManager;
-            _jwtService = jwtService;
+        private readonly IAccountDbService _accountDbService;
+        public AccountController(IAccountDbService accountDbService, ILogger<AccountController> logger) {
             _logger = logger;
-            _userInfoDbService = userInfoDbService;
+            _accountDbService = accountDbService;
         }
 
         [HttpPost]
@@ -47,34 +29,12 @@ namespace RosanicSocial.API.Controllers.v1 {
                 return Problem(errorMessage);
             }
 
-            ApplicationUser user = new ApplicationUser() {
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                Email = request.Email,
-                PhoneNumber = request.PhoneNumber,
-                UserName = request.Username
-            };
-            IdentityResult result = await _userManger.CreateAsync(user, request.Password);
-
-            if (result.Succeeded) {
-                await _signInManager.SignInAsync(user, isPersistent: false);
-
-                AuthenticationResponse authResponse = _jwtService.CreateJwtToken(user.ToAuthRequest());
-
-                user.RefreshToken = authResponse.RefreshToken;
-                user.RefreshTokenExpiration = authResponse.RefreshTokenExpiration;
-
-                await _userManger.UpdateAsync(user);
-
-                //CreateInfos
-                BaseInfoAddResponse baseInfoResponse = await _userInfoDbService.AddBaseInfo(new BaseInfoAddRequest { UserId = user.Id });
-                DetailedInfoAddResponse detailedInfoResponse = await _userInfoDbService.AddDetailedInfo(new DetailedInfoAddRequest { UserId= user.Id });
-
-                return Ok(authResponse);
+            AuthenticationResponse? authRespose = await _accountDbService.Register(request);
+            
+            if (authRespose != null) { 
+                return Ok(authRespose);
             }
-
-            string errorDesc = string.Join(" | ", result.Errors.Select(x => x.Description));
-            return Problem(errorDesc);
+            return Problem("Error occured while registering");
         }
 
         [HttpPost]
@@ -88,26 +48,17 @@ namespace RosanicSocial.API.Controllers.v1 {
                 return Problem(errorMessage);
             }
 
-            Microsoft.AspNetCore.Identity.SignInResult result = 
-                await _signInManager.PasswordSignInAsync(
-                    request.UserName, request.Password, isPersistent: false, lockoutOnFailure: true);
+            ApplicationUser? user = await _accountDbService.Login(request);
 
-            if (result.Succeeded) {
-                ApplicationUser? user = await _userManger.FindByNameAsync(request.UserName);
-
-                if (user == null) {
-                    return NoContent();
-                }
-
+            if (user != null) {
                 return Ok(new {
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     Email = user.Email,
-                    UserName = request.UserName
+                    UserName = user.UserName
                 });
-            } else {
-                return Problem("Invalid Username or Password");
             }
+            return Problem("Password and UserName is not Matching");
         }
 
         [HttpGet]
@@ -115,7 +66,7 @@ namespace RosanicSocial.API.Controllers.v1 {
             _logger.LogInformation("Logout Controller started");
             _logger.LogDebug($"Request Type: GET");
 
-            await _signInManager.SignOutAsync();
+            await _accountDbService.Logout();
             return NoContent();
         }
 
@@ -124,13 +75,8 @@ namespace RosanicSocial.API.Controllers.v1 {
             _logger.LogInformation("IsUsernameAlreadyRegistered Controller started");
             _logger.LogDebug($"Request Type: GET");
 
-            ApplicationUser? user = await _userManger.FindByNameAsync(usernanme);
-
-            if (user == null) {
-                return Ok(true);
-            } else {
-                return Ok(false);
-            }
+            ApplicationUser? user = await _accountDbService.IsUsernameAlreadyRegistered(usernanme);
+            return Ok(user == null);
         }
     }
 }

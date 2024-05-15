@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RosanicSocial.Application.Interfaces.DbServices;
+using RosanicSocial.Application.Interfaces.Managers;
 using RosanicSocial.Domain.DTO.Request.Follows;
 using RosanicSocial.Domain.DTO.Response.Follows;
 using RosanicSocial.WebAPI.Controllers;
@@ -10,8 +11,10 @@ namespace RosanicSocial.API.Controllers.v1 {
     [ApiVersion("1.0")]
     public class FollowController : CustomControllerBase {
         private readonly IFollowDbService _dbService;
-        public FollowController(IFollowDbService dbService) {
+        private readonly IInteractionDbManagerService _interactionDbManager;
+        public FollowController(IFollowDbService dbService, IInteractionDbManagerService interactionDbManager) {
             _dbService = dbService;
+            _interactionDbManager = interactionDbManager;
         }
 
         //Follow
@@ -21,14 +24,20 @@ namespace RosanicSocial.API.Controllers.v1 {
 
         [HttpPost]
         public async Task<ActionResult<FollowsAddResponse?>> AddFollow(FollowsAddRequest request) {
-            FollowsAddResponse response = await _dbService.AddFollow(request);
-            return Ok(response);
+            FollowsAddResponse? response = await _interactionDbManager.AddFollow(request);
+            if (response != null) { 
+                return Ok(response);
+            }
+            return Problem("Error occured while following");
         }
 
         [HttpDelete]
         public async Task<ActionResult<FollowsDeleteResponse?>> DeleteFollow(FollowsDeleteRequest request) {
-            FollowsDeleteResponse response = await _dbService.DeleteFollow(request);
-            return Ok(response);
+            FollowsDeleteResponse? response = await _interactionDbManager.DeleteFollow(request);
+            if (response != null) {
+                return Ok(response);
+            }
+            return Problem("Error occured while unfollowing");
         }
 
         [HttpDelete]

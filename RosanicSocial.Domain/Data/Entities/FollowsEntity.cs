@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 namespace RosanicSocial.Domain.Data.Entities {
     public class FollowsEntity {
         [Key]
+        public int Id { get; set; }
         [Required]
         public int UserId { get; set; }
         [Required]

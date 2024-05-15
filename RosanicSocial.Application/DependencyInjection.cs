@@ -18,6 +18,7 @@ using RosanicSocial.Application.Services.Managers;
 namespace RosanicSocial.Application {
     public static class DependencyInjection {
         public static IServiceCollection AddApplication(this IServiceCollection services) {
+            services.AddScoped<IAccountDbService, AccountDbService>();
             services.AddScoped<ICommentDbService, CommentDbService>();
             services.AddScoped<IFollowDbService, FollowDbService>();
             services.AddScoped<ILikeDbService, LikeDbService>();

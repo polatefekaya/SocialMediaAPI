@@ -74,9 +74,7 @@ namespace RosanicSocial.Application.Services.DbServices {
             BaseInfoEntity entity = request.ToEntity();
             entity.UpdatedAt = DateTime.UtcNow;
 
-            BaseInfoEntity updatedEntity = await _repo.UpdateBaseInfo(entity);
-            BaseInfoUpdateResponse response = updatedEntity.ToUpdateResponse();
-            return response;
+            return await baseUpdater(entity);
         }
 
         public async Task<BaseInfoUpdateResponse?> UpdateBaseInfoPostCount(BaseInfoUpdatePostCountRequest request) {
@@ -86,9 +84,27 @@ namespace RosanicSocial.Application.Services.DbServices {
             entity.PostCount += request.Change;
             entity.UpdatedAt = DateTime.UtcNow;
 
-            BaseInfoEntity updatedEntity = await _repo.UpdateBaseInfo(entity);
-            BaseInfoUpdateResponse response = updatedEntity.ToUpdateResponse();
-            return response;
+            return await baseUpdater(entity);
+        }
+
+        public async Task<BaseInfoUpdateResponse?> UpdateBaseInfoFollowerCount(BaseInfoUpdateFollowCountRequest request) {
+            BaseInfoEntity? entity = await _repo.GetBaseInfo(request.UserId);
+            if (entity == null) { return null; }
+
+            entity.FollowerCount += request.Change;
+            entity.UpdatedAt = DateTime.UtcNow;
+
+            return await baseUpdater(entity);
+        }
+
+        public async Task<BaseInfoUpdateResponse?> UpdateBaseInfoFollowingCount(BaseInfoUpdateFollowCountRequest request) {
+            BaseInfoEntity? entity = await _repo.GetBaseInfo(request.UserId);
+            if (entity == null) { return null; }
+
+            entity.FollowingCount += request.Change;
+            entity.UpdatedAt = DateTime.UtcNow;
+
+            return await baseUpdater(entity);
         }
 
         public async Task<DetailedInfoUpdateResponse?> UpdateDetailedInfo(DetailedInfoUpdateRequest request) {
@@ -97,6 +113,12 @@ namespace RosanicSocial.Application.Services.DbServices {
 
             DetailedInfoEntity updatedEntity = await _repo.UpdateDetailedInfo(entity);
             DetailedInfoUpdateResponse response = updatedEntity.ToUpdateResponse();
+            return response;
+        }
+
+        private async Task<BaseInfoUpdateResponse?> baseUpdater(BaseInfoEntity entity) {
+            BaseInfoEntity updatedEntity = await _repo.UpdateBaseInfo(entity);
+            BaseInfoUpdateResponse response = updatedEntity.ToUpdateResponse();
             return response;
         }
     }

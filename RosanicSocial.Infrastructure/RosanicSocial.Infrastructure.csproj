@@ -26,4 +26,8 @@
     <ProjectReference Include="..\RosanicSocial.Domain\RosanicSocial.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\Interactions\" />
+  </ItemGroup>
+
 </Project>

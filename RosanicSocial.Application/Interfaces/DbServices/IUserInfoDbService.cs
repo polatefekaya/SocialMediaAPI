@@ -37,6 +37,8 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
         Task<BaseInfoUpdateResponse?> UpdateBaseInfo(BaseInfoUpdateRequest request);
         Task<BaseInfoDeleteResponse?> DeleteBaseInfo(BaseInfoDeleteRequest request);
         Task<BaseInfoUpdateResponse?> UpdateBaseInfoPostCount(BaseInfoUpdatePostCountRequest request);
+        Task<BaseInfoUpdateResponse?> UpdateBaseInfoFollowingCount(BaseInfoUpdateFollowCountRequest request);
+        Task<BaseInfoUpdateResponse?> UpdateBaseInfoFollowerCount(BaseInfoUpdateFollowCountRequest request);
         #endregion
 
         #region DetailedInfo

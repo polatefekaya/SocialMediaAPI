@@ -401,4 +401,4 @@ FodyWeavers.xsd
 RosanicSocial.API/logs
 
 # Migration folders
-RosanicSocial.Infrastructure/Migrations
+#RosanicSocial.Infrastructure/Migrations
