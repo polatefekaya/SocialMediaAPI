@@ -11,6 +11,8 @@ namespace RosanicSocial.Domain.DTO.Response.Post
         public int? Type { get; set; } = null;
         public int? Topic { get; set; } = null;
         public string? Body { get; set; } = null;
+        public int LikeCount { get; set; } = 0;
+        public int CommentCount { get; set; } = 0;
         public string? MediaUrl { get; set; } = null;
         public int MediaType { get; set; } = 0;
         public bool IsUpdated { get; set; } = false;
@@ -30,6 +32,8 @@ namespace RosanicSocial.Domain.DTO.Response.Post
                 Type = entity.Type,
                 Topic = entity.Topic,
                 Body = entity.Body,
+                LikeCount = entity.LikeCount,
+                CommentCount = entity.CommentCount,
                 MediaUrl = entity.MediaUrl,
                 MediaType = entity.MediaType,
                 IsUpdated = entity.IsUpdated,

@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using RosanicSocial.Application.Interfaces.DbServices;
 using RosanicSocial.Application.Interfaces.Managers;
 using RosanicSocial.Domain.DTO.Request.Comment;
@@ -23,23 +24,43 @@ namespace RosanicSocial.Application.Services.Managers {
         private readonly IUserInfoDbService _userInfoDbService;
         private readonly IFollowDbService _followDbService;
 
-        public InteractionDbManagerService(IFollowDbService followDbService, IUserInfoDbService userInfoDbService, IPostDbService postDbService, ILikeDbService likeDbService, ICommentDbService commentDbService) {
+        private readonly ILogger<InteractionDbManagerService> _logger;
+
+        public InteractionDbManagerService(ILogger<InteractionDbManagerService> logger, IFollowDbService followDbService, IUserInfoDbService userInfoDbService, IPostDbService postDbService, ILikeDbService likeDbService, ICommentDbService commentDbService) {
             _postDbService = postDbService;
             _likeDbService = likeDbService;
             _commentDbService = commentDbService;
             _userInfoDbService = userInfoDbService;
             _followDbService = followDbService;
+            _logger = logger;
         }
 
         public async Task<PostLikesAddResponse?> AddPostLike(PostLikesAddRequest request) {
-            PostUpdateResponse? postResponse = await _postDbService.UpdatePostLikeCount(
-                new PostUpdateLikeCountRequest {
-                    PostId = request.PostId,
-                    Change = 1
-                });
-            if (postResponse == null) { return null; }
+            _logger.LogInformation("AddPostLike in InteractionDbService is started");
+            _logger.LogDebug("Total 2 DbService processes");
 
-            PostLikesAddResponse likesResponse = await _likeDbService.AddPostLike(request);
+            PostUpdateLikeCountRequest updateRequest = new PostUpdateLikeCountRequest {
+                PostId = request.PostId,
+                Change = 1
+            };
+            _logger.LogTrace($"Update Like Count Request Object has PostId: {updateRequest.PostId}, Change: {updateRequest.Change}");
+
+            PostUpdateResponse? postResponse = await _postDbService.UpdatePostLikeCount(updateRequest);
+            _logger.LogDebug("UpdatePosLikeCount with PostDbService is finished, (1/2)");
+            if (postResponse == null) {
+                _logger.LogWarning("PostUpdateResponse is null, returning null value may cause problems");
+                return null;
+            }
+
+            _logger.LogTrace($"PostUpdateResponse Object has UserId: {postResponse.UserId}, PostId: {postResponse.Id}, LikeCount: {postResponse.LikeCount}");
+
+
+            PostLikesAddResponse? likesResponse = await _likeDbService.AddPostLike(request);
+            _logger.LogDebug("AddPostLike with LikeDbService is finished. (2/2)");
+
+            if (likesResponse == null) {
+                _logger.LogWarning("PostLikesAddResponse is null, returning null value may cause problems");
+            }
             return likesResponse;
         }
 
