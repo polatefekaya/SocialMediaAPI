@@ -1,6 +1,8 @@
 using Microsoft.Extensions.Logging;
 using RosanicSocial.Application.Interfaces.DbServices;
+using RosanicSocial.Application.Interfaces.Helpers.Managers;
 using RosanicSocial.Application.Interfaces.Managers;
+using RosanicSocial.Application.Services.DbServices;
 using RosanicSocial.Domain.DTO.Request.Comment;
 using RosanicSocial.Domain.DTO.Request.Follows;
 using RosanicSocial.Domain.DTO.Request.Info.Base;
@@ -24,56 +26,62 @@ namespace RosanicSocial.Application.Services.Managers {
         private readonly IUserInfoDbService _userInfoDbService;
         private readonly IFollowDbService _followDbService;
 
+        private readonly IInteractionDbManagerHelperService _helper;
+
         private readonly ILogger<InteractionDbManagerService> _logger;
 
-        public InteractionDbManagerService(ILogger<InteractionDbManagerService> logger, IFollowDbService followDbService, IUserInfoDbService userInfoDbService, IPostDbService postDbService, ILikeDbService likeDbService, ICommentDbService commentDbService) {
+        public InteractionDbManagerService(IInteractionDbManagerHelperService helper, ILogger<InteractionDbManagerService> logger, IFollowDbService followDbService, IUserInfoDbService userInfoDbService, IPostDbService postDbService, ILikeDbService likeDbService, ICommentDbService commentDbService) {
             _postDbService = postDbService;
             _likeDbService = likeDbService;
             _commentDbService = commentDbService;
             _userInfoDbService = userInfoDbService;
             _followDbService = followDbService;
             _logger = logger;
+            _helper = helper;
         }
 
         public async Task<PostLikesAddResponse?> AddPostLike(PostLikesAddRequest request) {
-            _logger.LogInformation("AddPostLike in InteractionDbService is started");
-            _logger.LogDebug("Total 2 DbService processes");
+            _logger.LogInformation($"{nameof(AddPostLike)} in {nameof(InteractionDbManagerService)} is started");
+            _logger.LogDebug("Total of 2 DbService Processes");
 
-            PostUpdateLikeCountRequest updateRequest = new PostUpdateLikeCountRequest {
-                PostId = request.PostId,
-                Change = 1
-            };
-            _logger.LogTrace($"Update Like Count Request Object has PostId: {updateRequest.PostId}, Change: {updateRequest.Change}");
-
-            PostUpdateResponse? postResponse = await _postDbService.UpdatePostLikeCount(updateRequest);
-            _logger.LogDebug("UpdatePosLikeCount with PostDbService is finished, (1/2)");
-            if (postResponse == null) {
-                _logger.LogWarning("PostUpdateResponse is null, returning null value may cause problems");
-                return null;
-            }
-
-            _logger.LogTrace($"PostUpdateResponse Object has UserId: {postResponse.UserId}, PostId: {postResponse.Id}, LikeCount: {postResponse.LikeCount}");
-
+            //It will update the post entity to increment post like count on this post.
+            PostUpdateResponse? updateResponse = await _helper.UpdatePost(request.PostId, 1);
 
             PostLikesAddResponse? likesResponse = await _likeDbService.AddPostLike(request);
-            _logger.LogDebug("AddPostLike with LikeDbService is finished. (2/2)");
+            _logger.LogDebug($"{nameof(AddPostLike)} with {nameof(LikeDbService)} is finished. (2/2)");
 
             if (likesResponse == null) {
-                _logger.LogWarning("PostLikesAddResponse is null, returning null value may cause problems");
+                _logger.LogWarning($"{nameof(PostLikesAddResponse)} is null, returning null value may cause problems");
             }
             return likesResponse;
         }
 
         public async Task<PostLikesDeleteResponse?> DeletePostLike(PostLikesDeleteRequest request) {
-            PostUpdateResponse? postResponse = await _postDbService.UpdatePostLikeCount(
-                new PostUpdateLikeCountRequest {
-                    PostId = request.PostId,
-                    Change = -1
-                });
-            if (postResponse == null) { return null; }
+            _logger.LogInformation($"{nameof(DeletePostLike)} in {nameof(InteractionDbManagerService)} is started");
+            _logger.LogDebug("Total of 2 DbService Processes");
+
+            PostUpdateResponse? updateResponse = await _helper.UpdatePost(request.PostId, -1);
 
             PostLikesDeleteResponse? likesResponse = await _likeDbService.DeletePostLike(request);
             return likesResponse;
+        }
+
+        private async Task<PostUpdateResponse?> basePostUpdate(int postId, int change) {
+            PostUpdateLikeCountRequest updateRequest = new PostUpdateLikeCountRequest {
+                PostId = postId,
+                Change = change
+            };
+            _logger.LogTrace($"{nameof(PostUpdateLikeCountRequest)} has PostId: {updateRequest.PostId}, Change: {updateRequest.Change}");
+
+            PostUpdateResponse? postResponse = await _postDbService.UpdatePostLikeCount(updateRequest);
+            _logger.LogDebug($"{nameof(_postDbService.UpdatePostLikeCount)} with {nameof(PostDbService)} is finished, (1/2)");
+            if (postResponse == null) {
+                _logger.LogWarning($"{nameof(PostUpdateResponse)} is null, returning null value may cause problems");
+                return null;
+            }
+
+            _logger.LogTrace($"{nameof(PostUpdateResponse)} Object has UserId: {postResponse.UserId}, PostId: {postResponse.Id}, LikeCount: {postResponse.LikeCount}");
+            return postResponse;
         }
 
         public async Task<CommentLikesAddResponse?> AddCommentLike(CommentLikesAddRequest request) {

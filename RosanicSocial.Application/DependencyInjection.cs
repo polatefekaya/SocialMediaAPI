@@ -6,6 +6,7 @@ using RosanicSocial.Application.Interfaces.Creators;
 using RosanicSocial.Application.Interfaces.DbServices;
 using RosanicSocial.Application.Interfaces.Factories;
 using RosanicSocial.Application.Interfaces.Helpers;
+using RosanicSocial.Application.Interfaces.Helpers.Managers;
 using RosanicSocial.Application.Interfaces.Managers;
 using RosanicSocial.Application.Interfaces.Repository;
 using RosanicSocial.Application.Services;
@@ -13,6 +14,7 @@ using RosanicSocial.Application.Services.Creators;
 using RosanicSocial.Application.Services.DbServices;
 using RosanicSocial.Application.Services.Factories;
 using RosanicSocial.Application.Services.Helpers;
+using RosanicSocial.Application.Services.Helpers.Managers;
 using RosanicSocial.Application.Services.Managers;
 
 namespace RosanicSocial.Application {
@@ -32,6 +34,7 @@ namespace RosanicSocial.Application {
 
             services.AddScoped<ISharingsDbManagerService, SharingsDbManagerService>();
             services.AddScoped<IInteractionDbManagerService, InteractionDbManagerService>();
+            services.AddScoped<IInteractionDbManagerHelperService, InteractionDbManagerHelperService>();
 
             return services;
         }
