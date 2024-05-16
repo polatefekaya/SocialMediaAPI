@@ -51,7 +51,7 @@ namespace RosanicSocial.Application.Services.Managers {
             _logger.LogDebug($"{nameof(AddPostLike)} with {nameof(LikeDbService)} is finished. (2/2)");
 
             if (likesResponse == null) {
-                _logger.LogWarning($"{nameof(PostLikesAddResponse)} is null, returning null value may cause problems");
+                _logger.LogError($"{nameof(PostLikesAddResponse)} is null, returning null value may cause problems");
             }
             return likesResponse;
         }
@@ -63,6 +63,11 @@ namespace RosanicSocial.Application.Services.Managers {
             PostUpdateResponse? updateResponse = await _helper.UpdatePost(request.PostId, -1);
 
             PostLikesDeleteResponse? likesResponse = await _likeDbService.DeletePostLike(request);
+            _logger.LogDebug($"{nameof(DeletePostLike)} with {nameof(LikeDbService)} is finished. (2/2)");
+
+            if (likesResponse == null) {
+                _logger.LogError($"{nameof(PostLikesDeleteResponse)} is null, returning null value may cause problems");
+            }
             return likesResponse;
         }
 

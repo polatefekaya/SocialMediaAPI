@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RosanicSocial.Application.Filters;
 using RosanicSocial.Application.Interfaces.DbServices;
 using RosanicSocial.Domain.Data.Identity;
 using RosanicSocial.Domain.DTO.Request.Account;
@@ -24,19 +25,20 @@ namespace RosanicSocial.API.Controllers.v1 {
             _logger.LogDebug($"Request Type: {nameof(RegisterRequest)}");
 
             if (!ModelState.IsValid) {
-                string errorMessage = string.Join(" | ", 
+                string errorMessage = string.Join(" | ",
                     ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
                 return Problem(errorMessage);
             }
 
             AuthenticationResponse? authRespose = await _accountDbService.Register(request);
-            
-            if (authRespose != null) { 
+
+            if (authRespose != null) {
                 return Ok(authRespose);
             }
             return Problem("Error occured while registering");
         }
 
+        [TypeFilter(typeof(SampleFilter))]
         [HttpPost]
         public async Task<IActionResult> Login(LoginRequest request) {
             _logger.LogInformation("Login Controller started");
