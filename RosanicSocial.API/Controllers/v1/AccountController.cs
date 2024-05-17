@@ -38,7 +38,7 @@ namespace RosanicSocial.API.Controllers.v1 {
             return Problem("Error occured while registering");
         }
 
-        [TypeFilter(typeof(SampleFilter))]
+        [TypeFilter(typeof(FeatureDisabledTemporarilyResourceFilter))]
         [HttpPost]
         public async Task<IActionResult> Login(LoginRequest request) {
             _logger.LogInformation("Login Controller started");
