@@ -9,11 +9,9 @@ using System.Security.Claims;
 
 namespace RosanicSocial.Application.Filters {
     public class NotAutherizedUserActionFilter : IAsyncActionFilter {
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<NotAutherizedUserActionFilter> _logger;
 
-        public NotAutherizedUserActionFilter(UserManager<ApplicationUser> userManager, ILogger<NotAutherizedUserActionFilter> logger) {
-            _userManager = userManager;
+        public NotAutherizedUserActionFilter(ILogger<NotAutherizedUserActionFilter> logger) {
             _logger = logger;
         }
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next) {
@@ -25,8 +23,6 @@ namespace RosanicSocial.Application.Filters {
                 context.Result = new ContentResult { Content = "Authorization Process Failing, Access Terminated" };
                 return;
             }
-
-            //make it generic for different tpyes
 
             //before
             await next();
@@ -41,14 +37,14 @@ namespace RosanicSocial.Application.Filters {
                 return false;
             }
 
-            if (!context.ActionArguments.ContainsKey("postRequest")) {
+            if (!context.ActionArguments.ContainsKey("request")) {
                 _logger.LogError("No postRequest Key in Action Arguments");
                 return false;
             }
 
-            var personReq = context.ActionArguments["postRequest"];
-            
-            string? requestedUserId = Convert.ToString(context.ActionArguments["userId"]);
+            var personReq = context.ActionArguments["request"];
+
+            string? requestedUserId = Convert.ToString(personReq?.GetType().GetProperty("UserId")?.GetValue(personReq));
 
             if (requestedUserId is null) {
                 _logger.LogError("UserId is not supplied");
