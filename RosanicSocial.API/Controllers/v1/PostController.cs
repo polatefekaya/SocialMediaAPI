@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RosanicSocial.Application.Filters;
 using RosanicSocial.Application.Interfaces.DbServices;
 using RosanicSocial.Application.Interfaces.Managers;
 using RosanicSocial.Domain.DTO.Request.Post;
@@ -9,6 +10,7 @@ using RosanicSocial.WebAPI.Controllers;
 
 namespace RosanicSocial.API.Controllers.v1 {
     [ApiVersion("1.0")]
+    [TypeFilter(typeof(NotAutherizedUserActionFilter))]
     public class PostController : CustomControllerBase {
         private readonly IPostDbService _dbService;
         private readonly ISharingsDbManagerService _sharingsDbManager;
