@@ -27,7 +27,7 @@ namespace RosanicSocial.API.Controllers.v1 {
         }
 
         //GetBaseInfo Get
-        [HttpGet]
+        [HttpGet]        
         public async Task<ActionResult<BaseInfoGetResponse>> GetBaseInfo([FromQuery] BaseInfoGetRequest request) {
             BaseInfoGetResponse response = await _dbService.GetBaseInfo(request);
             return Ok(response);
