@@ -32,7 +32,7 @@ namespace RosanicSocial.Infrastructure.Repository {
             _db.UserBlocks.RemoveRange(entities);
             await _db.SaveChangesAsync();
 
-            _logger.LogDebug($"{nameof(DeleteAllBlocks)} in {nameof(UserBlockRepository)} is finished with {entities.Length} blocks.");
+            _logger.LogInformation($"{nameof(DeleteAllBlocks)} in {nameof(UserBlockRepository)} is finished with {entities.Length} blocks.");
             return entities;
         }
 
@@ -48,16 +48,31 @@ namespace RosanicSocial.Infrastructure.Repository {
             _db.UserBlocks.Remove(entity);
             await _db.SaveChangesAsync();
 
-            _logger.LogDebug($"{nameof(DeleteAllBlocks)} in {nameof(UserBlockRepository)} is finished.");
+            _logger.LogInformation($"{nameof(DeleteAllBlocks)} in {nameof(UserBlockRepository)} is finished.");
             return entity;
         }
 
-        public Task<UserBlockEntity[]> GetAllBlocksByUserId(int userId) {
-            throw new NotImplementedException();
+        public async Task<UserBlockEntity[]> GetAllBlocksByUserId(int userId) {
+            _logger.LogDebug($"{nameof(GetAllBlocksByUserId)} for UserId:{userId} in {nameof(UserBlockRepository)} is started.");
+
+            UserBlockEntity[] entities = await _db.UserBlocks.Where(be => be.UserId == userId).ToArrayAsync();
+
+            _logger.LogInformation($"{nameof(GetAllBlocksByUserId)} in {nameof(UserBlockRepository)} is finished.");
+
+            return entities;
         }
 
-        public Task<UserBlockEntity?> GetBlock(int userId) {
-            throw new NotImplementedException();
+        public async Task<UserBlockEntity?> GetBlock(int userId, int blockedId) {
+            _logger.LogDebug($"{nameof(GetBlock)} for (UserId:{userId} is blocked UserId:{blockedId}) in {nameof(UserBlockRepository)} is started.");
+
+            UserBlockEntity? entity = await _db.UserBlocks.SingleOrDefaultAsync(be => be.UserId == userId && be.BlockedUserId == blockedId);
+            if (entity == null) {
+                _logger.LogDebug($"No entity found for {nameof(GetBlock)} in {nameof(UserBlockRepository)}, returning null.");
+                return null;
+            }
+
+            _logger.LogInformation($"{nameof(GetBlock)} in {nameof(UserBlockEntity)} is finished.");
+            return entity;
         }
     }
 }
