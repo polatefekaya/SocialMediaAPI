@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 
 namespace RosanicSocial.Domain.DTO.Request.Reports.Block {
-    public class BlockGetRequest {
+    public class BlockGetAllRequest {
         public int UserId { get; set; }
-        public int BlockedUserId { get; set; }
     }
 }

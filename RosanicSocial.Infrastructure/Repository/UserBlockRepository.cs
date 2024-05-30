@@ -18,6 +18,13 @@ namespace RosanicSocial.Infrastructure.Repository {
         public async Task<UserBlockEntity?> AddBlock(UserBlockEntity entity) {
             _logger.LogDebug($"{nameof(AddBlock)} for UserId:{entity.UserId} in {nameof(UserBlockRepository)} is started.");
 
+            _logger.LogDebug($"Controlling {nameof(_db.UserBlocks)} db for preventing duplicate records.");
+            UserBlockEntity? dbEntity =  await _db.UserBlocks.SingleOrDefaultAsync(be => be.UserId == entity.UserId && be.BlockedUserId == entity.BlockedUserId);
+            if (dbEntity is not null) {
+                _logger.LogError($"Duplicate is found in {nameof(_db.UserBlocks)}, no additions made, returning the duplicate.");
+                return dbEntity;
+            }
+
             await _db.UserBlocks.AddAsync(entity);
             await _db.SaveChangesAsync();
 
@@ -39,7 +46,7 @@ namespace RosanicSocial.Infrastructure.Repository {
         public async Task<UserBlockEntity?> DeleteBlock(int userId, int blockedId) {
             _logger.LogDebug($"{nameof(DeleteBlock)} for (UserId:{userId} blocked UserId:{blockedId}) in {nameof(UserBlockRepository)} is started.");
 
-            UserBlockEntity? entity = await _db.UserBlocks.SingleOrDefaultAsync(be => be.Id == userId && be.BlockedUserId == blockedId);
+            UserBlockEntity? entity = await _db.UserBlocks.SingleOrDefaultAsync(be => be.UserId == userId && be.BlockedUserId == blockedId);
             if (entity == null) {
                 _logger.LogWarning($"No entity found for {nameof(DeleteBlock)} in {nameof(UserBlockRepository)}, returning null.");
                 return null;
