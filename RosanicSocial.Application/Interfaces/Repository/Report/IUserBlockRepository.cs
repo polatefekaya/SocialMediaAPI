@@ -8,9 +8,10 @@ namespace RosanicSocial.Application.Interfaces.Repository.Report
 {
     public interface IUserBlockRepository
     {
-        Task<UserBlockEntity> AddBlock(UserBlockEntity entity);
-        Task<UserBlockEntity> DeleteBlock(int userId, int blockedId);
-        Task<IQueryable<UserBlockEntity>> DeleteAllBlocks(int userId);
-        Task<IQueryable<UserBlockEntity>> GetAllBlocksByUserId(int userId);
+        Task<UserBlockEntity?> AddBlock(UserBlockEntity entity);
+        Task<UserBlockEntity?> DeleteBlock(int userId, int blockedId);
+        Task<UserBlockEntity[]> DeleteAllBlocks(int userId);
+        Task<UserBlockEntity[]> GetAllBlocksByUserId(int userId);
+        Task<UserBlockEntity?> GetBlock(int userId);
     }
 }
