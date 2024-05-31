@@ -10,8 +10,8 @@ namespace RosanicSocial.Application.Interfaces.Repository.Report
     {
         Task<UserBlockEntity?> AddBlock(UserBlockEntity entity);
         Task<UserBlockEntity?> DeleteBlock(int userId, int blockedId);
-        Task<UserBlockEntity[]> DeleteAllBlocks(int userId);
-        Task<UserBlockEntity[]> GetAllBlocksByUserId(int userId);
+        Task<UserBlockEntity[]?> DeleteAllBlocks(int userId);
+        Task<UserBlockEntity[]?> GetAllBlocksByUserId(int userId);
         Task<UserBlockEntity?> GetBlock(int userId, int blockedId);
     }
 }

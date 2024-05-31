@@ -21,39 +21,47 @@ namespace RosanicSocial.Application.Services.DbServices {
         }
 
         public async Task<BlockAddResponse?> AddBlock(BlockAddRequest request) {
-            _logger.LogDebug($"{nameof(AddBlock)} in {nameof(UserBlockDbService)} is started");
+            _logger.LogDebug($"{nameof(AddBlock)} in {nameof(UserBlockDbService)} is started.");
             UserBlockEntity? entity = request.ToEntity();
 
-            _logger.LogInformation($"{nameof(_repo.AddBlock)} in {nameof(IUserBlockRepository)} is starting");
+            entity.CreatedAt = DateTime.UtcNow;
+
+            _logger.LogInformation($"{nameof(_repo.AddBlock)} in {nameof(IUserBlockRepository)} is starting.");
             entity = await _repo.AddBlock(entity);
 
             BlockAddResponse response = entity.ToAddResponse();
 
-            _logger.LogInformation($"{nameof(AddBlock)} in {nameof(UserBlockDbService)} is finished");
+            _logger.LogInformation($"{nameof(AddBlock)} in {nameof(UserBlockDbService)} is finished.");
             return response;
         }
 
-        public async Task<BlockDeleteResponse[]> DeleteAllBlocks(BlockDeleteAllRequest request) {
-            _logger.LogDebug($"{nameof(DeleteAllBlocks)} in {nameof(UserBlockDbService)} is started");
+        public async Task<BlockDeleteResponse[]?> DeleteAllBlocks(BlockDeleteAllRequest request) {
+            _logger.LogDebug($"{nameof(DeleteAllBlocks)} in {nameof(UserBlockDbService)} is started.");
 
-            _logger.LogInformation($"{nameof(_repo.DeleteAllBlocks)} in {nameof(IUserBlockRepository)} is starting");
-            UserBlockEntity[] entities = await _repo.DeleteAllBlocks(request.UserId);
+            _logger.LogInformation($"{nameof(_repo.DeleteAllBlocks)} in {nameof(IUserBlockRepository)} is starting.");
+            UserBlockEntity[]? entities = await _repo.DeleteAllBlocks(request.UserId);
+
+            if (entities is null) {
+                _logger.LogError($"There is no entities that matches with conditions in {nameof(DeleteAllBlocks)}, returning null.");
+                return null;
+            }
 
             BlockDeleteResponse[] responses = await _converter.ToResponseAsync(entities, e => {
                 return e.ToDeleteResponse();
             });
 
-            _logger.LogInformation($"{nameof(DeleteAllBlocks)} in {nameof(UserBlockDbService)} is finished with {entities.Length} deletions");
+            _logger.LogInformation($"{nameof(DeleteAllBlocks)} in {nameof(UserBlockDbService)} is finished with {entities.Length} deletions.");
             return responses;
         }
 
         public async Task<BlockDeleteResponse?> DeleteBlock(BlockDeleteRequest request) {
-            _logger.LogDebug($"{nameof(DeleteBlock)} in {nameof(UserBlockDbService)} is started");
+            _logger.LogDebug($"{nameof(DeleteBlock)} in {nameof(UserBlockDbService)} is started.");
 
-            _logger.LogInformation($"{nameof(_repo.DeleteBlock)} in {nameof(IUserBlockRepository)} is starting");
+            _logger.LogInformation($"{nameof(_repo.DeleteBlock)} in {nameof(IUserBlockRepository)} is starting.");
             UserBlockEntity? entity = await _repo.DeleteBlock(request.UserId, request.BlockedUserId);
-            if (entity == null) {
-                _logger.LogError($"There is no entity that matches with conditions to delete, returning null.");
+
+            if (entity is null) {
+                _logger.LogError($"There is no entity that matches with conditions in {nameof(DeleteBlock)}, returning null.");
                 return null;
             }
 
@@ -62,8 +70,23 @@ namespace RosanicSocial.Application.Services.DbServices {
             _logger.LogInformation($"{nameof(DeleteBlock)} in {nameof(UserBlockDbService)} is finished.");
             return response;
         }
-        public Task<BlockGetResponse[]> GetBlocks(BlockGetAllRequest request) {
-            throw new NotImplementedException();
+        public async Task<BlockGetResponse[]?> GetBlocks(BlockGetAllRequest request) {
+            _logger.LogDebug($"{nameof(GetBlocks)} in {nameof(UserBlockDbService)} is started.");
+
+            _logger.LogInformation($"{nameof(_repo.GetAllBlocksByUserId)} in {nameof(IUserBlockRepository)} is starting.");
+            UserBlockEntity[]? entities = await _repo.GetAllBlocksByUserId(request.UserId);
+
+            if (entities is null) {
+                _logger.LogError($"No Block Entities found with given parameters in {nameof(GetBlocks)}, returning null.");
+                return null;
+            }
+
+            BlockGetResponse[]? responses = await _converter.ToResponseAsync(entities, e => {
+                return e.ToGetResponse();
+            });
+
+            _logger.LogInformation($"{nameof(GetBlocks)} in {nameof(UserBlockDbService)} is finished with {entities.Length} blocks entities.");
+            return responses;
         }
 
         public async Task<BlockGetResponse?> GetBlock(BlockGetRequest request) {
@@ -83,5 +106,21 @@ namespace RosanicSocial.Application.Services.DbServices {
             return response;
         }
 
+        public async Task<BlockGetResponse?> GetAmIBlocked(BlockGetRequest request) {
+            _logger.LogDebug($"{nameof(GetAmIBlocked)} in {nameof(UserBlockDbService)} is started.");
+
+            _logger.LogInformation($"{nameof(_repo.GetBlock)} in {nameof(IUserBlockRepository)} is starting.");
+            UserBlockEntity? entity = await _repo.GetBlock(request.BlockedUserId, request.UserId);
+
+            if (entity is null) {
+                _logger.LogError($"No Block Entity found with given parameters, returning null.");
+                return null;
+            }
+
+            BlockGetResponse? response = entity.ToGetResponse();
+
+            _logger.LogInformation($"{nameof(GetAmIBlocked)} in {nameof(UserBlockDbService)} is finished.");
+            return response;
+        }
     }
 }

@@ -7,8 +7,9 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
     public interface IUserBlockDbService {
         Task<BlockAddResponse?> AddBlock(BlockAddRequest request);
         Task<BlockDeleteResponse?> DeleteBlock(BlockDeleteRequest request);
-        Task<BlockDeleteResponse[]> DeleteAllBlocks(BlockDeleteAllRequest request);
-        Task<BlockGetResponse[]> GetBlocks(BlockGetAllRequest request);
+        Task<BlockDeleteResponse[]?> DeleteAllBlocks(BlockDeleteAllRequest request);
+        Task<BlockGetResponse[]?> GetBlocks(BlockGetAllRequest request);
         Task<BlockGetResponse?> GetBlock(BlockGetRequest request);
+        Task<BlockGetResponse?> GetAmIBlocked(BlockGetRequest request);
     }
 }

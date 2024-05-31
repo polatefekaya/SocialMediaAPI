@@ -32,6 +32,8 @@ namespace RosanicSocial.Application {
             services.AddTransient<IJwtHelperService, JwtHelperService>();
             services.AddScoped<IEntityConvertService, EntityConvertService>();
 
+            services.AddScoped<IUserBlockDbService, UserBlockDbService>();
+
             services.AddScoped<ISharingsDbManagerService, SharingsDbManagerService>();
             services.AddScoped<IInteractionDbManagerService, InteractionDbManagerService>();
             services.AddScoped<IInteractionDbManagerHelperService, InteractionDbManagerHelperService>();

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RosanicSocial.Application.Interfaces.Repository;
 using RosanicSocial.Application.Interfaces.Repository.Post;
+using RosanicSocial.Application.Interfaces.Repository.Report;
 using RosanicSocial.Domain.Data.Entities;
 using RosanicSocial.Infrastructure.DatabaseContext;
 using RosanicSocial.Infrastructure.Repository;
@@ -17,6 +18,9 @@ namespace RosanicSocial.Infrastructure
             services.AddScoped<ILikeRepository, LikeRepository>();
             services.AddScoped<IPostRepository, PostRepository>();
             services.AddScoped<IUserInfoRepository, UserInfoRepository>();
+
+            services.AddScoped<IUserBlockRepository, UserBlockRepository>();
+            
 
             return services;
         }

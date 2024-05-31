@@ -27,7 +27,7 @@ namespace RosanicSocial.API.Controllers.v1 {
         }
 
         //GetBaseInfo Get
-        [HttpGet]        
+        [HttpGet]
         public async Task<ActionResult<BaseInfoGetResponse>> GetBaseInfo([FromQuery] BaseInfoGetRequest request) {
             BaseInfoGetResponse response = await _dbService.GetBaseInfo(request);
             return Ok(response);
@@ -52,13 +52,13 @@ namespace RosanicSocial.API.Controllers.v1 {
         #region Detailed
 
         [HttpPost]
-        [TypeFilter(typeof(AccountUserRelationsActionFilter))]
         public async Task<ActionResult<DetailedInfoAddResponse>> AddDetailedInfo(DetailedInfoAddRequest request) {
             DetailedInfoAddResponse response = await _dbService.AddDetailedInfo(request);
             return Ok(response);
         }
 
         [HttpGet]
+        [TypeFilter(typeof(AmIBlockedActionFilter))]
         [TypeFilter(typeof(AccountUserRelationsActionFilter))]
         public async Task<ActionResult<DetailedInfoGetResponse>> GetDetailedInfo([FromQuery] DetailedInfoGetRequest request) {
             DetailedInfoGetResponse response = await _dbService.GetDetailedInfo(request);
@@ -66,14 +66,12 @@ namespace RosanicSocial.API.Controllers.v1 {
         }
         
         [HttpPut]
-        [TypeFilter(typeof(AccountUserRelationsActionFilter))]
         public async Task<ActionResult<DetailedInfoUpdateResponse>> UpdateDetailedInfo(DetailedInfoUpdateRequest request) {
             DetailedInfoUpdateResponse response = await _dbService.UpdateDetailedInfo(request);
             return Ok(response);
         }
 
         [HttpDelete]
-        [TypeFilter(typeof(AccountUserRelationsActionFilter))]
         public async Task<ActionResult<DetailedInfoDeleteResponse>> DeleteDetailedInfo(DetailedInfoDeleteRequest request) {
             DetailedInfoDeleteResponse response = await _dbService.DeleteDetailedInfo(request);
             return Ok(response);

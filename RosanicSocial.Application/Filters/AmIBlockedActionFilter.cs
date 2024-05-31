@@ -27,15 +27,14 @@ namespace RosanicSocial.Application.Filters {
 
             };
 
-            BlockGetResponse? response = await _userBlockDbService.GetBlock(request);
+            BlockGetResponse? response = await _userBlockDbService.GetAmIBlocked(request);
             if (response is not null) {
                 _logger.LogError($"Requested UserId:{request.BlockedUserId} is blocked the current UserId:{request.UserId}");
                 context.Result = new ContentResult { Content = "Requested User is Blocked The Current User." };
+            } else {
+                _logger.LogError($"Requested UserId:{request.BlockedUserId} is NOT blocked the current UserId:{request.UserId}");
+                await next();
             }
-
-            //before
-            await next();
-            //after
         }
 
         private async Task<int> GetRequestedUserIdFromActionArguments(ActionExecutingContext context) {

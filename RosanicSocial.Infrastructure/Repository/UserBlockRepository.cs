@@ -32,10 +32,15 @@ namespace RosanicSocial.Infrastructure.Repository {
             return entity;
         }
 
-        public async Task<UserBlockEntity[]> DeleteAllBlocks(int userId) {
+        public async Task<UserBlockEntity[]?> DeleteAllBlocks(int userId) {
             _logger.LogDebug($"{nameof(DeleteAllBlocks)} for UserId:{userId} in {nameof(UserBlockRepository)} is started.");
 
             UserBlockEntity[] entities = await _db.UserBlocks.Where(be => be.UserId == userId).ToArrayAsync();
+            if (entities is null) {
+                _logger.LogDebug($"No entities found for {nameof(DeleteAllBlocks)} in {nameof(UserBlockRepository)}, returning null.");
+                return null;
+            }
+
             _db.UserBlocks.RemoveRange(entities);
             await _db.SaveChangesAsync();
 
@@ -47,7 +52,7 @@ namespace RosanicSocial.Infrastructure.Repository {
             _logger.LogDebug($"{nameof(DeleteBlock)} for (UserId:{userId} blocked UserId:{blockedId}) in {nameof(UserBlockRepository)} is started.");
 
             UserBlockEntity? entity = await _db.UserBlocks.SingleOrDefaultAsync(be => be.UserId == userId && be.BlockedUserId == blockedId);
-            if (entity == null) {
+            if (entity is null) {
                 _logger.LogWarning($"No entity found for {nameof(DeleteBlock)} in {nameof(UserBlockRepository)}, returning null.");
                 return null;
             }
@@ -59,10 +64,14 @@ namespace RosanicSocial.Infrastructure.Repository {
             return entity;
         }
 
-        public async Task<UserBlockEntity[]> GetAllBlocksByUserId(int userId) {
+        public async Task<UserBlockEntity[]?> GetAllBlocksByUserId(int userId) {
             _logger.LogDebug($"{nameof(GetAllBlocksByUserId)} for UserId:{userId} in {nameof(UserBlockRepository)} is started.");
 
             UserBlockEntity[] entities = await _db.UserBlocks.Where(be => be.UserId == userId).ToArrayAsync();
+            if (entities is null) {
+                _logger.LogDebug($"No entities found for {nameof(GetAllBlocksByUserId)} in {nameof(UserBlockRepository)}, returning null.");
+                return null;
+            }
 
             _logger.LogInformation($"{nameof(GetAllBlocksByUserId)} in {nameof(UserBlockRepository)} is finished.");
 
@@ -73,7 +82,7 @@ namespace RosanicSocial.Infrastructure.Repository {
             _logger.LogDebug($"{nameof(GetBlock)} for (UserId:{userId} is blocked UserId:{blockedId}) in {nameof(UserBlockRepository)} is started.");
 
             UserBlockEntity? entity = await _db.UserBlocks.SingleOrDefaultAsync(be => be.UserId == userId && be.BlockedUserId == blockedId);
-            if (entity == null) {
+            if (entity is null) {
                 _logger.LogDebug($"No entity found for {nameof(GetBlock)} in {nameof(UserBlockRepository)}, returning null.");
                 return null;
             }

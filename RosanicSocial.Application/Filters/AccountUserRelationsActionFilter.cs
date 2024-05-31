@@ -60,12 +60,20 @@ namespace RosanicSocial.Application.Filters {
                 return false;
             }
 
+            bool isSameUser = await CheckIsSameId(context, requestedUserId);
+
+            if (isSameUser) {
+                goto SAMEUSER;
+            }
+
             bool isPrivate = response.IsPrivate;
 
             if (isPrivate) {
                 _logger.LogInformation("Requested Account is Private, Looking For Friend Relation");
                 return await CheckIsFriend(context, requestedUserId);    
             }
+
+            SAMEUSER:
 
             _logger.LogDebug("There is No Visibility Problem here");
             return true;
@@ -90,6 +98,24 @@ namespace RosanicSocial.Application.Filters {
             }
 
             _logger.LogDebug("RequestedUser is Friend, Access Approved");
+            return true;
+        }
+
+        private async Task<bool> CheckIsSameId(ActionExecutingContext context, int requesteduserId) {
+            int? currentUserId = await GetCurrentUserId(context);
+            if (currentUserId is null) {
+                _logger.LogError("Current User Id is null");
+                return false;
+            }
+
+            bool isRequestedUserAndCurrentUserSame = currentUserId.Equals(requesteduserId);
+
+            if (!isRequestedUserAndCurrentUserSame) {
+                _logger.LogError("RequestedUser Is Not CurrentUser");
+                return false;
+            }
+
+            _logger.LogDebug("RequestedUser is CurrentUser, Access Approved");
             return true;
         }
 
