@@ -66,8 +66,21 @@ namespace RosanicSocial.Application.Services.DbServices {
             throw new NotImplementedException();
         }
 
-        public Task<BlockGetResponse?> GetBlock(BlockGetRequest request) {
-            throw new NotImplementedException();
+        public async Task<BlockGetResponse?> GetBlock(BlockGetRequest request) {
+            _logger.LogDebug($"{nameof(GetBlock)} in {nameof(UserBlockDbService)} is started.");
+
+            _logger.LogInformation($"{nameof(_repo.GetBlock)} in {nameof(IUserBlockRepository)} is starting.");
+            UserBlockEntity? entity = await _repo.GetBlock(request.UserId, request.BlockedUserId);
+
+            if (entity is null) {
+                _logger.LogError($"No Block Entity found with given parameters, returning null.");
+                return null;
+            }
+
+            BlockGetResponse? response = entity.ToGetResponse();
+
+            _logger.LogInformation($"{nameof(GetBlock)} in {nameof(UserBlockDbService)} is finished.");
+            return response;
         }
 
     }
