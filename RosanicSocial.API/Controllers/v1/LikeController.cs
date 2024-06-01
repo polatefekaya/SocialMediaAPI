@@ -65,14 +65,14 @@ namespace RosanicSocial.API.Controllers.v1 {
         }
 
         [HttpGet]
-        public async Task<ActionResult<PostLikesGetResponse>> GetPostLike([FromQuery] PostLikesGetRequest request) {
+        public async Task<ActionResult<PostLikesGetResponse?>> GetPostLike([FromQuery] PostLikesGetRequest request) {
             _logger.LogInformation($"{nameof(GetPostLike)} controller started in {nameof(LikeController)}");
 
             PostLikesGetResponse? response = await _dbService.GetPostLike(request);
             if (response == null) {
                 return BadRequest("There is no object like specified.");
             }
-            return null;
+            return response;
         }
 
         [HttpGet]
