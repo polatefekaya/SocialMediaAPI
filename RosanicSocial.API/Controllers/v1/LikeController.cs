@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RosanicSocial.Application.Filters;
 using RosanicSocial.Application.Interfaces.DbServices;
 using RosanicSocial.Application.Interfaces.Managers;
 using RosanicSocial.Domain.DTO.Request.Likes.Comment;
@@ -12,6 +13,7 @@ using RosanicSocial.WebAPI.Controllers;
 
 namespace RosanicSocial.API.Controllers.v1 {
     [ApiVersion("1.0")]
+    [TypeFilter(typeof(NotAutherizedUserActionFilter))]
     public class LikeController : CustomControllerBase {
         private readonly ILikeDbService _dbService;
         private readonly IInteractionDbManagerService _interactionDbManager;
@@ -96,7 +98,7 @@ namespace RosanicSocial.API.Controllers.v1 {
             _logger.LogInformation($"{nameof(AddCommentLike)} controller started in {nameof(LikeController)}");
 
             //CommentLikesAddResponse response = await _dbService.AddCommentLike(request);
-            CommentLikesAddResponse response = await _interactionDbManager.AddCommentLike(request);
+            CommentLikesAddResponse? response = await _interactionDbManager.AddCommentLike(request);
             if (response == null) { return BadRequest(); }
 
             return response;

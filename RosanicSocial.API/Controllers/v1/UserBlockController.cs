@@ -34,7 +34,17 @@ namespace RosanicSocial.API.Controllers.v1 {
 
         [HttpGet]
         public async Task<ActionResult<BlockGetResponse[]>> GetAllBlocks([FromQuery] BlockGetAllRequest request) {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(GetAllBlocks)} request is started in {nameof(UserBlockController)}.");
+
+            _logger.LogInformation($"{nameof(_userBlockDbService.GetBlocks)} in {nameof(IUserBlockDbService)} is starting.");
+            BlockGetResponse[]? response = await _userBlockDbService.GetBlocks(request);
+            if (response is null) {
+                _logger.LogError($"No response returned from {nameof(_userBlockDbService.GetBlocks)} in {nameof(IUserBlockDbService)}, nothing to delete.");
+                return NotFound("The Block Entities that you are looking for is not found.");
+            }
+
+            _logger.LogInformation($"{nameof(GetAllBlocks)} request is finished.");
+            return Ok(response);
         }
 
         [HttpPost]
@@ -54,12 +64,32 @@ namespace RosanicSocial.API.Controllers.v1 {
 
         [HttpDelete]
         public async Task<ActionResult<BlockDeleteResponse>> DeleteBlock(BlockDeleteRequest request) {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(DeleteBlock)} request is started in {nameof(UserBlockController)}.");
+
+            _logger.LogInformation($"{nameof(_userBlockDbService.DeleteBlock)} in {nameof(IUserBlockDbService)} is starting.");
+            BlockDeleteResponse? response = await _userBlockDbService.DeleteBlock(request);
+            if (response is null) {
+                _logger.LogError($"No response returned from {nameof(_userBlockDbService.DeleteBlock)} in {nameof(IUserBlockDbService)}, nothing to delete.");
+                return NotFound("Can't be able to delete this Block Entity.");
+            }
+
+            _logger.LogInformation($"{nameof(DeleteBlock)} request is finished.");
+            return Ok(response);
         }
 
         [HttpDelete]
         public async Task<ActionResult<BlockDeleteResponse[]>> DeleteAllBlocks(BlockDeleteAllRequest request) {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(DeleteAllBlocks)} request is started in {nameof(UserBlockController)}.");
+
+            _logger.LogInformation($"{nameof(_userBlockDbService.DeleteAllBlocks)} in {nameof(IUserBlockDbService)} is starting.");
+            BlockDeleteResponse[]? response = await _userBlockDbService.DeleteAllBlocks(request);
+            if (response is null) {
+                _logger.LogError($"No response returned from {nameof(_userBlockDbService.DeleteAllBlocks)} in {nameof(IUserBlockDbService)}, nothing to delete.");
+                return NotFound("Can't be able to delete these Block Entities.");
+            }
+
+            _logger.LogInformation($"{nameof(DeleteAllBlocks)} request is finished.");
+            return Ok(response);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RosanicSocial.Application.Interfaces.Repository;
 using RosanicSocial.Domain.Data.Entities.Post;
 using RosanicSocial.Infrastructure.DatabaseContext;
@@ -8,26 +9,44 @@ using System.Collections.Generic;
 namespace RosanicSocial.Infrastructure.Repository {
     public class LikeRepository : ILikeRepository {
         private readonly InteractionDbContext _db;
-        public LikeRepository(InteractionDbContext db) {
+        private readonly ILogger<LikeRepository> _logger;
+        public LikeRepository(InteractionDbContext db, ILogger<LikeRepository> logger) {
             _db = db;
+            _logger = logger;
         }
-        public async Task<CommentLikesEntity> AddCommentLike(CommentLikesEntity entity) {
+        public async Task<CommentLikesEntity?> AddCommentLike(CommentLikesEntity entity) {
+            _logger.LogDebug($"{nameof(AddCommentLike)} in {nameof(LikeRepository)} is started.");
+
+            _logger.LogInformation($"Controlling the {nameof(_db.CommentLikes)} db for preventing duplicate records.");
             CommentLikesEntity? entityFromDb = await GetCommentLike(entity.CommentId, entity.UserId);
-            if (entityFromDb != null) { 
-                return entityFromDb;
+
+            if (entityFromDb is not null) {
+                _logger.LogError($"Duplicate record found in {nameof(_db.CommentLikes)}, returning null.");
+                return null;
             }
+
             await _db.CommentLikes.AddAsync(entity);
-            await _db.SaveChangesAsync();   
+            await _db.SaveChangesAsync();
+
+            _logger.LogInformation($"{nameof(AddCommentLike)} in {nameof(LikeRepository)} is finished.");
             return entity;
         }
 
-        public async Task<PostLikesEntity> AddPostLike(PostLikesEntity entity) {
+        public async Task<PostLikesEntity?> AddPostLike(PostLikesEntity entity) {
+            _logger.LogDebug($"{nameof(AddPostLike)} in {nameof(LikeRepository)} is started.");
+
+            _logger.LogInformation($"Controlling the {nameof(_db.PostLikes)} db for preventing duplicate records.");
             PostLikesEntity? entityFromDb = await GetPostLike(entity.PostId, entity.UserId);
-            if (entityFromDb != null) {
-                return entityFromDb;
+
+            if (entityFromDb is not null) {
+                _logger.LogError($"Duplicate record found in {nameof(_db.PostLikes)}, returning null.");
+                return null;
             }
+
             await _db.PostLikes.AddAsync(entity);
             await _db.SaveChangesAsync();
+
+            _logger.LogInformation($"{nameof(AddPostLike)} in {nameof(LikeRepository)} is finished.");
             return entity;
         }
 

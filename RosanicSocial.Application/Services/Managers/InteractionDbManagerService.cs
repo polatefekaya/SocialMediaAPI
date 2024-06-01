@@ -44,20 +44,22 @@ namespace RosanicSocial.Application.Services.Managers {
             _logger.LogInformation($"{nameof(AddPostLike)} in {nameof(InteractionDbManagerService)} is started");
             _logger.LogDebug("Total of 2 DbService Processes");
 
-            //It will update the post entity to increment post like count on this post.
-            PostUpdateResponse? updateResponse = await _helper.UpdatePost(request.PostId, 1);
-
             PostLikesAddResponse? likesResponse = await _likeDbService.AddPostLike(request);
             _logger.LogDebug($"{nameof(AddPostLike)} with {nameof(LikeDbService)} is finished. (2/2)");
 
-            if (likesResponse == null) {
-                _logger.LogError($"{nameof(PostLikesAddResponse)} is null, returning null value may cause problems");
+            if (likesResponse is null) {
+                _logger.LogError($"{nameof(PostLikesAddResponse)} is null, duplicate records can cause this issue.");
+                return null;
             }
+
+            //It will update the post entity to increment post like count on this post.
+            PostUpdateResponse? updateResponse = await _helper.UpdatePost(request.PostId, 1);
+
             return likesResponse;
         }
 
         public async Task<PostLikesDeleteResponse?> DeletePostLike(PostLikesDeleteRequest request) {
-            _logger.LogInformation($"{nameof(DeletePostLike)} in {nameof(InteractionDbManagerService)} is started");
+            _logger.LogDebug($"{nameof(DeletePostLike)} in {nameof(InteractionDbManagerService)} is started");
             _logger.LogDebug("Total of 2 DbService Processes");
 
             PostUpdateResponse? updateResponse = await _helper.UpdatePost(request.PostId, -1);
@@ -90,13 +92,20 @@ namespace RosanicSocial.Application.Services.Managers {
         }
 
         public async Task<CommentLikesAddResponse?> AddCommentLike(CommentLikesAddRequest request) {
+            _logger.LogDebug($"{nameof(AddCommentLike)} in {nameof(InteractionDbManagerService)} is started");
+
+            CommentLikesAddResponse? likesResponse = await _likeDbService.AddCommentLike(request);
+            if (likesResponse is null) {
+                _logger.LogError($"{nameof(CommentLikesAddResponse)} is null, duplicate records can cause this issue.");
+                return null;
+            }
+
             CommentUpdateResponse? commentResponse = await _commentDbService.UpdateCommentLikeCount(
                 new CommentUpdateLikeCountRequest {
                     CommentId = request.CommentId,
                     Change = 1
                 });
 
-            CommentLikesAddResponse? likesResponse = await _likeDbService.AddCommentLike(request);
             return likesResponse;
         }
 

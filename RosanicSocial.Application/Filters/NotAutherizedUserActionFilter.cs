@@ -38,7 +38,7 @@ namespace RosanicSocial.Application.Filters {
             }
 
             if (!context.ActionArguments.ContainsKey("request")) {
-                _logger.LogError("No postRequest Key in Action Arguments");
+                _logger.LogError("No request Key in Action Arguments");
                 return false;
             }
 

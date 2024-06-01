@@ -17,17 +17,29 @@ namespace RosanicSocial.Application.Services.DbServices {
             _repo = repo;
             _converter = converter;
         }
-        public async Task<CommentLikesAddResponse> AddCommentLike(CommentLikesAddRequest request) {
-            CommentLikesEntity entity = request.ToEntity();
+        public async Task<CommentLikesAddResponse?> AddCommentLike(CommentLikesAddRequest request) {
+            CommentLikesEntity? entity = request.ToEntity();
+
             entity.CreatedAt = DateTime.UtcNow;
             entity = await _repo.AddCommentLike(entity);
+
+            if (entity is null) {
+                return null;
+            }
+
             return entity.ToAddResponse();
         }
 
-        public async Task<PostLikesAddResponse> AddPostLike(PostLikesAddRequest request) {
-            PostLikesEntity entity = request.ToEntity();
+        public async Task<PostLikesAddResponse?> AddPostLike(PostLikesAddRequest request) {
+            PostLikesEntity? entity = request.ToEntity();
+
             entity.CreatedAt = DateTime.UtcNow;
             entity = await _repo.AddPostLike(entity);
+
+            if (entity is null) {
+                return null; 
+            }
+
             return entity.ToAddResponse();
         }
 
