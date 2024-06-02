@@ -25,7 +25,7 @@ namespace RosanicSocial.Application.Services.Managers {
                     UserId = request.UserId, 
                     Change = 1
                 });
-            if (infoResponse == null) { return null; }
+            if (infoResponse is null) { return null; }
 
             PostAddResponse postResponse = await _postDb.AddPost(request);
 
@@ -46,21 +46,25 @@ namespace RosanicSocial.Application.Services.Managers {
                     UserId = request.UserId,
                     Change = -1
                 });
-            if (infoResponse == null) { return null; }
+            if (infoResponse is null) { return null; }
 
             PostDeleteResponse postResponse = await _postDb.DeletePost(request);
             return postResponse;
         }
 
         public async Task<CommentAddResponse?> AddComment(CommentAddRequest request) {
+            CommentAddResponse? commentResposne = await _commentDb.AddCommentAsync(request);
+            if (commentResposne is null) {
+                return null;
+            }
+
             PostUpdateResponse? postResponse =  await _postDb.UpdatePostCommentCount(
                 new PostUpdateCommentCountRequest {
                     PostId = request.PostId,
                     Change = 1
                 });
-            if (postResponse == null) { return null; }
+            if (postResponse is null) { return null; }
 
-            CommentAddResponse commentResposne = await _commentDb.AddCommentAsync(request);
             return commentResposne;
         }
 
@@ -70,7 +74,7 @@ namespace RosanicSocial.Application.Services.Managers {
                     PostId = request.PostId,
                     Change = 1
                 });
-            if (postResponse == null) { return null; }
+            if (postResponse is null) { return null; }
 
             CommentDeleteResponse commentResponse = await _commentDb.DeleteCommentAsync(request);
             return commentResponse;

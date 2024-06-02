@@ -19,16 +19,30 @@ namespace RosanicSocial.Application.Services.DbServices {
             _converter = converter;
         }
 
-        public async Task<CommentAddResponse> AddCommentAsync(CommentAddRequest request) {
-            _logger.LogInformation("Add Comment in DbService is started");
+        public async Task<CommentAddResponse?> AddCommentAsync(CommentAddRequest request) {
+            _logger.LogDebug($"{nameof(AddCommentAsync)} in {nameof(CommentDbService)} is started.");
 
             CommentEntity entity = request.ToEntity();
+
+            if(entity.Dimension >= 1) {
+                _logger.LogError($"{nameof(AddCommentAsync)} is can not add the comment, comment dimension can not be higher than 1");
+                return null;
+            }
+
+            if(entity.IsReply) {
+                entity.Dimension += 1;
+                _logger.LogDebug($"Comment is reply for another comment. Dimension count increased (from {entity.Dimension - 1} to {entity.Dimension}).");
+            }
 
             entity.CreatedAt = DateTime.UtcNow;
             entity.UpdatedAt = entity.CreatedAt;
 
             entity = await _repo.AddComment(entity);
-            return entity.ToAddResponse();
+
+            CommentAddResponse? response = entity.ToAddResponse();
+
+            _logger.LogInformation($"{nameof(AddCommentAsync)} in {nameof(CommentDbService)} is finished.");
+            return response;
         }
 
         public async Task<CommentDeleteResponse[]> DeleteAllCommentsByUserIdAsync(CommentDeleteAllByUserIdRequest request) {

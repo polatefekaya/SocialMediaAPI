@@ -67,7 +67,7 @@ namespace RosanicSocial.Application.Services.Managers {
             PostLikesDeleteResponse? likesResponse = await _likeDbService.DeletePostLike(request);
             _logger.LogDebug($"{nameof(DeletePostLike)} with {nameof(LikeDbService)} is finished. (2/2)");
 
-            if (likesResponse == null) {
+            if (likesResponse is null) {
                 _logger.LogError($"{nameof(PostLikesDeleteResponse)} is null, returning null value may cause problems");
             }
             return likesResponse;
@@ -82,7 +82,7 @@ namespace RosanicSocial.Application.Services.Managers {
 
             PostUpdateResponse? postResponse = await _postDbService.UpdatePostLikeCount(updateRequest);
             _logger.LogDebug($"{nameof(_postDbService.UpdatePostLikeCount)} with {nameof(PostDbService)} is finished, (1/2)");
-            if (postResponse == null) {
+            if (postResponse is null) {
                 _logger.LogWarning($"{nameof(PostUpdateResponse)} is null, returning null value may cause problems");
                 return null;
             }
@@ -126,14 +126,14 @@ namespace RosanicSocial.Application.Services.Managers {
                     UserId = request.UserId,
                     Change = 1
                 });
-            if (infoFollowingResponse == null) { return null; }
+            if (infoFollowingResponse is null) { return null; }
 
             BaseInfoUpdateResponse? infoFollowerResponse = await _userInfoDbService.UpdateBaseInfoFollowerCount(
                 new BaseInfoUpdateFollowCountRequest {
                     UserId = request.FollowingId,
                     Change = 1
                 });
-            if (infoFollowerResponse == null) { return null;}
+            if (infoFollowerResponse is null) { return null;}
 
             FollowsAddResponse? followResponse = await _followDbService.AddFollow(request);
             return followResponse;
@@ -145,14 +145,14 @@ namespace RosanicSocial.Application.Services.Managers {
                     UserId = request.UserId,
                     Change = -1
                 });
-            if (infoFollowingResponse == null) { return null; }
+            if (infoFollowingResponse is null) { return null; }
 
             BaseInfoUpdateResponse? infoFollowerResponse = await _userInfoDbService.UpdateBaseInfoFollowerCount(
                 new BaseInfoUpdateFollowCountRequest {
                     UserId = request.FollowingId,
                     Change = -1
                 });
-            if (infoFollowerResponse == null) { return null; }
+            if (infoFollowerResponse is null) { return null; }
 
             FollowsDeleteResponse? followsReponse = await _followDbService.DeleteFollow(request);
             return followsReponse;

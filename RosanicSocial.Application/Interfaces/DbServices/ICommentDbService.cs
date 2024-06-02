@@ -22,7 +22,7 @@ namespace RosanicSocial.Application.Interfaces.DbServices {
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        Task<CommentAddResponse> AddCommentAsync(CommentAddRequest request);
+        Task<CommentAddResponse?> AddCommentAsync(CommentAddRequest request);
         /// <summary>
         /// Gets the comment from database by it's <paramref name="id"/> and returns it.
         /// <paramref name="id"/> is must given with <paramref name="request"/>
