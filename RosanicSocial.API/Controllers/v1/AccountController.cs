@@ -102,5 +102,16 @@ namespace RosanicSocial.API.Controllers.v1 {
             throw new NotImplementedException();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> SendConfirmationEmail() {
+            //has to be logged in
+            throw new NotImplementedException();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ConfirmEmail() {
+            throw new NotImplementedException();
+        }
+
     }
 }
