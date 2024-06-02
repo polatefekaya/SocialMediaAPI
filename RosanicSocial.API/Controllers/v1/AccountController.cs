@@ -2,10 +2,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RosanicSocial.Application.Filters;
+using RosanicSocial.Application.Interfaces;
 using RosanicSocial.Application.Interfaces.DbServices;
 using RosanicSocial.Domain.Data.Identity;
 using RosanicSocial.Domain.DTO.Request.Account;
+using RosanicSocial.Domain.DTO.Request.Email;
 using RosanicSocial.Domain.DTO.Response.Authentication;
+using RosanicSocial.Domain.DTO.Response.Email;
 using RosanicSocial.WebAPI.Controllers;
 
 namespace RosanicSocial.API.Controllers.v1 {
@@ -14,9 +17,11 @@ namespace RosanicSocial.API.Controllers.v1 {
     public class AccountController : CustomControllerBase {
         private readonly ILogger<AccountController> _logger;
         private readonly IAccountDbService _accountDbService;
-        public AccountController(IAccountDbService accountDbService, ILogger<AccountController> logger) {
+        private readonly IEmailSenderService _emailSenderService;
+        public AccountController(IAccountDbService accountDbService, ILogger<AccountController> logger, IEmailSenderService emailSenderService) {
             _logger = logger;
             _accountDbService = accountDbService;
+            _emailSenderService = emailSenderService;
         }
 
         [HttpPost]
@@ -79,5 +84,23 @@ namespace RosanicSocial.API.Controllers.v1 {
             ApplicationUser? user = await _accountDbService.IsUsernameAlreadyRegistered(usernanme);
             return Ok(user == null);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> SetTwoFactorAuth() {
+            //Create token and send it via email
+            //wait user for verify
+            EmailSendResponse? response = await _accountDbService.SetTwoFactorAuth();
+            if (response is null) {
+                return BadRequest();
+            }
+
+            return Ok(response);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> VerifyTwoFactorAuth(string token) {
+            throw new NotImplementedException();
+        }
+
     }
 }

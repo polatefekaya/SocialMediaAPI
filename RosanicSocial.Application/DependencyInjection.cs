@@ -38,6 +38,8 @@ namespace RosanicSocial.Application {
             services.AddScoped<IInteractionDbManagerService, InteractionDbManagerService>();
             services.AddScoped<IInteractionDbManagerHelperService, InteractionDbManagerHelperService>();
 
+            services.AddTransient<IEmailSenderService, EmailSenderService>();
+
             return services;
         }
     }

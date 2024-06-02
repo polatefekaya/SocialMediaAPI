@@ -1,17 +1,22 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RosanicSocial.Application.Interfaces;
 using RosanicSocial.Application.Interfaces.DbServices;
 using RosanicSocial.Domain.Data.Identity;
 using RosanicSocial.Domain.DTO.Request.Account;
+using RosanicSocial.Domain.DTO.Request.Email;
 using RosanicSocial.Domain.DTO.Request.Info.Base;
 using RosanicSocial.Domain.DTO.Request.Info.Detailed;
 using RosanicSocial.Domain.DTO.Response.Authentication;
+using RosanicSocial.Domain.DTO.Response.Email;
 using RosanicSocial.Domain.DTO.Response.Info.Base;
 using RosanicSocial.Domain.DTO.Response.Info.Detailed;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace RosanicSocial.Application.Services.DbServices {
     public class AccountDbService : IAccountDbService {
@@ -21,14 +26,21 @@ namespace RosanicSocial.Application.Services.DbServices {
         private readonly IJwtService _jwtService;
         private readonly IUserInfoDbService _userInfoDbService;
 
+        private readonly IEmailSenderService _emailSenderService;
+        private readonly IHttpContextAccessor _context;
+        private readonly IConfiguration _configuration;
+
         private readonly ILogger<AccountDbService> _logger; 
-        public AccountDbService(ILogger<AccountDbService> logger, UserManager<ApplicationUser> userManger, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager, IJwtService jwtService, IUserInfoDbService userInfoDbService) {
+        public AccountDbService(ILogger<AccountDbService> logger, UserManager<ApplicationUser> userManger, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager, IJwtService jwtService, IUserInfoDbService userInfoDbService, IEmailSenderService emailSenderService, IHttpContextAccessor context, IConfiguration configuration) {
             _userManager = userManger;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _jwtService = jwtService;
             _userInfoDbService = userInfoDbService;
             _logger = logger;
+            _emailSenderService = emailSenderService;
+            _context = context;
+            _configuration = configuration;
         }
 
         public async Task<ApplicationUser?> IsUsernameAlreadyRegistered(string username) {
@@ -85,6 +97,33 @@ namespace RosanicSocial.Application.Services.DbServices {
             string errorDesc = string.Join(" | ", result.Errors.Select(x => x.Description));
             _logger.LogError(errorDesc);
             return null;
+        }
+
+        public async Task<EmailSendResponse?> SetTwoFactorAuth() {
+            string? currentUserId = _context.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (currentUserId is null) {
+                _logger.LogError("Not Signed In");
+                return null;
+            }
+
+            ApplicationUser? user = await _userManager.FindByIdAsync(currentUserId);
+            if (user is null) {
+                return null;
+            }
+
+            EmailSendRequest request = new EmailSendRequest {
+                From = _configuration["EmailOptions:TwoFactorAuthSender"],
+                To = user.Email,
+                Subject = "Two Factor Authentication Verification",
+                PlainTextContent = $"{788521}"
+            };
+
+            EmailSendResponse? response = await _emailSenderService.SendEmail(request);
+            return response;
+        }
+
+        public Task<EmailSendResponse?> VerifyTwoFactorToken(string token) {
+            throw new NotImplementedException();
         }
     }
 }
