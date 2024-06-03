@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using RosanicSocial.Application.Interfaces;
 using RosanicSocial.Application.Interfaces.Creators;
@@ -39,6 +40,8 @@ namespace RosanicSocial.Application {
             services.AddScoped<IInteractionDbManagerHelperService, InteractionDbManagerHelperService>();
 
             services.AddTransient<IEmailSenderService, EmailSenderService>();
+
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
             return services;
         }

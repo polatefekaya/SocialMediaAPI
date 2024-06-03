@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using RosanicSocial.Application.Interfaces;
 using RosanicSocial.Domain.Data.Entities;
+using RosanicSocial.Domain.Data.Entities.Email;
 using RosanicSocial.Domain.DTO.Request.Email;
 using RosanicSocial.Domain.DTO.Response.Email;
 using SendGrid;
@@ -8,7 +9,8 @@ using SendGrid.Helpers.Mail;
 using System;
 using System.Collections.Generic;
 
-namespace RosanicSocial.Application.Services {
+namespace RosanicSocial.Application.Services
+{
     public class EmailSenderService : IEmailSenderService {
         private readonly IConfiguration _configuration;
 

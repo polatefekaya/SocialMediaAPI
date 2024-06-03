@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RosanicSocial.Application.Interfaces;
@@ -10,10 +12,12 @@ using RosanicSocial.Domain.DTO.Request.Account;
 using RosanicSocial.Domain.DTO.Request.Email;
 using RosanicSocial.Domain.DTO.Request.Info.Base;
 using RosanicSocial.Domain.DTO.Request.Info.Detailed;
+using RosanicSocial.Domain.DTO.Request.Verification.Email;
 using RosanicSocial.Domain.DTO.Response.Authentication;
 using RosanicSocial.Domain.DTO.Response.Email;
 using RosanicSocial.Domain.DTO.Response.Info.Base;
 using RosanicSocial.Domain.DTO.Response.Info.Detailed;
+using RosanicSocial.Domain.DTO.Response.Verification.Email;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -31,7 +35,11 @@ namespace RosanicSocial.Application.Services.DbServices {
         private readonly IConfiguration _configuration;
 
         private readonly ILogger<AccountDbService> _logger; 
-        public AccountDbService(ILogger<AccountDbService> logger, UserManager<ApplicationUser> userManger, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager, IJwtService jwtService, IUserInfoDbService userInfoDbService, IEmailSenderService emailSenderService, IHttpContextAccessor context, IConfiguration configuration) {
+
+        private readonly IUrlHelperFactory _urlHelperFactory;
+        private readonly IActionContextAccessor _actionContextAccessor;
+
+        public AccountDbService(ILogger<AccountDbService> logger, UserManager<ApplicationUser> userManger, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager, IActionContextAccessor actionContextAccessor, IUrlHelperFactory urlHelperFactory, IJwtService jwtService, IUserInfoDbService userInfoDbService, IEmailSenderService emailSenderService, IHttpContextAccessor context, IConfiguration configuration) {
             _userManager = userManger;
             _signInManager = signInManager;
             _roleManager = roleManager;
@@ -41,6 +49,9 @@ namespace RosanicSocial.Application.Services.DbServices {
             _emailSenderService = emailSenderService;
             _context = context;
             _configuration = configuration;
+
+            _urlHelperFactory = urlHelperFactory;
+            _actionContextAccessor = actionContextAccessor;
         }
 
         public async Task<ApplicationUser?> IsUsernameAlreadyRegistered(string username) {
@@ -99,14 +110,46 @@ namespace RosanicSocial.Application.Services.DbServices {
             return null;
         }
 
-        public async Task<EmailSendResponse?> SetTwoFactorAuth() {
-            string? currentUserId = _context.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (currentUserId is null) {
-                _logger.LogError("Not Signed In");
+        public async Task<EmailSendResponse?> SendConfirmationEmail() {
+            ApplicationUser? user = await GetCurrentUser();
+            if (user is null) {
                 return null;
             }
 
-            ApplicationUser? user = await _userManager.FindByIdAsync(currentUserId);
+            string token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            ActionContext actionContext = _actionContextAccessor.ActionContext;
+            IUrlHelper _urlHelper = _urlHelperFactory.GetUrlHelper(actionContext);
+
+            string? confirmationLink = UrlHelperExtensions.Action(_urlHelper ,"ConfirmEmail","Account", new {UserId = user.Id, Token = token}, protocol: _context.HttpContext?.Request.Scheme);
+            if (confirmationLink is null) {
+                return null;
+            }
+
+
+            EmailSendRequest emailRequest = new EmailSendRequest {
+                From = _configuration["EmailOptions:TwoFactorAuthSender"],
+                To = user.Email,
+                Subject = $"{confirmationLink}",
+                PlainTextContent = $"{788521}"
+            };
+
+            EmailSendResponse? response = await _emailSenderService.SendEmail(emailRequest);
+            if (response is null) {
+                return null;
+            }
+
+            return response;
+        }
+
+        public async Task<EmailConfirmResponse?> ConfirmEmail(EmailConfirmRequest request) {
+            _logger.LogDebug($"This is worked UserId:{request.UserId}, Token:{request.Token}");
+            return null;
+        }
+
+
+        public async Task<EmailSendResponse?> SetTwoFactorAuth() {
+            ApplicationUser? user = await GetCurrentUser();
             if (user is null) {
                 return null;
             }
@@ -124,6 +167,26 @@ namespace RosanicSocial.Application.Services.DbServices {
 
         public Task<EmailSendResponse?> VerifyTwoFactorToken(string token) {
             throw new NotImplementedException();
+        }
+
+        private string? GetCurrentUserId() {
+            return _context.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        }
+
+        private async Task<ApplicationUser?> GetCurrentUser() {
+            string? currentUserId = GetCurrentUserId();
+            if (currentUserId is null) {
+                _logger.LogError("Not Signed In");
+                return null;
+            }
+
+            ApplicationUser? user = await _userManager.FindByIdAsync(currentUserId);
+            if (user is null) {
+                _logger.LogError($"No User with this:{currentUserId} Id");
+                return null;
+            }
+
+            return user;
         }
     }
 }

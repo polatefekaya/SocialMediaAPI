@@ -1,9 +1,10 @@
-using RosanicSocial.Domain.Data.Entities;
+using RosanicSocial.Domain.Data.Entities.Email;
 using System;
 using System.Collections.Generic;
 using System.Net;
 
-namespace RosanicSocial.Domain.DTO.Response.Email {
+namespace RosanicSocial.Domain.DTO.Response.Email
+{
     public class EmailSendResponse {
         public string From { get; set; }
         public string To { get; set; }

@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using RosanicSocial.Application.Filters;
 using RosanicSocial.Application.Interfaces;
 using RosanicSocial.Application.Interfaces.DbServices;
@@ -18,6 +19,7 @@ namespace RosanicSocial.API.Controllers.v1 {
         private readonly ILogger<AccountController> _logger;
         private readonly IAccountDbService _accountDbService;
         private readonly IEmailSenderService _emailSenderService;
+
         public AccountController(IAccountDbService accountDbService, ILogger<AccountController> logger, IEmailSenderService emailSenderService) {
             _logger = logger;
             _accountDbService = accountDbService;
@@ -105,7 +107,11 @@ namespace RosanicSocial.API.Controllers.v1 {
         [HttpPost]
         public async Task<IActionResult> SendConfirmationEmail() {
             //has to be logged in
-            throw new NotImplementedException();
+            EmailSendResponse? response = await _accountDbService.SendConfirmationEmail();
+            if (response is null) {
+                return BadRequest();
+            }
+            return Ok(response);
         }
 
         [HttpPost]
