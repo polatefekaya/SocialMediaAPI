@@ -127,14 +127,14 @@ namespace RosanicSocial.Application.Services.DbServices {
             }
 
 
-            EmailSendRequest emailRequest = new EmailSendRequest {
+            EmailSendVerificationRequest emailRequest = new EmailSendVerificationRequest {
                 From = _configuration["EmailOptions:TwoFactorAuthSender"],
                 To = user.Email,
-                Subject = $"{confirmationLink}",
-                PlainTextContent = $"{788521}"
+                Name = FirstCharToUpperStringCreate(user.FirstName),
+                ConfirmationLink = confirmationLink
             };
 
-            EmailSendResponse? response = await _emailSenderService.SendEmail(emailRequest);
+            EmailSendResponse? response = await _emailSenderService.SendVerificationEmail(emailRequest);
             if (response is null) {
                 return null;
             }
@@ -163,6 +163,17 @@ namespace RosanicSocial.Application.Services.DbServices {
 
             EmailSendResponse? response = await _emailSenderService.SendEmail(request);
             return response;
+        }
+        private string FirstCharToUpperStringCreate(string? input) {
+            if (string.IsNullOrEmpty(input)) {
+                return string.Empty;
+            }
+
+            return string.Create(input.Length, input, static (Span<char> chars, string str) =>
+            {
+                chars[0] = char.ToUpperInvariant(str[0]);
+                str.AsSpan(1).CopyTo(chars[1..]);
+            });
         }
 
         public Task<EmailSendResponse?> VerifyTwoFactorToken(string token) {
