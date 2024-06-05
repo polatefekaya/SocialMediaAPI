@@ -9,6 +9,7 @@ using RosanicSocial.Application.Interfaces;
 using RosanicSocial.Application.Interfaces.DbServices;
 using RosanicSocial.Domain.Data.Identity;
 using RosanicSocial.Domain.DTO.Request.Account;
+using RosanicSocial.Domain.DTO.Request.Authentication;
 using RosanicSocial.Domain.DTO.Request.Email;
 using RosanicSocial.Domain.DTO.Request.Info.Base;
 using RosanicSocial.Domain.DTO.Request.Info.Detailed;
@@ -67,8 +68,13 @@ namespace RosanicSocial.Application.Services.DbServices {
                 ApplicationUser? user = await _userManager.FindByNameAsync(request.UserName);
                 return user;
 
+            } else if (result.RequiresTwoFactor) {
+                await SendTwoFactorAuth(request);
+                _logger.LogInformation("Two Factor Authentication Code is Sent.");
+                return null;
+
             } else {
-                _logger.LogError("Password and Username not matching");
+                _logger.LogError("Password and Username not matching.");
                 return null;
             }
         }
@@ -143,25 +149,62 @@ namespace RosanicSocial.Application.Services.DbServices {
         }
 
         public async Task<EmailConfirmResponse?> ConfirmEmail(EmailConfirmRequest request) {
-            _logger.LogDebug($"This is worked UserId:{request.UserId}, Token:{request.Token}");
-            return null;
-        }
-
-
-        public async Task<EmailSendResponse?> SetTwoFactorAuth() {
-            ApplicationUser? user = await GetCurrentUser();
-            if (user is null) {
+            _logger.LogDebug($"{nameof(ConfirmEmail)} in {nameof(AccountDbService)} is started with UserId:{request.UserId}, Token:{request.Token} parameters.");
+            if (string.IsNullOrEmpty(request.UserId)) {
+                _logger.LogError($"UserId in {nameof(EmailConfirmRequest)} is null or empty.");
+                return null;
+            }
+            if (string.IsNullOrEmpty(request.Token)) {
+                _logger.LogError($"Token in {nameof(EmailConfirmRequest)} is null or empty.");
                 return null;
             }
 
-            EmailSendRequest request = new EmailSendRequest {
+            ApplicationUser? user = await _userManager.FindByIdAsync(request.UserId);
+            if (user is null) {
+                _logger.LogError($"Can't find any user with UserId:{request.UserId}");
+                return null;
+            }
+
+            IdentityResult result = await _userManager.ConfirmEmailAsync(user, request.Token);
+            if (result.Succeeded) {
+                _logger.LogInformation($"Email confirmed for UserId:{request.UserId}");
+                EmailConfirmResponse response = new EmailConfirmResponse {
+
+                };
+                return response;
+            }
+
+            _logger.LogError($"Email can't be confirmed for UserId:{request.UserId}");
+            return null;    
+        }
+
+
+        public async Task<EmailSendResponse?> SendTwoFactorAuth(LoginRequest? request = null) {
+            ApplicationUser? user;
+            if (request is not null) {
+                user = await _userManager.FindByNameAsync(request.UserName);
+                bool passwordCorrect = await _userManager.CheckPasswordAsync(user, request.Password);
+
+                if (!passwordCorrect) {
+                    _logger.LogError("Password is not Correct.");
+                    return null;
+                }
+            } else {
+                user = await GetCurrentUser();
+            }
+            if (user is null) {
+                _logger.LogError("User not found");
+                return null;
+            }
+
+            EmailSendTwoFactorRequest twoFactorRequest = new EmailSendTwoFactorRequest {
+                UserId = user.Id,
                 From = _configuration["EmailOptions:TwoFactorAuthSender"],
                 To = user.Email,
-                Subject = "Two Factor Authentication Verification",
-                PlainTextContent = $"{788521}"
+                OTPToken = await _userManager.GenerateTwoFactorTokenAsync(user, TokenOptions.DefaultPhoneProvider)
             };
 
-            EmailSendResponse? response = await _emailSenderService.SendEmail(request);
+            EmailSendResponse? response = await _emailSenderService.SendTwoFactorEmail(twoFactorRequest);
             return response;
         }
         private string FirstCharToUpperStringCreate(string? input) {
@@ -176,8 +219,42 @@ namespace RosanicSocial.Application.Services.DbServices {
             });
         }
 
-        public Task<EmailSendResponse?> VerifyTwoFactorToken(string token) {
-            throw new NotImplementedException();
+        public async Task<TwoFactorVerificationResponse?> VerifyTwoFactorToken(TwoFactorVerificationRequest request) {
+            ApplicationUser? user;
+            if (request is not null) {
+                user = await _userManager.FindByNameAsync(request.UserName);
+                bool passwordCorrect = await _userManager.CheckPasswordAsync(user, request.Password);
+
+                if (!passwordCorrect) {
+                    _logger.LogError("Password is not Correct.");
+                    return null;
+                }
+            } else {
+                user = await GetCurrentUser();
+            }
+            if (user is null) {
+                _logger.LogError("User not found");
+                return null;
+            }
+
+            bool isVerfied = await _userManager.VerifyTwoFactorTokenAsync(user, TokenOptions.DefaultPhoneProvider, request.Token);
+            if (isVerfied) {
+                _logger.LogInformation($"Sucessfully Verified the 2FA Token.");
+            } else {
+                _logger.LogError("2FA Token Can not Verified.");
+            }
+
+            TwoFactorVerificationResponse response = new TwoFactorVerificationResponse {
+                Token = request.Token,
+                isVerified = isVerfied
+            };
+
+            if (isVerfied) {
+                await _signInManager.SignInAsync(user, false);
+                _logger.LogInformation($"Sign in with 2FA is successfull.");
+            }
+
+            return response;
         }
 
         private string? GetCurrentUserId() {
@@ -185,19 +262,49 @@ namespace RosanicSocial.Application.Services.DbServices {
         }
 
         private async Task<ApplicationUser?> GetCurrentUser() {
-            string? currentUserId = GetCurrentUserId();
-            if (currentUserId is null) {
-                _logger.LogError("Not Signed In");
-                return null;
-            }
-
-            ApplicationUser? user = await _userManager.FindByIdAsync(currentUserId);
+            ApplicationUser? user = await _userManager.GetUserAsync(_context.HttpContext?.User);
             if (user is null) {
-                _logger.LogError($"No User with this:{currentUserId} Id");
+                _logger.LogError($"No User with this:{GetCurrentUserId()} Id");
                 return null;
             }
 
             return user;
+        }
+
+        public async Task<TwoFactorManageResponse?> ManageTwoFactorLogIn(TwoFactorManageRequest request) {
+            _logger.LogDebug($"{nameof(ManageTwoFactorLogIn)} in {nameof(AccountDbService)} is started.");
+
+            ApplicationUser? user = await GetCurrentUser();
+            if (user is null) {
+                _logger.LogError("There is no User");
+                return null;
+            }
+
+            bool isVerified = await _userManager.VerifyTwoFactorTokenAsync(user, TokenOptions.DefaultPhoneProvider, request.Token);
+
+            if (!isVerified) {
+                _logger.LogError("2FA Token Can not Be Verified.");
+                return null;
+            }
+
+            if (user.TwoFactorEnabled) {
+                _logger.LogInformation($"2FA Disabled For UserId:{user.Id}");
+                user.TwoFactorEnabled = false;
+            } else {
+                _logger.LogInformation($"2FA Enabled For UserId:{user.Id}");
+                user.TwoFactorEnabled = true;
+            }
+
+            await _userManager.UpdateAsync(user);
+
+            TwoFactorManageResponse response = new TwoFactorManageResponse { 
+                Token = request.Token,
+                isTwoFactorEnabled = user.TwoFactorEnabled,
+                isVerified = isVerified
+            };
+
+            _logger.LogInformation($"{nameof(ManageTwoFactorLogIn)} in {nameof(AccountDbService)} is finished.");
+            return response;
         }
     }
 }

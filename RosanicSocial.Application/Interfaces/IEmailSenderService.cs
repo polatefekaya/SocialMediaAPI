@@ -7,5 +7,6 @@ namespace RosanicSocial.Application.Interfaces {
     public interface IEmailSenderService {
         Task<EmailSendResponse?> SendEmail(EmailSendRequest request);
         Task<EmailSendResponse?> SendVerificationEmail(EmailSendVerificationRequest request);
+        Task<EmailSendResponse?> SendTwoFactorEmail(EmailSendTwoFactorRequest request);
     }
 }

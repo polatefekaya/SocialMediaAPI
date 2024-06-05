@@ -7,9 +7,12 @@ using RosanicSocial.Application.Interfaces;
 using RosanicSocial.Application.Interfaces.DbServices;
 using RosanicSocial.Domain.Data.Identity;
 using RosanicSocial.Domain.DTO.Request.Account;
+using RosanicSocial.Domain.DTO.Request.Authentication;
 using RosanicSocial.Domain.DTO.Request.Email;
+using RosanicSocial.Domain.DTO.Request.Verification.Email;
 using RosanicSocial.Domain.DTO.Response.Authentication;
 using RosanicSocial.Domain.DTO.Response.Email;
+using RosanicSocial.Domain.DTO.Response.Verification.Email;
 using RosanicSocial.WebAPI.Controllers;
 
 namespace RosanicSocial.API.Controllers.v1 {
@@ -87,11 +90,11 @@ namespace RosanicSocial.API.Controllers.v1 {
             return Ok(user == null);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> SetTwoFactorAuth() {
+        [HttpPost]
+        public async Task<IActionResult> SendTwoFactorAuth() {
             //Create token and send it via email
             //wait user for verify
-            EmailSendResponse? response = await _accountDbService.SetTwoFactorAuth();
+            EmailSendResponse? response = await _accountDbService.SendTwoFactorAuth();
             if (response is null) {
                 return BadRequest();
             }
@@ -100,8 +103,22 @@ namespace RosanicSocial.API.Controllers.v1 {
         }
 
         [HttpPost]
-        public async Task<IActionResult> VerifyTwoFactorAuth(string token) {
-            throw new NotImplementedException();
+        public async Task<IActionResult> ManageTwoFactorVerification(TwoFactorManageRequest request) {
+            TwoFactorManageResponse? response = await _accountDbService.ManageTwoFactorLogIn(request);
+            if (response is null) {
+                return BadRequest();
+            }
+            return Ok(response);
+        }
+
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> VerifyTwoFactorAuth(TwoFactorVerificationRequest request) {
+            TwoFactorVerificationResponse? response = await _accountDbService.VerifyTwoFactorToken(request);
+            if (response is null) {
+                return BadRequest();
+            }
+            return Ok(response);
         }
 
         [HttpPost]
@@ -114,9 +131,14 @@ namespace RosanicSocial.API.Controllers.v1 {
             return Ok(response);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> ConfirmEmail() {
-            throw new NotImplementedException();
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmEmail([FromQuery] EmailConfirmRequest request) {
+            EmailConfirmResponse? response = await _accountDbService.ConfirmEmail(request);
+            if (response is null) {
+                return BadRequest();
+            }
+            return Ok(response);
         }
 
     }

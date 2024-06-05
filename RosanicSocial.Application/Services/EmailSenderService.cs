@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using RosanicSocial.Application.Interfaces;
 using RosanicSocial.Domain.Data.Entities.Email;
+using RosanicSocial.Domain.Data.Entities.Email.DynamicTemplate;
 using RosanicSocial.Domain.DTO.Request.Email;
 using RosanicSocial.Domain.DTO.Response.Email;
 using SendGrid;
@@ -48,6 +49,39 @@ namespace RosanicSocial.Application.Services
                 htmlContent: entity.HtmlContent
             );
             */
+
+            SendGrid.Response? response = await emailClient.SendEmailAsync(msg2);
+
+            EmailSendResponse emailSendResponse = entity.ToSendResponse();
+            emailSendResponse.Sent = response.IsSuccessStatusCode;
+            emailSendResponse.Message = response.Body;
+            emailSendResponse.StatusCode = response.StatusCode;
+
+            return emailSendResponse;
+        }
+
+        public async Task<EmailSendResponse?> SendTwoFactorEmail(EmailSendTwoFactorRequest request) {
+            EmailEntity entity = request.ToEntity();
+            string? apiKey = _configuration["ApiKey:SendGrid"];
+            if (apiKey is null) {
+                return null;
+            }
+
+            SendGridClient emailClient = new SendGridClient(apiKey);
+
+            EmailAddress from = new EmailAddress(entity.From, _configuration["EmailOptions:SenderName"]);
+            EmailAddress to = new EmailAddress(entity.To);
+
+            DynamicTemplateOTPEntity otpEntity = new DynamicTemplateOTPEntity {
+                otpCode = Convert.ToInt32(request.OTPToken)
+            };
+
+            SendGridMessage msg2 = MailHelper.CreateSingleTemplateEmail(
+                from: from,
+                to: to,
+                templateId: _configuration["EmailOptions:TwoFactorTokenTemplateId"],
+                dynamicTemplateData: otpEntity
+                );
 
             SendGrid.Response? response = await emailClient.SendEmailAsync(msg2);
 
