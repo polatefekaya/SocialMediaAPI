@@ -8,5 +8,6 @@ namespace RosanicSocial.Application.Interfaces {
         Task<EmailSendResponse?> SendEmail(EmailSendRequest request);
         Task<EmailSendResponse?> SendVerificationEmail(EmailSendVerificationRequest request);
         Task<EmailSendResponse?> SendTwoFactorEmail(EmailSendTwoFactorRequest request);
+        Task<EmailSendResponse?> SendResetPasswordEmail(EmailSendResetPasswordRequest request);
     }
 }

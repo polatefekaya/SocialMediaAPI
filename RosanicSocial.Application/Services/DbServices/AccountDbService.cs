@@ -10,11 +10,13 @@ using RosanicSocial.Application.Interfaces.DbServices;
 using RosanicSocial.Domain.Data.Identity;
 using RosanicSocial.Domain.DTO.Request.Account;
 using RosanicSocial.Domain.DTO.Request.Authentication;
+using RosanicSocial.Domain.DTO.Request.Authentication.Password;
 using RosanicSocial.Domain.DTO.Request.Email;
 using RosanicSocial.Domain.DTO.Request.Info.Base;
 using RosanicSocial.Domain.DTO.Request.Info.Detailed;
 using RosanicSocial.Domain.DTO.Request.Verification.Email;
 using RosanicSocial.Domain.DTO.Response.Authentication;
+using RosanicSocial.Domain.DTO.Response.Authentication.Response;
 using RosanicSocial.Domain.DTO.Response.Email;
 using RosanicSocial.Domain.DTO.Response.Info.Base;
 using RosanicSocial.Domain.DTO.Response.Info.Detailed;
@@ -305,6 +307,49 @@ namespace RosanicSocial.Application.Services.DbServices {
 
             _logger.LogInformation($"{nameof(ManageTwoFactorLogIn)} in {nameof(AccountDbService)} is finished.");
             return response;
+        }
+
+        public async Task<EmailSendResponse?> ForgotPassword(ForgotPasswordRequest request) {
+            _logger.LogDebug($"{nameof(ForgotPassword)} in {nameof(AccountDbService)} is started.");
+
+            //we have to send an email with a token
+            ApplicationUser? user = await _userManager.FindByNameAsync(request.UserName);
+            if (user is null) {
+                _logger.LogError($"There is no user with UserName:{request.UserName}");
+                return null;
+            }
+
+            string token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            ActionContext actionContext = _actionContextAccessor.ActionContext;
+            IUrlHelper _urlHelper = _urlHelperFactory.GetUrlHelper(actionContext);
+
+            string? confirmationLink = UrlHelperExtensions.Action(_urlHelper, "ResetForgottenPassword", "Account", new { UserName = user.UserName, Token = token }, protocol: _context.HttpContext?.Request.Scheme);
+            if (confirmationLink is null) {
+                _logger.LogError("Confirmation link is null.");
+                return null;
+            }
+
+            EmailSendResetPasswordRequest emailSendResetPasswordRequest = new EmailSendResetPasswordRequest {
+                From = _configuration["EmailOptions:TwoFactorAuthSender"],
+                To = user.Email,
+                ConfirmationLink = confirmationLink
+            };
+
+            EmailSendResponse? response = await _emailSenderService.SendResetPasswordEmail(emailSendResetPasswordRequest);
+
+            _logger.LogInformation($"{nameof(ForgotPassword)} in {nameof(AccountDbService)} is finished.");
+        }
+
+        public Task<ResetForgottenPasswordResponse?> ResetForgottenPassword(ResetForgottenPasswordRequest request) {
+            _logger.LogDebug($"{nameof(ResetForgottenPassword)} in {nameof(AccountDbService)} is started.");
+            _logger.LogInformation($"{nameof(ResetForgottenPassword)} in {nameof(AccountDbService)} is finished.");
+            return null;
+        }
+
+        public Task<ChangePasswordResponse?> ChangePassword(ChangePasswordRequest request) {
+            _logger.LogDebug($"{nameof(ChangePassword)} in {nameof(AccountDbService)} is started.");
+            _logger.LogInformation($"{nameof(ChangePassword)} in {nameof(AccountDbService)} is finished.");
+            return null;
         }
     }
 }
