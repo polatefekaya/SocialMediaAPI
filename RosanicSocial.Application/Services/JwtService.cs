@@ -13,16 +13,23 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Logging;
+using RosanicSocial.Domain.Models;
+using Microsoft.AspNetCore.Identity;
+using RosanicSocial.Domain.Data.Identity;
 
 namespace RosanicSocial.Application.Services {
     public class JwtService : IJwtService {
         private readonly IConfiguration _configuration;
         private readonly IJwtHelperService _jwtHelperService;
+
+        private readonly UserManager<ApplicationUser> _userManager;
+
         private readonly ILogger<JwtService> _logger;
-        public JwtService(IConfiguration configuration, IJwtHelperService jwtHelperService, ILogger<JwtService> logger) {
+        public JwtService(IConfiguration configuration, IJwtHelperService jwtHelperService, ILogger<JwtService> logger, UserManager<ApplicationUser> userManager) {
             _configuration = configuration;
             _jwtHelperService = jwtHelperService;
             _logger = logger;
+            _userManager = userManager;
         }
 
         public AuthenticationResponse CreateJwtToken(AuthenticationRequest request) {
@@ -61,6 +68,65 @@ namespace RosanicSocial.Application.Services {
                 RefreshToken = refreshToken,
                 RefreshTokenExpiration = refreshTokenExpiration
             };
+        }
+
+        public async Task<AuthenticationResponse?> GenerateNewAccessToken(TokenModel tokenModel) {
+            _logger.LogInformation("GenerateNewAccessToken Controller is started");
+
+            if (tokenModel is null) {
+                _logger.LogError("Invalid Client Request");
+                return null;
+            }
+
+            ClaimsPrincipal? principal = GetClaimsPrincipal(tokenModel.Token);
+            _logger.LogDebug("ClaimsPrincipal is setted");
+
+            if (principal is null) {
+                _logger.LogError($"Invalid JWT Access Token");
+                return null;
+            }
+
+            string? userName = principal.FindFirstValue(ClaimTypes.Name);
+            if (userName is null) {
+                _logger.LogError("No UserName Found");
+                return null;
+            }
+            _logger.LogTrace($"UserName is extracted from ClaimPrinciples: {userName}");
+
+            ApplicationUser? user = await _userManager.FindByNameAsync(userName);
+            _logger.LogDebug("ApplicationUser is setted via UserManager");
+
+            if (user is null) {
+                _logger.LogWarning($"{nameof(user)} is null");
+                _logger.LogTrace($"Searched UserName is {userName}");
+                return null;
+            }
+
+            bool isRefreshTokensNotMatch = user.RefreshToken != tokenModel.RefreshToken;
+            if (isRefreshTokensNotMatch) {
+                _logger.LogError("RefreshTokens not matching");
+                return null;
+            }
+
+            bool isRefreshTokenExpired = user.RefreshTokenExpiration <= DateTime.UtcNow;
+
+            if (isRefreshTokenExpired) {
+                _logger.LogError("RefreshToken is Expired");
+                return null;
+            }
+
+            AuthenticationResponse response = CreateJwtToken(user.ToAuthRequest());
+            _logger.LogDebug("AuthenticationResponse is created");
+
+            user.RefreshToken = response.RefreshToken;
+            user.RefreshTokenExpiration = response.RefreshTokenExpiration;
+
+            _logger.LogTrace($"User RefreshToken: {response.RefreshToken}\nUser RefreshToken Expiration: {response.RefreshTokenExpiration}");
+
+            await _userManager.UpdateAsync(user);
+            _logger.LogDebug("User Manager updated the database with new data");
+
+            return response;
         }
 
         public ClaimsPrincipal? GetClaimsPrincipal(string? token) {

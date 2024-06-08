@@ -30,65 +30,10 @@ namespace RosanicSocial.API.Controllers.v1 {
         /// <returns>New token values</returns>
         [HttpPost]
         public async Task<ActionResult<AuthenticationResponse>> GenerateNewAccessToken(TokenModel tokenmodel) {
-            _logger.LogInformation("GenerateNewAccessToken Controller is started");
-
-            if (tokenmodel == null) {
-                _logger.LogError("Invalid Client Request");
-                return BadRequest("Invalid Client Request");
-            }
-
-            string? jwtToken = tokenmodel.Token;
-            string? refreshToken = tokenmodel.RefreshToken;
-
-            ClaimsPrincipal? principal = _jwtService.GetClaimsPrincipal(jwtToken);
-            _logger.LogDebug("ClaimsPrincipal is setted");
-
-            if (principal == null) {
-                _logger.LogError($"Invalid JWT Access Token");
-                return BadRequest("Invalid JWT Access Token");
-            }
-
-            string? userName = principal.FindFirstValue(ClaimTypes.Name);
-            if (userName == null) {
-                _logger.LogError("No UserName Found");
-                return BadRequest("No UserName Found");
-            }
-            _logger.LogTrace($"UserName is extracted from ClaimPrinciples: {userName}");
-
-            ApplicationUser? user = await _userManager.FindByNameAsync(userName);
-            _logger.LogDebug("ApplicationUser is setted via UserManager");
-
-            bool isUserNull = user is null;
-            if (isUserNull) {
-                _logger.LogWarning($"{nameof(user)} is null");
-                _logger.LogTrace($"Searched UserName is {userName}");
-                return BadRequest("Invalid Jwt Token");
-            }
-
-            bool isRefreshTokensNotMatch = user.RefreshToken != tokenmodel.RefreshToken;
-            if (isRefreshTokensNotMatch) {
-                _logger.LogError("RefreshTokens not matching");
+            AuthenticationResponse? response = await _jwtService.GenerateNewAccessToken(tokenmodel);
+            if (response is null) {
                 return BadRequest("Invalid RefreshToken");
             }
-
-            bool isRefreshTokenExpired = user.RefreshTokenExpiration <= DateTime.UtcNow;
-
-            if (isRefreshTokenExpired) {   
-                _logger.LogError("RefreshToken is Expired");
-                return BadRequest("Invalid RefreshToken");
-            }
-
-            AuthenticationResponse response = _jwtService.CreateJwtToken(user.ToAuthRequest());
-            _logger.LogDebug("AuthenticationResponse is created");
-
-            user.RefreshToken = response.RefreshToken;
-            user.RefreshTokenExpiration = response.RefreshTokenExpiration;
-
-            _logger.LogTrace($"User RefreshToken: {response.RefreshToken}\nUser RefreshToken Expiration: {response.RefreshTokenExpiration}");
-
-            await _userManager.UpdateAsync(user);
-            _logger.LogDebug("User Manager updated the database with new data");
-
             return Ok(response);
         }
     }
