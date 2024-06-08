@@ -33,7 +33,7 @@ namespace RosanicSocial.Application.Services {
         }
 
         public AuthenticationResponse CreateJwtToken(AuthenticationRequest request) {
-            _logger.LogTrace($"JwtToken Creation is Started for {request.Username}");
+            _logger.LogTrace($"JwtToken Creation is Started for {request.Username.Replace(Environment.NewLine, "")}");
 
             DateTime tokenExpiration = _jwtHelperService.SetExpiration(JwtServiceData.Expirations.Token);
             _logger.LogDebug("Token Expiration is setted");
