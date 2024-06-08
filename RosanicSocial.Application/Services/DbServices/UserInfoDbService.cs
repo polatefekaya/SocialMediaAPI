@@ -18,7 +18,7 @@ namespace RosanicSocial.Application.Services.DbServices {
             _repo = repo;
         }
         public async Task<BaseInfoAddResponse> AddBaseInfo(BaseInfoAddRequest request) {
-            _logger.LogInformation($"Add BaseInfo Add request: {request}");
+            _logger.LogDebug($"{nameof(AddBaseInfo)} in {nameof(UserInfoDbService)} is started.");
             BaseInfoEntity entity = request.ToEntity();
 
             entity.CreatedAt = DateTime.UtcNow;

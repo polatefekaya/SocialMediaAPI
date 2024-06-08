@@ -91,13 +91,13 @@ namespace RosanicSocial.Application.Services {
                 _logger.LogError("No UserName Found");
                 return null;
             }
-            _logger.LogTrace($"UserName is extracted from ClaimPrinciples: {userName}");
+            _logger.LogTrace($"UserName is extracted from ClaimPrinciples: {userName.Replace(Environment.NewLine, "")}");
 
             ApplicationUser? user = await _userManager.FindByNameAsync(userName);
             _logger.LogDebug("ApplicationUser is setted via UserManager");
 
             if (user is null) {
-                _logger.LogWarning($"{nameof(user)} is null");
+                _logger.LogWarning($"User is null");
                 _logger.LogTrace($"Searched UserName is {userName}");
                 return null;
             }

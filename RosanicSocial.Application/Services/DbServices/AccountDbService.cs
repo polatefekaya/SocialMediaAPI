@@ -151,7 +151,7 @@ namespace RosanicSocial.Application.Services.DbServices {
         }
 
         public async Task<EmailConfirmResponse?> ConfirmEmail(EmailConfirmRequest request) {
-            _logger.LogDebug($"{nameof(ConfirmEmail)} in {nameof(AccountDbService)} is started with UserId:{request.UserId}, Token:{request.Token} parameters.");
+            _logger.LogDebug($"{nameof(ConfirmEmail)} in {nameof(AccountDbService)} is started with UserId:{request.UserId.Replace(Environment.NewLine, "")}, Token:{request.Token.Replace(Environment.NewLine, "")} parameters.");
             if (string.IsNullOrEmpty(request.UserId)) {
                 _logger.LogError($"UserId in {nameof(EmailConfirmRequest)} is null or empty.");
                 return null;
@@ -163,20 +163,20 @@ namespace RosanicSocial.Application.Services.DbServices {
 
             ApplicationUser? user = await _userManager.FindByIdAsync(request.UserId);
             if (user is null) {
-                _logger.LogError($"Can't find any user with UserId:{request.UserId}");
+                _logger.LogError($"Can't find any user with UserId:{request.UserId.Replace(Environment.NewLine, "")}");
                 return null;
             }
 
             IdentityResult result = await _userManager.ConfirmEmailAsync(user, request.Token);
             if (result.Succeeded) {
-                _logger.LogInformation($"Email confirmed for UserId:{request.UserId}");
+                _logger.LogInformation($"Email confirmed for UserId:{request.UserId.Replace(Environment.NewLine, "")}");
                 EmailConfirmResponse response = new EmailConfirmResponse {
 
                 };
                 return response;
             }
 
-            _logger.LogError($"Email can't be confirmed for UserId:{request.UserId}");
+            _logger.LogError($"Email can't be confirmed for UserId:{request.UserId.Replace(Environment.NewLine, "")}");
             return null;    
         }
 
@@ -315,7 +315,7 @@ namespace RosanicSocial.Application.Services.DbServices {
             //we have to send an email with a token
             ApplicationUser? user = await _userManager.FindByNameAsync(request.UserName);
             if (user is null) {
-                _logger.LogError($"There is no user with UserName:{request.UserName}");
+                _logger.LogError($"There is no user with UserName:{request.UserName.Replace(Environment.NewLine, "")}");
                 return null;
             }
 
@@ -347,7 +347,7 @@ namespace RosanicSocial.Application.Services.DbServices {
 
             ApplicationUser? user = await _userManager.FindByNameAsync(request.UserName);
             if (user is null) {
-                _logger.LogError($"There is no user with UserName:{request.UserName}.");
+                _logger.LogError($"There is no user with UserName:{request.UserName.Replace(Environment.NewLine, "")}.");
                 return null;
             }
 
