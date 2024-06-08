@@ -4,8 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RosanicSocial.Domain.DTO.Request.Authentication.Password {
     public class ResetForgottenPasswordRequest {
-        [EmailAddress]
-        public string Email { get; set; }
+        public string UserName { get; set; }
 
         [DataType(DataType.Password)]
         public string Password { get; set; }

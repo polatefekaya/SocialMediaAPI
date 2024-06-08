@@ -330,6 +330,7 @@ namespace RosanicSocial.Application.Services.DbServices {
             }
 
             EmailSendResetPasswordRequest emailSendResetPasswordRequest = new EmailSendResetPasswordRequest {
+                Name = user.FirstName,
                 From = _configuration["EmailOptions:TwoFactorAuthSender"],
                 To = user.Email,
                 ConfirmationLink = confirmationLink
@@ -338,18 +339,59 @@ namespace RosanicSocial.Application.Services.DbServices {
             EmailSendResponse? response = await _emailSenderService.SendResetPasswordEmail(emailSendResetPasswordRequest);
 
             _logger.LogInformation($"{nameof(ForgotPassword)} in {nameof(AccountDbService)} is finished.");
+            return response;
         }
 
-        public Task<ResetForgottenPasswordResponse?> ResetForgottenPassword(ResetForgottenPasswordRequest request) {
+        public async Task<ResetForgottenPasswordResponse?> ResetForgottenPassword(ResetForgottenPasswordRequest request) {
             _logger.LogDebug($"{nameof(ResetForgottenPassword)} in {nameof(AccountDbService)} is started.");
+
+            ApplicationUser? user = await _userManager.FindByNameAsync(request.UserName);
+            if (user is null) {
+                _logger.LogError($"There is no user with UserName:{request.UserName}.");
+                return null;
+            }
+
+            IdentityResult result = await _userManager.ResetPasswordAsync(user, request.Token, request.Password);
+
+            if (!result.Succeeded) {
+                _logger.LogError($"Password can't be changed, {result.Errors.Count()} errors found.");
+                foreach (var error in result.Errors) {
+                    _logger.LogCritical($"{error.Description}");
+                }
+                return null;
+            }
+
+            ResetForgottenPasswordResponse? response = new ResetForgottenPasswordResponse();
+
             _logger.LogInformation($"{nameof(ResetForgottenPassword)} in {nameof(AccountDbService)} is finished.");
-            return null;
+
+            return response;
         }
 
-        public Task<ChangePasswordResponse?> ChangePassword(ChangePasswordRequest request) {
+        public async Task<ChangePasswordResponse?> ChangePassword(ChangePasswordRequest request) {
             _logger.LogDebug($"{nameof(ChangePassword)} in {nameof(AccountDbService)} is started.");
+
+            ApplicationUser? user = await GetCurrentUser();
+            if (user is null) {
+                return null;
+            }
+
+            IdentityResult result = await _userManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
+
+            if(!result.Succeeded) {
+                _logger.LogError($"Password can't be changed, {result.Errors.Count()} errors found.");
+                foreach (var error in result.Errors) {
+                    _logger.LogCritical($"{error.Description}");
+                }
+                return null;
+            }
+
+            await _signInManager.RefreshSignInAsync(user);
+
+            ChangePasswordResponse? response = new ChangePasswordResponse();
+
             _logger.LogInformation($"{nameof(ChangePassword)} in {nameof(AccountDbService)} is finished.");
-            return null;
+            return response;
         }
     }
 }

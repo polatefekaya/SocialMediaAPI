@@ -8,9 +8,11 @@ using RosanicSocial.Application.Interfaces.DbServices;
 using RosanicSocial.Domain.Data.Identity;
 using RosanicSocial.Domain.DTO.Request.Account;
 using RosanicSocial.Domain.DTO.Request.Authentication;
+using RosanicSocial.Domain.DTO.Request.Authentication.Password;
 using RosanicSocial.Domain.DTO.Request.Email;
 using RosanicSocial.Domain.DTO.Request.Verification.Email;
 using RosanicSocial.Domain.DTO.Response.Authentication;
+using RosanicSocial.Domain.DTO.Response.Authentication.Response;
 using RosanicSocial.Domain.DTO.Response.Email;
 using RosanicSocial.Domain.DTO.Response.Verification.Email;
 using RosanicSocial.WebAPI.Controllers;
@@ -91,7 +93,7 @@ namespace RosanicSocial.API.Controllers.v1 {
         }
 
         [HttpPost]
-        public async Task<IActionResult> SendTwoFactorAuth() {
+        public async Task<ActionResult<EmailSendResponse>> SendTwoFactorAuth() {
             //Create token and send it via email
             //wait user for verify
             EmailSendResponse? response = await _accountDbService.SendTwoFactorAuth();
@@ -103,7 +105,7 @@ namespace RosanicSocial.API.Controllers.v1 {
         }
 
         [HttpPost]
-        public async Task<IActionResult> ManageTwoFactorVerification(TwoFactorManageRequest request) {
+        public async Task<ActionResult<TwoFactorManageResponse>> ManageTwoFactorVerification(TwoFactorManageRequest request) {
             TwoFactorManageResponse? response = await _accountDbService.ManageTwoFactorLogIn(request);
             if (response is null) {
                 return BadRequest();
@@ -113,7 +115,7 @@ namespace RosanicSocial.API.Controllers.v1 {
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> VerifyTwoFactorAuth(TwoFactorVerificationRequest request) {
+        public async Task<ActionResult<TwoFactorVerificationResponse>> VerifyTwoFactorAuth(TwoFactorVerificationRequest request) {
             TwoFactorVerificationResponse? response = await _accountDbService.VerifyTwoFactorToken(request);
             if (response is null) {
                 return BadRequest();
@@ -122,7 +124,7 @@ namespace RosanicSocial.API.Controllers.v1 {
         }
 
         [HttpPost]
-        public async Task<IActionResult> SendConfirmationEmail() {
+        public async Task<ActionResult<EmailSendResponse>> SendConfirmationEmail() {
             //has to be logged in
             EmailSendResponse? response = await _accountDbService.SendConfirmationEmail();
             if (response is null) {
@@ -133,8 +135,37 @@ namespace RosanicSocial.API.Controllers.v1 {
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> ConfirmEmail([FromQuery] EmailConfirmRequest request) {
+        public async Task<ActionResult<EmailConfirmResponse>> ConfirmEmail([FromQuery] EmailConfirmRequest request) {
             EmailConfirmResponse? response = await _accountDbService.ConfirmEmail(request);
+            if (response is null) {
+                return BadRequest();
+            }
+            return Ok(response);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult<EmailSendResponse>> ForgotPassword(ForgotPasswordRequest request) {
+            EmailSendResponse? response = await _accountDbService.ForgotPassword(request);
+            if (response is null) {
+                return BadRequest();
+            }
+            return Ok(response);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult<ResetForgottenPasswordResponse>> ResetForgottenPassword(ResetForgottenPasswordRequest request) {
+            ResetForgottenPasswordResponse? response = await _accountDbService.ResetForgottenPassword(request);
+            if (response is null) {
+                return BadRequest();
+            }
+            return Ok(response);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<ChangePasswordResponse>> ChangePassword(ChangePasswordRequest request) {
+            ChangePasswordResponse? response = await _accountDbService.ChangePassword(request);
             if (response is null) {
                 return BadRequest();
             }

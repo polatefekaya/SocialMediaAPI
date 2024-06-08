@@ -60,6 +60,40 @@ namespace RosanicSocial.Application.Services
             return emailSendResponse;
         }
 
+        public async Task<EmailSendResponse?> SendResetPasswordEmail(EmailSendResetPasswordRequest request) {
+            EmailEntity entity = request.ToEntity();
+            string? apiKey = _configuration["ApiKey:SendGrid"];
+            if (apiKey is null) {
+                return null;
+            }
+
+            SendGridClient emailClient = new SendGridClient(apiKey);
+
+            EmailAddress from = new EmailAddress(entity.From, _configuration["EmailOptions:SenderName"]);
+            EmailAddress to = new EmailAddress(entity.To);
+
+            DynamicTemplateVerificationEntity verificationEntity = new DynamicTemplateVerificationEntity {
+                name = request.Name,
+                confirmationLink = request.ConfirmationLink
+            };
+
+            SendGridMessage msg2 = MailHelper.CreateSingleTemplateEmail(
+                from: from,
+                to: to,
+                templateId: _configuration["EmailOptions:PasswordResetTemplateId"],
+                dynamicTemplateData: verificationEntity
+                );
+
+            SendGrid.Response? response = await emailClient.SendEmailAsync(msg2);
+
+            EmailSendResponse emailSendResponse = entity.ToSendResponse();
+            emailSendResponse.Sent = response.IsSuccessStatusCode;
+            emailSendResponse.Message = response.Body;
+            emailSendResponse.StatusCode = response.StatusCode;
+
+            return emailSendResponse;
+        }
+
         public async Task<EmailSendResponse?> SendTwoFactorEmail(EmailSendTwoFactorRequest request) {
             EmailEntity entity = request.ToEntity();
             string? apiKey = _configuration["ApiKey:SendGrid"];
