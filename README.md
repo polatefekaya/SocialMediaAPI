@@ -68,3 +68,22 @@
 - Get
 - Update
 - Delete
+
+# How To Use
+## Start Migration
+- Firstly, you have to set database. In the API Project, appsettings.json. 
+- Set Connection String to your Database Conn String.
+- Don't forget to change Jwt variables in appsettings.Development.json especially the Key.
+- **Migrate with the commands that I pre wrote in the Infrastructure Project>MigrationCommands.xml**
+
+## Change EMail Settings
+- In the API Project>appsettings.json, you can change the Twilio Sendgrid settings little bit (Dynamic Template Ids and Sender Name)
+- ApiKey must be supplied from environment variables via User-Secrets
+
+## Change Logging
+- In the API Project>appsettings.json and appsettings.Development.json, you can change the logging levels.
+
+## Configure Launch Settings
+- In the API Project>Properties>launchSettings.json, configure the options with your needs.
+- App is in development mode as standard but you can change it.
+- App will start with swagger UI but you can also change it.
