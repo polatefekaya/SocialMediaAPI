@@ -2,7 +2,7 @@
 
 # Welcome to **Rosanic** Social Media API
 
-> You can create your own social media with this repository. Fork it and pull to your local machine
+> You can create your own social media with this repository. Fork it and pull to your local machine. Use Restful Api to interact.
 
 ## Functionalities
 ### Account
